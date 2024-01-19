@@ -11,6 +11,27 @@ class LineasController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function index(Request $request)
+    {
+        $busqueda = $request->busqueda;
+        $lineas = Lineas::where('linea', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('vip', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('inventario', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('serial', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('mac', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('plataforma', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('titular', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('estado', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('localidad', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('piso', 'LIKE', '%'.$busqueda.'%')
+                    ->orderBy('linea', 'ASC')
+                    ->latest('id')
+                    ->paginate(20);                     
+                                              
+        return view('lineas.index',compact('lineas','busqueda'));
+    }
+    /**
     public function index(Request $request)
     {
         $busqueda=trim($request->get('busqueda'));
@@ -29,7 +50,7 @@ class LineasController extends Controller
                     ->orderBy('linea', 'ASC')
                     ->paginate(20);
         return view('lineas.index',compact('lineas','busqueda'));
-    }
+    }*/
 
     /**
      * Show the form for creating a new resource.

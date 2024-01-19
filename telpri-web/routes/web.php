@@ -3,6 +3,7 @@
 use App\Http\Controllers\CallcenterController;
 use App\Http\Controllers\LineasController;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 });
+
+Route::get('callcenters/pdf',[App\Http\Controllers\CallcenterController::class, 'pdf'])->name('callcenters.pdf');
 
 Route::resource('/callcenters', CallcenterController::class)->middleware('auth');
 Route::resource('/lineas', LineasController::class);

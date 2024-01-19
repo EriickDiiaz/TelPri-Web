@@ -35,6 +35,8 @@
             <tr>
                 <th>Linea</th>
                 <th>Mac/Campo/Li3</th>
+                <th>Inventario</th>
+                <th>Serial</th>
                 <th>Plataforma</th>
                 <th>Titular</th>
                 <th>Estado</th>
@@ -61,7 +63,9 @@
             @foreach ($lineas as $linea)
             <tr>
                 <td>{{ $linea->linea }}</td>
-                <td>{{ $linea->mac }}</td>   
+                <td>{{ $linea->mac }}</td>
+                <td>{{ $linea->inventario }}</td>
+                <td>{{ $linea->serial }}</td>
                 <td>{{ $linea->plataforma }}</td>   
                 <td>{{ $linea->titular }}</td>
                 <td>{{ $linea->estado }}</td>
@@ -81,21 +85,28 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
                     </a>
-                    |
+                    
                     <!-- Botón Eliminar -->
+                    <!--
+                    |
                     <form action="{{ url('lineas/'.$linea->id)}}" class="d-inline" method="post">
                         @method("DELETE")
                         @csrf
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     </form>
-                   
+                    -->
                 </td>
             </tr>
             @endforeach
             @endif
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">{{$lineas->appends(['busqueda'=>$busqueda])}}</td>
+            </tr>
+        </tfoot>
     </table>
-    {!! $lineas->links() !!}
+    
 </div>
 
 @endsection

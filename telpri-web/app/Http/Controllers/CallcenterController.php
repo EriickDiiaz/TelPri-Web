@@ -5,25 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\Callcenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class CallcenterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index(Request $request)
     {
-        $busqueda=trim($request->get('busqueda'));
-        $callcenters = DB::table('callcenters')
-                    ->select('id', 'extension', 'nombres', 'usuario', 'contrasena', 'servicio', 'acceso')
-                    ->where('extension', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('nombres', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('usuario', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('servicio', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('acceso', 'LIKE', '%'.$busqueda.'%')
-                    ->orderBy('extension', 'ASC')
-                    ->paginate(20);
+        $busqueda = $request->busqueda;
+        $callcenters = Callcenter::where('extension', 'LIKE', '%'.$busqueda.'%')
+                        ->orWhere('nombres', 'LIKE', '%'.$busqueda.'%')
+                        ->orWhere('usuario', 'LIKE', '%'.$busqueda.'%')
+                        ->orWhere('servicio', 'LIKE', '%'.$busqueda.'%')
+                        ->orWhere('acceso', 'LIKE', '%'.$busqueda.'%')
+                        ->latest('id')
+                        ->paginate(20);
+        
         return view('callcenters.index',compact('callcenters','busqueda'));
+    }
+
+    /**
+     * Funcion para crear PDF.
+     */
+
+    public function pdf()
+    {
+        $callcenters = Callcenter::paginate();
+
+        $pdf = Pdf::loadView('callcenters.pdf', ['callcenters'=>$callcenters]);
+        return $pdf->stream();
     }
 
     /**
