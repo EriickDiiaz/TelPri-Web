@@ -23,7 +23,7 @@ Route::get('/', function () {
 Route::get('callcenters/pdf',[App\Http\Controllers\CallcenterController::class, 'pdf'])->name('callcenters.pdf');
 
 Route::resource('/callcenters', CallcenterController::class)->middleware('auth');
-Route::resource('/lineas', LineasController::class);
+Route::resource('/lineas', LineasController::class)->middleware('auth');;
 
 Auth::routes(['register'=>false, 'reset'=>false]);
 
