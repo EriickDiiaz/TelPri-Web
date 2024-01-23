@@ -15,6 +15,13 @@ class CallcenterController extends Controller
     
     public function index(Request $request)
     {
+        $conteo = Callcenter::toBase()
+        ->selectRaW("count(case when servicio = 'CIC' then 1 end) as CIC")
+        ->selectRaW("count(case when servicio = 'CSI' then 1 end) as CSI")
+        ->selectRaW("count(*) as TotalCallcenter")
+                
+        ->first();
+
         $busqueda = $request->busqueda;
         $callcenters = Callcenter::where('extension', 'LIKE', '%'.$busqueda.'%')
                         ->orWhere('nombres', 'LIKE', '%'.$busqueda.'%')
@@ -24,7 +31,7 @@ class CallcenterController extends Controller
                         ->latest('id')
                         ->paginate(20);
         
-        return view('callcenters.index',compact('callcenters','busqueda'));
+        return view('callcenters.index',compact('callcenters','busqueda','conteo'));
     }
 
     /**
