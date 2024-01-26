@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
+use Carbon\Carbon;
 use App\Models\Lineas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,12 @@ class LineasController extends Controller
 
     public function index(Request $request)
     {
+        $conteo = Lineas::toBase()
+        ->selectRaW("count(case when plataforma = 'AXE' then 1 end) as TotalAxe")
+        ->selectRaW("count(case when plataforma = 'Cisco' then 1 end) as TotalCisco")
+        ->selectRaW("count(case when plataforma = 'Ericsson' then 1 end) as TotalEricsson")
+        ->first();
+
         $busqueda = $request->busqueda;
         $lineas = Lineas::where('linea', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('vip', 'LIKE', '%'.$busqueda.'%')
@@ -29,28 +37,19 @@ class LineasController extends Controller
                     ->latest('id')
                     ->paginate(20);                     
                                               
-        return view('lineas.index',compact('lineas','busqueda'));
+        return view('lineas.index',compact('lineas','busqueda','conteo'));
     }
+
     /**
-    public function index(Request $request)
-    {
-        $busqueda=trim($request->get('busqueda'));
-        $lineas = DB::table('lineas')
-                    ->select('id', 'linea', 'vip', 'inventario', 'serial', 'mac', 'plataforma', 'titular', 'estado', 'localidad', 'piso')
-                    ->where('linea', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('vip', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('inventario', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('serial', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('mac', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('plataforma', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('titular', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('estado', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('localidad', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('piso', 'LIKE', '%'.$busqueda.'%')
-                    ->orderBy('linea', 'ASC')
-                    ->paginate(20);
-        return view('lineas.index',compact('lineas','busqueda'));
-    }*/
+    * Funcion para crear PDF y controlar fecha.
+    */
+
+    public function pdf(){
+        $fecha = Carbon::now()->format('d / m / Y - H:i:s');
+        $lineas = Lineas::all();
+        $pdf = PDF::LoadView('lineas.pdf', ['lineas'=>$lineas, 'fecha'=>$fecha]);;
+        return $pdf->stream();        
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'TelPri Web | Home')
 
 @section('content')
 <div class="container">

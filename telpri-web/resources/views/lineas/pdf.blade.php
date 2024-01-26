@@ -27,34 +27,34 @@
 </head>
 <body>
 <img src="{{URL::asset('Imagenes/Logo_TelPri_1.png')}}" alt="LogoTelPri Web" width="200" class="py-2">
-    <h2>Usuarios CallCenter.</h2>
+    <h2>Lineas.</h2>
     <h5>{{$fecha}}</h5>
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Extensión</th>
-                <th>Nombres</th>
-                <th>Usuario</th>
-                <th>Pass</th>
-                <th>Servicio</th>
-                <th>Accesso</th>
+                <th>Linea</th>
+                <th>Mac/Campo/Li3</th>
+                <th>Inventario</th>
+                <th>Serial</th>
+                <th>Plataforma</th>
+                <th>Titular</th>
+                <th>Estado</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($callcenters as $callcenter)
+            @foreach ($lineas as $linea)
             <tr>
-                <td>{{ $callcenter->extension }}</td>
-                <td>{{ $callcenter->nombres }}</td>   
-                <td>{{ $callcenter->usuario }}</td>   
-                <td>{{ $callcenter->contrasena }}</td>                        
-                <td>{{ $callcenter->servicio }}</td>   
-                <td>{{ $callcenter->acceso }}</td>
+                <td>{{ $linea->linea }}</td>
+                <td>{{ $linea->mac }}</td>
+                <td>{{ $linea->inventario }}</td>
+                <td>{{ $linea->serial }}</td>
+                <td>{{ $linea->plataforma }}</td>   
+                <td>{{ $linea->titular }}</td>
+                <td>{{ $linea->estado }}</td>
             </tr>
             @endforeach
-            
         </tbody>
-        
     </table>
 
 </body>
