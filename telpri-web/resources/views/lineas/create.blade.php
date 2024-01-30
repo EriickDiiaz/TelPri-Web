@@ -27,7 +27,7 @@
                 <input type="text" class="form-control" name="linea" id="linea" value="{{ old('linea') }}" required>
             </div>
         </div>
-
+ 
         <div class="mb-3 row">
             <label for="vip" class="col-sm-2 col-form-label">¿Vip?</label>
             <div class="col-sm-5">
@@ -39,6 +39,19 @@
                     <option value="Gerente General">Gerente General</option>
                     <option value="Asesor">Asesor</option>
                     <option value="Asistente">Asistente</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label for="plataforma" class="col-sm-2 col-form-label">Plataforma:</label>
+            <div class="col-sm-5">
+                <select name="plataforma" id="plataforma" class="form-select">
+                    <option value="{{ old('plataforma') }}">{{ old('plataforma') }}</option>
+                    <option value="">Seleccione</option>
+                    <option value="Axe">Axe</option>
+                    <option value="Cisco">Cisco</option>
+                    <option value="Ericsson">Ericsson</option>
                 </select>
             </div>
         </div>
@@ -58,22 +71,16 @@
         </div>
 
         <div class="mb-3 row">
-            <label for="mac" class="col-sm-2 col-form-label">Mac/Campo/Li3:</label>
+            <label for="mac" class="col-sm-2 col-form-label">Mac/EQ/Li3:</label>
             <div class="col-sm-5">
                 <input type="text" class="form-control" name="mac" id="mac" value="{{ old('mac') }}">
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="plataforma" class="col-sm-2 col-form-label">Plataforma:</label>
+            <label for="campo" class="col-sm-2 col-form-label">Ubic/Par/Campo:</label>
             <div class="col-sm-5">
-                <select name="plataforma" id="plataforma" class="form-select">
-                    <option value="{{ old('plataforma') }}">{{ old('plataforma') }}</option>
-                    <option value="">Seleccione</option>
-                    <option value="Axe">Axe</option>
-                    <option value="Cisco">Cisco</option>
-                    <option value="Ericsson">Ericsson</option>
-                </select>
+                <input type="text" class="form-control" name="campo" id="campo" value="{{ old('campo') }}">
             </div>
         </div>
 

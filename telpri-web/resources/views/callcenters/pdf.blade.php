@@ -4,33 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    
-    <style>
-
-        body {
-            margin: 0;
-            font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #212529;
-            background-color: #fff;
-            -webkit-text-size-adjust: 100%;
-            -webkit-tap-highlight-color: transparent;
-        }
-        h5{
-            line-height:0.5;
-        }
-        
-    </style>
-
+    <link href="{{ public_path('css/app.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body>
-<img src="{{URL::asset('Imagenes/Logo_TelPri_1.png')}}" alt="LogoTelPri Web" width="200" class="py-2">
-    <h2>Usuarios CallCenter.</h2>
-    <h5>{{$fecha}}</h5>
+<h2>Usuarios CallCenter.</h2>
 
-    <table class="table table-striped">
+<table class="table table-striped">
         <thead>
             <tr>
                 <th>Extensión</th>
@@ -52,10 +31,9 @@
                 <td>{{ $callcenter->acceso }}</td>
             </tr>
             @endforeach
-            
         </tbody>
-        
     </table>
-
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </body>
 </html>

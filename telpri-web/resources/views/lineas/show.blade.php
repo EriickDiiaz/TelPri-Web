@@ -16,8 +16,9 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item"><strong>Cod. Inv.:</strong> {{ $linea->inventario }}</li>
         <li class="list-group-item"><strong>Serial:</strong> {{ $linea->serial }}</li>
-        <li class="list-group-item"><strong>Mac/Campo/Li3:</strong> {{ $linea->mac }}</li>
         <li class="list-group-item"><strong>Plataforma:</strong> {{ $linea->plataforma }}</li>
+        <li class="list-group-item"><strong>Mac/Campo/Li3:</strong> {{ $linea->mac }}</li>
+        <li class="list-group-item"><strong>Ubic/Par/Campo:</strong> {{ $linea->campo }}</li>
         <li class="list-group-item"><strong>Titular:</strong> {{ $linea->titular }}</li>
         <li class="list-group-item"><strong>Estado:</strong> {{ $linea->estado }}</li>
         <li class="list-group-item"><strong>Localidad:</strong> {{ $linea->localidad }}</li>
@@ -25,8 +26,6 @@
         <li class="list-group-item"><strong>Observación:</strong> {{ $linea->observacion }}</li>
     </ul>
 </div>
-
-            
 
             <a href="{{ url('lineas') }}" class="btn btn-danger btn-sm">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-backspace" viewBox="0 0 16 16">

@@ -51,10 +51,10 @@
         <thead>
             <tr>
                 <th>Linea</th>
-                <th>Mac/Campo/Li3</th>
-                <th>Inventario</th>
-                <th>Serial</th>
                 <th>Plataforma</th>
+                <th>Mac/EQ/Li3</th>
+                <th>Ubic/Par/Campo</th>
+                <th>Inventario</th>
                 <th>Titular</th>
                 <th>Estado</th>
                 <th></th>
@@ -80,10 +80,10 @@
             @foreach ($lineas as $linea)
             <tr>
                 <td>{{ $linea->linea }}</td>
+                <td>{{ $linea->plataforma }}</td> 
                 <td>{{ $linea->mac }}</td>
+                <td>{{ $linea->campo }}</td>
                 <td>{{ $linea->inventario }}</td>
-                <td>{{ $linea->serial }}</td>
-                <td>{{ $linea->plataforma }}</td>   
                 <td>{{ $linea->titular }}</td>
                 <td>{{ $linea->estado }}</td>
                 <td>

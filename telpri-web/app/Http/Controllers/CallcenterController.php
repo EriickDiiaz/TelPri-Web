@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use PDF;
-use Carbon\Carbon;
 use App\Models\Callcenter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class CallcenterController extends Controller
 {
@@ -36,14 +35,15 @@ class CallcenterController extends Controller
     }
 
     /**
-     * Funcion para crear PDF y controlar fecha.
-    */
+     * Funcion para crear PDF.
+     */
 
-    public function pdf(){
-        $fecha = Carbon::now()->format('d / m / Y - H:i:s');
-        $callcenters = Callcenter::all();
-        $pdf = PDF::LoadView('callcenters.pdf', ['callcenters'=>$callcenters, 'fecha'=>$fecha]);;
-        return $pdf->stream();        
+    public function pdf()
+    {
+        $callcenters = Callcenter::paginate();
+
+        $pdf = Pdf::loadView('callcenters.pdf', ['callcenters'=>$callcenters]);
+        return $pdf->stream();
     }
 
     /**

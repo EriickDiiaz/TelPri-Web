@@ -25,10 +25,10 @@ class LineasController extends Controller
         $busqueda = $request->busqueda;
         $lineas = Lineas::where('linea', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('vip', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('inventario', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('serial', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('mac', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('plataforma', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('inventario', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('campo', 'LIKE', '%'.$busqueda.'%')
+                    ->orWhere('mac', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('titular', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('estado', 'LIKE', '%'.$busqueda.'%')
                     ->orWhere('localidad', 'LIKE', '%'.$busqueda.'%')
@@ -40,6 +40,7 @@ class LineasController extends Controller
         return view('lineas.index',compact('lineas','busqueda','conteo'));
     }
 
+
     /**
     * Funcion para crear PDF y controlar fecha.
     */
@@ -47,8 +48,9 @@ class LineasController extends Controller
     public function pdf(){
         $fecha = Carbon::now()->format('d / m / Y - H:i:s');
         $lineas = Lineas::all();
-        $pdf = PDF::LoadView('lineas.pdf', ['lineas'=>$lineas, 'fecha'=>$fecha]);;
-        return $pdf->stream();        
+        $pdf = PDF::LoadView('lineas.pdf', ['lineas'=>$lineas, 'fecha'=>$fecha]);
+        return $pdf->stream();
+        //return $pdf->stream("archivo.pdf", array("Attachment"=>true));     
     }
 
     /**
@@ -69,8 +71,9 @@ class LineasController extends Controller
             'vip' =>'max:20|nullable',
             'inventario' =>'max:50|nullable',
             'serial' =>'max:50|nullable',
-            'mac' =>'max:50|nullable',
             'plataforma' =>'max:20|nullable',
+            'mac' =>'max:50|nullable',
+            'campo' =>'max:50|nullable',
             'titular' =>'max:100|nullable',
             'estado' =>'required|max:20',
             'localidad' =>'max:50|nullable',
@@ -81,10 +84,11 @@ class LineasController extends Controller
         $linea = new Lineas();
         $linea->linea = $request->input('linea');
         $linea->vip = $request->input('vip');
+        $linea->plataforma = $request->input('plataforma');
         $linea->inventario = $request->input('inventario');
         $linea->serial = $request->input('serial');
         $linea->mac = $request->input('mac');
-        $linea->plataforma = $request->input('plataforma');
+        $linea->campo = $request->input('campo');
         $linea->titular = $request->input('titular');
         $linea->estado = $request->input('estado');
         $linea->localidad = $request->input('localidad');
@@ -122,10 +126,11 @@ class LineasController extends Controller
         $request->validate([
             'linea' =>'required|max:10',
             'vip' =>'max:20|nullable',
+            'plataforma' =>'max:20|nullable',
             'inventario' =>'max:50|nullable',
             'serial' =>'max:50|nullable',
             'mac' =>'max:50|nullable',
-            'plataforma' =>'max:20|nullable',
+            'campo' =>'max:50|nullable',
             'titular' =>'max:100|nullable',
             'estado' =>'required|max:20',
             'localidad' =>'max:50|nullable',
@@ -136,10 +141,11 @@ class LineasController extends Controller
         $linea = Lineas::find($id);
         $linea->linea = $request->input('linea');
         $linea->vip = $request->input('vip');
+        $linea->plataforma = $request->input('plataforma');
         $linea->inventario = $request->input('inventario');
         $linea->serial = $request->input('serial');
         $linea->mac = $request->input('mac');
-        $linea->plataforma = $request->input('plataforma');
+        $linea->campo = $request->input('campo');
         $linea->titular = $request->input('titular');
         $linea->estado = $request->input('estado');
         $linea->localidad = $request->input('localidad');

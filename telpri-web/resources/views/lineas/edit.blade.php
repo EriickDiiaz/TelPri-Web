@@ -44,6 +44,19 @@
         </div>
 
         <div class="mb-3 row">
+            <label for="plataforma" class="col-sm-2 col-form-label">Plataforma:</label>
+            <div class="col-sm-5">
+                <select name="plataforma" id="plataforma" class="form-select">
+                    <option value="{{ $linea->plataforma }}">{{ $linea->plataforma }}</option>
+                    <option value="">Seleccione</option>
+                    <option value="Axe">Axe</option>
+                    <option value="Cisco">Cisco</option>
+                    <option value="Ericsson">Ericsson</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
             <label for="inventario" class="col-sm-2 col-form-label">Inventario:</label>
             <div class="col-sm-5">
                 <input type="text" class="form-control" name="inventario" id="inventario" value="{{ $linea->inventario }}">
@@ -58,25 +71,30 @@
         </div>
 
         <div class="mb-3 row">
-            <label for="mac" class="col-sm-2 col-form-label">Mac/Campo/Li3:</label>
+            <label for="mac" class="col-sm-2 col-form-label">Mac/EQ/Li3:</label>
             <div class="col-sm-5">
                 <input type="text" class="form-control" name="mac" id="mac" value="{{ $linea->mac }}">
             </div>
         </div>
 
         <div class="mb-3 row">
-            <label for="plataforma" class="col-sm-2 col-form-label">Plataforma:</label>
+            <label for="campo" class="col-sm-2 col-form-label">Ubic/Par/Campo:</label>
             <div class="col-sm-5">
-                <select name="plataforma" id="plataforma" class="form-select">
-                    <option value="{{ $linea->plataforma }}">{{ $linea->plataforma }}</option>
+                <input type="text" class="form-control" name="campo" id="campo" value="{{ $linea->campo }}">
+            </div>
+        </div>
+        <!--
+        <div class="mb-3 row">
+            <label for="campo" class="col-sm-2 col-form-label">Ubic/Par/Campo:</label>
+            <div class="col-sm-5">
+                <select name="campo" id="campo" class="form-select">
+                    <option value="{{ $linea->campo }}">{{ $linea->campo }}</option>
                     <option value="">Seleccione</option>
-                    <option value="Axe">Axe</option>
-                    <option value="Cisco">Cisco</option>
-                    <option value="Ericsson">Ericsson</option>
+                    <option value="Asistente">Asistente</option>
                 </select>
             </div>
         </div>
-
+        -->
         <div class="mb-3 row">
             <label for="titular" class="col-sm-2 col-form-label">Titular:</label>
             <div class="col-sm-5">
