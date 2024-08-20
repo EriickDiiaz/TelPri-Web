@@ -30,7 +30,7 @@
             color: #fff;
         }
         .admin-navbar {
-            background-color: #0098DA;
+            background-color: #0E15F9;
             margin-left: 18%;
         }
         i{
