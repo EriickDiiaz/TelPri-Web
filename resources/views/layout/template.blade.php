@@ -6,9 +6,9 @@
     <title>@yield('title')</title>
     
     <!-- Enlace al CSS de Bootstrap -->
-    <link href="{{ asset('css/bootstrap-5.3.3/css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Iconos de Bootstrap -->
-    <link href="{{ asset('css/bootstrap-5.3.3/icons/font/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Iconos de Font Awesome -->
+    <script src="https://kit.fontawesome.com/708e2917d6.js" crossorigin="anonymous"></script>
 
     <!-- Sweet Alert 2 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -16,194 +16,188 @@
 
     <style>
         /* Estilos personalizados */
+        html, body {
+            height: 100%;
+        }
         .sidebar {
             background-color: #2B3035;
-            color: #fff;
-            height: 100%;
+            height: 90%;
             position: fixed;
-            top: 0;
+            top: 5;
             left: 0;
-            width: 18%;
-            padding-top: 3rem;
+            border-radius: 50px;
         }
         .sidebar a {
-            color: #fff;
+            color: #0098DA;
+        }
+        .sidebar a:hover {
+            color: #0E15F9;
         }
         .admin-navbar {
-            background-color: #0E15F9;
-            margin-left: 18%;
+            background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
         }
-        i{
-            font-size:120%;
-            margin:1px;
+        /* Ajuste de espaciado para el contenido principal */
+        body {
+            padding-top: 4%; /* Altura del navbar */
+            display: flex;
+            flex-direction: column;
         }
         .contenido{
             margin-left: 18%;
             min-height: 570px;
         }
-        .footer{
-            margin-left: 18%;
+        .container-fluid {
+            flex: 1;
         }
-               
+        .footer{
+            margin-left: 18%;            
+            padding: 10px 0;    
+            position: relative;
+            bottom: 0;
+            text-align: center;
+        }               
     </style>
 </head>
 <body>
 
 <!-- Navbar para administración de usuario -->
-<nav class="navbar navbar-expand-lg admin-navbar border-bottom" >
+<nav class="navbar navbar-expand-lg admin-navbar fixed-top">
     <div class="container-fluid">
-        <div>
-            <i class="bi bi-bar-chart-steps"></i> ...
+        <div class="col-4">
+            <i class="fa-solid fa-shoe-prints"></i> ... Breadcrumb ... 
         </div>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                <ul class="navbar-nav ms-auto">
-                <!-- Authentication Links -->
-                @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                <i class="bi bi-box-arrow-in-right"></i> {{ __('Ingresar') }}
-                            </a>
-                        </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">
-                                <i class="bi bi-check-square"></i> {{ __('Registrar') }}
-                            </a>
-                        </li>
-                    @endif
-                @else
+        <div class="col-4 text-center">
+            <i class="fa-regular fa-calendar"></i>
+            <span id="fechaHora">{{ $fechaHoraActual }}</span>
+        </div>
+        <div class="col-4">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            <i class="bi bi-person"></i> {{ Auth::user()->name }}
-                        </a>
+                    <ul class="navbar-nav ms-auto">
+                    <!-- Authentication Links -->
+                    @guest
+                        @if (Route::has('login'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">
+                                    <i class="fa-solid fa-right-to-bracket"></i> {{ __('Ingresar') }}
+                                </a>
+                            </li>
+                        @endif
 
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ url('usuarios/'.Auth::user()->id.'/edit')}}">
-                                <i class="bi bi-person-exclamation"></i> {{ __('Modificar Usuario') }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                                document.getElementById('logout-form').submit();">
-                                <i class="bi bi-box-arrow-right"></i> {{ __('Cerrar Sesión') }}
+                        @if (Route::has('register'))
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('register') }}">
+                                    <i class="fa-solid fa-check-to-slot"></i> {{ __('Registrar') }}
+                                </a>
+                            </li>
+                        @endif
+                    @else
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <i class="fa-solid fa-user"></i> {{ Auth::user()->name }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
-                            </form>
-                        </div>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url('usuarios/'.Auth::user()->id.'/edit')}}">
+                                    <i class="fa-solid fa-gear"></i> {{ __('Modificar Usuario') }}
+                                </a>
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">
+                                    <i class="fa-solid fa-right-to-bracket"></i> {{ __('Cerrar Sesión') }}
+                                </a>
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                        @endguest
+                    </ul>
                     </li>
-                @endguest
-            </ul>
-                </li>
-            </ul>
-        </div>
+                </ul>
+            </div>
+        </div>   
     </div>
 </nav>
 
-<!-- Sidebar -->
-<nav class="sidebar">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/home') }}">
-            <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 100%;" class="py-3">
-        </a>
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ps-0">
-            <li class="border-top my-3 nav-item"></li>
-            <li class="mb-1 nav-item">
-                <button class="btn btn-toggle align-items-center rounded collapsed fw-medium" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
-                    <i class="bi bi-telephone"></i>
-                    Lineas
-                </button>
-                <div class="collapse" id="home-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/lineas')}}">General</a></li>
-                        <li class="nav-item">
-                            <hr class="dropdown-divider">
-                        </li class="nav-item">
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('lineas/axe') }}">Axe</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('lineas/cisco') }}">Cisco</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('lineas/ericsson') }}">Ericsson</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('lineas/externo') }}">Externos</a></li> 
-                </ul>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="sidebar col-2 m-2">
+            <div class="container d-flex flex-column h-100">
+                <div class="d-grid gap-2 col-12 mx-auto">
+                    <a class="navbar-brand" href="{{ url('/home') }}">
+                        <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 90%;" class="m-2 pt-2">
+                    </a>
+                    <div class="border-top my-2 nav-item"></div>
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/lineas') }}">
+                        <i class="fa-solid fa-phone m-2"></i>Líneas
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/callcenters') }}">
+                        <i class="fa-solid fa-headset m-2"></i>CallCenters
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="#">
+                        <i class="fa-solid fa-warehouse m-2"></i>Depósitos
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="#">
+                        <i class="fa-solid fa-network-wired m-2"></i>Redes Corp.
+                    </a>
+                    <div class="border-top my-2 nav-item"></div>
+                    @can('Menu Localidades')
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/localidades') }}">
+                        <i class="fa-solid fa-location-dot m-2"></i>Adm. de Localidades
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/campos') }}">
+                        <i class="fa-solid fa-ethernet m-2"></i>Adm. de Campos
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/usuarios') }}">
+                        <i class="fa-solid fa-person m-2"></i>Adm. de Usuarios
+                    </a>
+                    @endcan
+                    <div class="border-top my-2 nav-item"></div>
+                    @can('Menu Sistema')
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/roles') }}">
+                        <i class="fa-solid fa-address-card m-2"></i>Adm. de Roles
+                    </a>
+                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/permisos') }}">
+                        <i class="fa-solid fa-list-check m-2"></i>Adm. de Permisos
+                    </a>
+                    @endcan 
                 </div>
-            </li>
-            <li class="mb-1 nav-item">
-                <button class="btn btn-toggle align-items-center rounded collapsed fw-medium" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                    <a class="nav-link" href="{{ url('/callcenters') }}">
-                    <i class="bi bi-headset"></i> CallCenters</a>
-                </button>
-            </li>
-            <li class="border-top my-3 nav-item"></li>
-            @can('Menu Localidades')
-            <li class="mb-1 nav-item">
-                <button class="btn btn-toggle align-items-center rounded collapsed fw-medium" data-bs-toggle="collapse" data-bs-target="#localidades-collapse" aria-expanded="false">
-                    <i class="bi bi-building"></i>
-                    Adm. de Localidades
-                </button>
-                <div class="collapse" id="localidades-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/localidades') }}">Localidades</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/pisos') }}">Pisos</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/campos') }}">Campos</a></li>
-                    </ul>
+                <div class="mt-auto text-center">
+                    <img src="{{ asset('imagenes/Logo_cantv_Wh.png') }}" alt="Logo CANTV" class="img-fluid logo-footer m-3" style="width: 40%;">
                 </div>
-            </li>
-            <li class="mb-1 nav-item">
-                <button class="btn btn-toggle align-items-center rounded collapsed fw-medium" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                    <a class="nav-link" href="{{ url('/usuarios') }}">
-                    <i class="bi bi-person"></i> Adm. de Usuarios</a>
-                </button>
-            </li>
-            @endcan
-            @can('Menu Sistema')
-            <li class="border-top my-3 nav-item"></li>
-            <li class="mb-1 nav-item">
-                <button class="btn btn-toggle align-items-center rounded collapsed fw-medium" data-bs-toggle="collapse" data-bs-target="#sistema-collapse" aria-expanded="false">
-                    <i class="bi bi-gear"></i>
-                    Adm. de Sistema
-                </button>
-                <div class="collapse" id="sistema-collapse">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small navbar-nav me-auto mb-2 mb-lg-0">                        
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/roles') }}">Adm. de Roles</a></li>
-                        <li class="nav-item"><a class="nav-link dropdown-item px-3" href="{{ url('/permisos') }}">Adm. de Permisos</a></li>
-                    </ul>
-                </div>
-            </li> 
-            @endcan          
-        </ul>
-        <div class="row mt-3">
-            <div class="col-md-12 text-center position-absolute bottom-0 p-3">
-            <img src="{{ asset('imagenes/Logo_cantv_Wh.png') }}" alt="Logo CANTV" class="img-fluid" style="width: 50%;">
             </div>
-        </div>
-    </div>   
-</nav>
+        </nav>
 
-<!-- Contenido principal -->
-<main class="contenido px-2 my-3">
-    @yield('contenido')
-</main>
+
+        <!-- Contenido principal -->
+        <main class="col-10 offset-2">
+            <div class="m-2">
+                @yield('contenido')
+            </div>
+        </main>
+    </div>
+</div>
 
 <!-- Footer -->
-<footer class="footer mt-auto">
+<footer class="footer">
     <div class="container">
         <div class="row mt-3">
             <div class="col-md-12 text-center">
-            <img src="{{ asset('imagenes/Logo_TelPri_Wh.png') }}" alt="Imagen 2" class="img-fluid" style="width: 10%;">
+                <img src="{{ asset('imagenes/Logo_TelPri_Wh.png') }}" alt="Imagen 2" class="img-fluid" style="width: 10%;">
             </div>
         </div>
         <div class="row mt-1">
             <div class="col-md-12 text-center">
-                <p>
-                    © 2024 TelPri-Web. Todos los derechos reservados.</p>
+                <p>© 2024 TelPri-Web. Todos los derechos reservados.</p>
             </div>
         </div>
     </div>
 </footer>
+
 <!-- Scripts Bootstrap -->
 <script src="{{ asset('css/bootstrap-5.3.3/js/bootstrap.bundle.min.js') }}"></script>
 <!-- Scripts DataTables -->
