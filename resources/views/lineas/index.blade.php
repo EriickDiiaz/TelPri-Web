@@ -6,7 +6,7 @@
 <!-- Mensajes y Notificaciones -->
 @if(Session::has('mensaje'))
     <div class="alert alert-success alert-dismissible" role="alert">
-        <i class="bi bi-check2-circle"></i>
+        <i class="fa-solid fa-circle-check"></i>
         {{ Session::get('mensaje') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -14,65 +14,54 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">
-    <i class="bi bi-telephone" style="font-size:150%;"></i>
-    <h2 class="align-middle">Líneas Telefónicas.</h2>
+    <h2><i class="fa-solid fa-phone m-2"></i>Líneas Telefónicas.</h2>
 </div>
 
-<div class="d-flex justify-content-between">
-    <!-- Botones izquierda -->
-    <div class="d-flex">
-        @can('Crear Lineas')
-        <a href="{{ url('lineas/create') }}" class="btn btn-outline-success btn-sm me-2">
-            <i class="bi bi-telephone-plus"></i>
-            <span>Agregar Línea</span>
-        </a>
-        @endcan
-    </div>
-
-    <!-- Botones derecha -->
-    <div class="d-flex">
-        <a href="{{ url('lineas/avanzada') }}" class="btn btn-outline-light btn-sm me-2">
-            <i class="bi bi-binoculars" style="font-size:120%;"></i>
-            <span>Busqueda Avanzada</span>
-        </a>
-        <form class="d-flex" role="search" action="{{ route('lineas.index') }}" method="get">
-            <input class="form-control me-2" type="search" placeholder="Busqueda" aria-label="Search" name="busqueda" value="{{ $busqueda }}">
-            <button class="btn btn-outline-success" type="submit">
-                <i class="bi bi-search align-middle"></i>
-            </button>
-        </form>
-    </div>
+<!-- Botones de Acción -->
+<div class="d-flex">   
+    @can('Crear Lineas')
+    <a href="{{ url('lineas/create') }}" class="btn btn-outline-success btn-sm me-2">
+        <span>
+            <i class="fa-solid fa-phone-volume m-2"></i>Agregar Línea
+        </span>
+    </a>
+    @endcan
+    <a href="{{ url('lineas/avanzada') }}" class="btn btn-outline-light btn-sm me-2">
+        <span>
+            <i class="fa-solid fa-binoculars m-2"></i>Busqueda Avanzada
+        </span>
+    </a>
 </div>
 
 <!-- Resumen de Lineas -->
-<div class="d-flex justify-content-between py-2 col-7">
-    <div class="align-items-center">
-        <a href="{{ url('lineas/axe') }}" class="btn btn-outline-light btn-sm">Axe:
+<div class="d-flex py-2">
+    <div class="align-items-center me-2">
+        <button class="btn btn-outline-light btn-sm filter-button" data-plataforma="Axe">Axe:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalAxe }}</span>
-        </a>
+        </button>
     </div>
-    <div class="align-items-center">
-        <a href="{{ url('lineas/cisco') }}" class="btn btn-outline-light btn-sm">Cisco:
+    <div class="align-items-center me-2">
+        <button class="btn btn-outline-light btn-sm filter-button" data-plataforma="Cisco">Cisco:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCisco }}</span>
-        </a>
+        </button>
     </div>
-    <div class="align-items-center">
-        <a href="{{ url('lineas/ericsson') }}" class="btn btn-outline-light btn-sm">Ericsson:
+    <div class="align-items-center me-2">
+        <button class="btn btn-outline-light btn-sm filter-button" data-plataforma="Ericsson">Ericsson:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalEricsson }}</span>
-        </a>
+        </button>
     </div>
-    <div class="align-items-center">
-        <a href="{{ url('lineas/externo') }}" class="btn btn-outline-light btn-sm">Externo:
+    <div class="align-items-center me-2">
+        <button class="btn btn-outline-light btn-sm filter-button" data-plataforma="Externo">Externo:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalExterno }}</span>
-        </a>
+        </button>
     </div>
-    <div class="align-items-center">
-        <a href="{{ url('/lineas')}}" class="btn btn-outline-primary btn-sm">Total:
+    <div class="align-items-center me-2">
+        <button class="btn btn-outline-primary btn-sm filter-button" data-plataforma="">Total:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalLineas }}</span>
-        </a>
-        
+        </button>        
     </div>
 </div>
+
 <!-- Contenido de Sección -->
 <table class="table table-striped">
     <thead>
@@ -113,19 +102,19 @@
             <td>{{ $linea->estado }}</td>
             <td>
                 <a href="{{ url('lineas/'.$linea->id)}}" target="_blank" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-eye"></i>
+                    <i class="fa-solid fa-eye"></i>
                 </a>
-                |
+                @can('Editar Lineas')
                 <a href="{{ url('lineas/'.$linea->id.'/edit')}}" target="_blank" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-pencil-square"></i>
+                    <i class="fa-solid fa-phone-volume"></i>
                 </a>
+                @endcan
                 @can('Eliminar Lineas')
-                |
                 <form action="{{ url('lineas/'.$linea->id)}}" id="form-eliminar-{{ $linea->id }}" action="{{ route('lineas.destroy', $linea->id) }}" class="d-inline" method="post">
                     @method("DELETE")
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-telephone-x"></i>
+                        <i class="fa-solid fa-phone-slash"></i>
                     </button>
                 </form>
                 @endcan
