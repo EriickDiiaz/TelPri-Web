@@ -31,7 +31,7 @@
             color: #0098DA;
         }
         .sidebar a:hover {
-            color: #0E15F9;
+            color: #4658E5;
         }
         .admin-navbar {
             background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
