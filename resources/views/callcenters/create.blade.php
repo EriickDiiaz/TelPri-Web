@@ -6,6 +6,7 @@
 <!-- Mensajes y Notificaciones -->
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
         <strong>¡Uy!</strong> Revisa los siguientes errores antes de continuar.
         <ul>
             @foreach($errors->all() as $error)
@@ -17,44 +18,43 @@
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <i class="bi bi-person-add" style="font-size:150%;"> </i>
-    <h2 class="align-middle">Crear Usuario CallCenter.</h2>
+<div class="d-flex">    
+    <h2><i class="fa-solid fa-user-plus m-2"></i>Crear Usuario CallCenter.</h2>
 </div>
 
 <!--Contenido de la Sección -->
 <form action="{{ url('callcenters') }}" method="post">
     @csrf
 
-    <div>
+    <div class="mb-2">
         <label for="extension" class="col-sm-2 col-form-label">Extensión:</label>
         <div class="col-sm-5">
             <input type="text" class="form-control" name="extension" id="extension" value="{{ old('extension') }}" required>
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="nombres" class="col-sm-2 col-form-label">Nombre y Apellido:</label>
         <div class="col-sm-5">
             <input type="text" class="form-control" name="nombres" id="nombres" value="{{ old('nombres') }}">
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="usuario" class="col-sm-2 col-form-label">Usuario:</label>
         <div class="col-sm-5">
             <input type="text" class="form-control" name="usuario" id="usuario" value="{{ old('usuario') }}">
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="contrasena" class="col-sm-2 col-form-label">Contraseña:</label>
         <div class="col-sm-5">
             <input type="text" class="form-control" name="contrasena" id="contrasena" value="{{ old('contrasena') }}">
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="servicio" class="col-sm-2 col-form-label">Servicio:</label>
         <div class="col-sm-5">
             <select name="servicio" id="servicio" class="form-select">
@@ -69,7 +69,7 @@
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <label for="acceso" class="col-sm-2 col-form-label">Acceso:</label>
         <div class="col-sm-5">
         <select name="acceso" id="acceso" class="form-select">
@@ -81,28 +81,19 @@
         </div>
     </div>
 
-    <div>
-        <label for="localidad" class="col-sm-2 col-form-label">Localidad:</label>
-        <div class="col-sm-5">
-        <select name="localidad" id="localidad" class="form-select">
-                <option value="{{ old('localidad') }}">{{ old('localidad') }}</option>
-                <option value="Cortijos">Cortijos</option>
-                <option value="Palos Grandes">Palos Grandes</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="mt-3">
+    <div class="mt-3 d-flex justify-content-between col-5">
         <a href="{{ url('callcenters') }}" class="btn btn-outline-danger btn-sm">
-            <i class="bi bi-backspace"></i>
-            <span>Regresar</span>
+            <span>
+                <i class="fa-solid fa-delete-left m-2"></i>Regresar
+            </span>
         </a>
-        |
         <button type="submit" class="btn btn-outline-success btn-sm">
-            <i class="bi bi-person-add"></i>
-            <span>Agregar</span>
+            <span>
+                <i class="fa-solid fa-user-plus m-2"></i>Agregar Usuario
+            </span>
         </button>
-    </div>               
+    </div>  
+
 </form>
 
 @endsection

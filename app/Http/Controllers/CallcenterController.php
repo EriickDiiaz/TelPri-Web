@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Callcenter;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Illuminate\Http\Request;
 
 class CallcenterController extends Controller
@@ -15,20 +13,7 @@ class CallcenterController extends Controller
     public function index(Request $request)
     {
         $callcenters = Callcenter::all();
-
-        $busqueda = $request->busqueda;
-                
-        $callcentersQuery = Callcenter::query()
-                    ->orderBy('extension')
-                    ->where('extension', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('nombres', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('usuario', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('servicio', 'LIKE', '%'.$busqueda.'%')
-                    ->orWhere('acceso', 'LIKE', '%'.$busqueda.'%');
-
-        // Paginar los resultados
-        $callcenters = $callcentersQuery->paginate(20);
-        
+       
         // Obtener el total de usuarios para CIC
         $totalCIC = Callcenter::where('servicio', 'CIC')->count();
         // Obtener el total de usuarios para CSI
@@ -45,7 +30,7 @@ class CallcenterController extends Controller
         $totalCallcenter = Callcenter::count();
 
         return view('callcenters.index',compact(
-            'callcenters','busqueda',
+            'callcenters',
             'totalCIC','totalCSI',
             'totalHCM','totalCeCom','totalPRO','totalCOR',
             'totalCallcenter'
@@ -163,45 +148,6 @@ class CallcenterController extends Controller
         $callcenter->delete();
 
         return redirect('callcenters')->with('mensaje','Usuario eliminado con exito.');
-    }
-
-    public function generatePDF()
-    {
-        // Datos que quieras pasar a la vista
-        $callcenters = Callcenter::all();
-        $totalCIC = Callcenter::where('servicio', 'CIC')->count();
-        $totalCSI = Callcenter::where('servicio', 'CSI')->count();
-        $totalHCM = Callcenter::where('servicio', 'HCM')->count();
-        $totalCeCom = Callcenter::where('servicio', 'CeCom')->count();
-        $totalPRO = Callcenter::where('servicio', 'PROV')->count();
-        $totalCOR = Callcenter::where('servicio', 'COR')->count();
-        $totalCallcenter = Callcenter::count();
-
-        // Renderizar la vista con los datos
-        $view = view('callcenters.pdf-callcenter', compact(
-            'callcenters',
-            'totalCIC', 'totalCSI',
-            'totalHCM', 'totalCeCom', 'totalPRO', 'totalCOR',
-            'totalCallcenter'
-        ))->render();
-
-        // Inicializar Dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf = new Dompdf($options);
-
-        // Cargar el HTML en Dompdf
-        $dompdf->loadHtml($view);
-
-        // (Opcional) Configurar el tamaño y la orientación del papel
-        $dompdf->setPaper('A4', 'landscape');
-
-        // Renderizar el PDF
-        $dompdf->render();
-
-        // Descargar el PDF
-        return $dompdf->stream('reporte_callcenter.pdf', ['Attachment' => false]);
     }
 
 }
