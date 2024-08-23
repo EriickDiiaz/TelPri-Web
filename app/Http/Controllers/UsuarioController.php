@@ -25,7 +25,8 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('usuarios.create');
+        $roles = Role::all();
+        return view('usuarios.create',compact('roles'));
     }
 
     /**
@@ -56,6 +57,7 @@ class UsuarioController extends Controller
         $usuario = new User();
         $usuario->name = $request->input('name');
         $usuario->email = $request->input('email');
+        $usuario->roles()->sync($request->role);
         $usuario->password = Hash::make($request->input('password'));
         
         $usuario->save();
