@@ -56,9 +56,9 @@ class CallcenterController extends Controller
             'extension.max' => 'La extensión no puede tener más de 6 caracteres.',
             'nombres.max' => 'Los nombres no pueden tener más de 100 caracteres.',
             'usuario.max' => 'El usuario no puede tener más de 20 caracteres.',
+            'usuario.unique' => 'Este usuario ya esta en uso',
             'servicio.max' => 'El servicio no puede tener más de 15 caracteres.',
-            'acceso.max' => 'El acceso no puede tener más de 30 caracteres.',
-            'localidad.max' => 'La localidad no puede tener más de 30 caracteres.'
+            'acceso.max' => 'El acceso no puede tener más de 30 caracteres.'
         ];
 
         $request->validate([
@@ -66,8 +66,7 @@ class CallcenterController extends Controller
             'nombres' =>'max:100|nullable',
             'usuario' =>'max:20|nullable',
             'servicio' =>'max:15|nullable',
-            'acceso' =>'max:30|nullable',
-            'localidad' =>'max:30|nullable'
+            'acceso' =>'max:30|nullable'
         ],$errors);
 
         $callcenter = new Callcenter();
@@ -77,7 +76,6 @@ class CallcenterController extends Controller
         $callcenter->contrasena = $request->input('contrasena');
         $callcenter->servicio = $request->input('servicio');
         $callcenter->acceso = $request->input('acceso');
-        $callcenter->localidad = $request->input('localidad');
         $callcenter->save();
 
         return redirect ('callcenters')->with('mensaje','Usuario guardado con exito.');
@@ -111,9 +109,9 @@ class CallcenterController extends Controller
             'extension.max' => 'La extensión no puede tener más de 6 caracteres.',
             'nombres.max' => 'Los nombres no pueden tener más de 100 caracteres.',
             'usuario.max' => 'El usuario no puede tener más de 20 caracteres.',
+            'usuario.unique' => 'Este usuario ya esta en uso',
             'servicio.max' => 'El servicio no puede tener más de 15 caracteres.',
-            'acceso.max' => 'El acceso no puede tener más de 30 caracteres.',
-            'localidad.max' => 'La localidad no puede tener más de 30 caracteres.'
+            'acceso.max' => 'El acceso no puede tener más de 30 caracteres.'
         ];
         
         $request->validate([
@@ -122,8 +120,7 @@ class CallcenterController extends Controller
             'usuario' =>'max:20|unique:callcenters,usuario,'.$id,
             'contrasena' =>'max:10',
             'servicio' =>'max:15|nullable',
-            'acceso' =>'max:30|nullable',
-            'localidad' =>'max:30|nullable'
+            'acceso' =>'max:30|nullable'
         ], $errors);
 
         $callcenter = Callcenter::find($id);
@@ -133,7 +130,6 @@ class CallcenterController extends Controller
         $callcenter->contrasena = $request->input('contrasena');
         $callcenter->servicio = $request->input('servicio');
         $callcenter->acceso = $request->input('acceso');
-        $callcenter->localidad = $request->input('localidad');
         $callcenter->save();
 
         return redirect ('callcenters')->with('mensaje','Usuario actualizado con exito.');
