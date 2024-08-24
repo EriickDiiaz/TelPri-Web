@@ -152,15 +152,16 @@
 
     <div>
         <label for="acceso" class="col-sm-2 col-form-label">Accesos:</label>
-            <div class="d-flex justify-content-between col-7">
+        <div class="d-flex justify-content-between col-7">
             @foreach ($accesos as $acceso)  
+                <div class="form-check me-2">
                     <input class="form-check-input" type="checkbox" name="acceso[]" value="{{ $acceso }}" id="acceso_{{ $acceso }}"
                     @if (in_array($acceso, old('acceso', $linea->acceso ?? []))) checked @endif>
-                    <label class="form-check-label me-2" for="acceso_{{ $acceso }}">
+                    <label class="form-check-label" for="acceso_{{ $acceso }}">
                         {{ $acceso }}
                     </label>
+                </div>
             @endforeach
-            </div>
         </div>
     </div>
 
@@ -207,6 +208,8 @@
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Script para cargar los pisos segun la localidad seleccionada-->
 <script type="text/javascript">
 $(document).ready(function() {
     $('#localidad_id').change(function() {
@@ -234,6 +237,24 @@ $(document).ready(function() {
         }
     });
 });
+</script>
+
+<!-- Script para marcar automaticamente checkboxes de accesos-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accesos = ['Interno', 'Local', 'Nacional', '0416', 'Otras Operadoras', 'Internacional'];
+        
+        accesos.forEach((acceso, index) => {
+            const checkbox = document.getElementById('acceso_' + acceso);
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    for (let i = 0; i < index; i++) {
+                        document.getElementById('acceso_' + accesos[i]).checked = true;
+                    }
+                }
+            });
+        });
+    });
 </script>
 
 @endsection
