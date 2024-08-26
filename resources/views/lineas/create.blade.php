@@ -1,4 +1,4 @@
-@extends('layout/template')
+@extends('layout/template') 
 
 @section('title','Líneas | Crear')
 @section('contenido')
@@ -6,6 +6,7 @@
 <!-- Mensajes y Notificaciones -->
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
         <strong>¡Uy!</strong> Revisa los siguientes errores antes de continuar.
         <ul>
             @foreach($errors->all() as $error)
@@ -17,9 +18,8 @@
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <i class="bi bi-telephone-plus" style="font-size:150%;"></i>
-    <h2 class="align-middle">Crear Línea Telefónica.</h2>
+<div class="d-flex">    
+    <h2><i class="fa-solid fa-phone m-2"></i>Crear Línea Telefónica.</h2>
 </div>
 
 <!--Contenido de la Sección -->
@@ -183,17 +183,19 @@
             </div>
     </div>
     
-    <div class="mt-3">
+    <div class="mt-3 d-flex justify-content-between col-sm-7">
         <a href="{{ url('lineas') }}" class="btn btn-outline-danger btn-sm">
-            <i class="bi bi-backspace"></i>
-            <span>Regresar</span>
+            <span>
+                <i class="fa-solid fa-delete-left m-2"></i>Regresar
+            </span>
         </a>
-        |
         <button type="submit" class="btn btn-outline-success btn-sm">
-            <i class="bi bi-telephone-plus"></i>
-            <span>Agregar</span>
+            <span>
+            <i class="fa-solid fa-phone m-2"></i>Agregar Línea
+            </span>
         </button>
-    </div>               
+    </div>
+
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

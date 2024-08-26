@@ -92,7 +92,7 @@
                 <i class="fa-solid fa-user-plus m-2"></i>Agregar Usuario
             </span>
         </button>
-    </div>  
+    </div>
 
 </form>
 

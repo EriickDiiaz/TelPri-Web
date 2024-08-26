@@ -92,10 +92,11 @@
         </a>
         <button type="submit" class="btn btn-outline-primary btn-sm">
             <span>
-                <i class="fa-solid fa-user-pen m-2"></i>Actualizar
+                <i class="fa-solid fa-user-pen m-2"></i>Actualizar Usuario
             </span>
         </button>
     </div>
+
 </form>
 
 @endsection

@@ -102,7 +102,7 @@
             <td>{{ $linea->estado }}</td>
             <td>
                 <a href="{{ url('lineas/'.$linea->id)}}" target="_blank" class="btn btn-outline-light btn-sm">
-                    <i class="fa-solid fa-eye"></i>
+                    <i class="fa-solid fa-list-ul"></i>
                 </a>
                 @can('Editar Lineas')
                 <a href="{{ url('lineas/'.$linea->id.'/edit')}}" target="_blank" class="btn btn-outline-primary btn-sm">

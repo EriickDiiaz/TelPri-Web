@@ -4,13 +4,13 @@
 @section('contenido')
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <i class="bi bi-telephone" style="font-size:150%;"></i>
-    <h2 class="align-middle">Detalles de Línea {{ $linea->linea }}.
+<div class="d-flex">    
+    <h2>
+        <i class="fa-solid fa-list-ul m-2"></i>Detalles de Línea {{ $linea->linea }}
         @if(!empty($linea->vip))
-            <i class="bi bi-star text-warning"></i>
+            <i class="fa-regular fa-star text-warning"></i>
         @endif
-    </h2>
+    </h2>    
 </div>
 
 <!--Contenido de la Sección -->
@@ -148,26 +148,28 @@
     </div>
 </div>
 <a href="{{ url('lineas') }}" class="btn btn-outline-danger btn-sm">
-    <i class="bi bi-backspace"></i>
-    <span>Regresar</span>
+    <span>
+        <i class="fa-solid fa-delete-left m-2"></i>Regresar
+    </span>
 </a>
-|
+
 <a href="{{ url('lineas/'.$linea->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
-    <i class="bi bi-pencil-square"></i>
-    <span>Modificar</span>
+    <span>
+        <i class="fa-solid fa-phone-volume m-2"></i>Modificar Línea
+    </span>
 </a>
-|
-<a href="#" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#historialModal">
-    <i class="bi bi-clock-history"></i>
+
+<a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#historialModal">
+    <i class="fa-solid fa-clock-rotate-left"></i>
     <span>Historial</span>
 </a>
+
 @can('Eliminar Lineas')
-|
-<form action="{{ url('lineas/'.$linea->id)}}" id="form-eliminar-{{ $linea->id }}" action="{{ route('lineas.destroy', $linea->id) }}" class="d-inline" method="post" style="display: none;">
+<form action="{{ url('lineas/'.$linea->id)}}" id="form-eliminar-{{ $linea->id }}" action="{{ route('lineas.destroy', $linea->id) }}" class="d-inline" method="post">
     @method("DELETE")
     @csrf
-    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="confirmarEliminacion('{{ $linea->id}}')">
-        <i class="bi bi-telephone-x"></i>
+    <button type="submit" class="btn btn-outline-danger ">
+        <i class="fa-solid fa-phone-slash"></i>
     </button>
 </form>
 @endcan
@@ -177,7 +179,9 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="historialModalLabel">Historial de Modificaciones</h5>
+                <h5 class="modal-title" id="historialModalLabel">
+                    <i class="fa-solid fa-clock-rotate-left m-2"></i>Historial de Modificaciones
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -230,5 +234,36 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('form[id^="form-eliminar-"]').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formId = this.id;
+
+            Swal.fire({
+                title: '¿Estás seguro de que quieres eliminar esta línea?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#333',  // Fondo oscuro
+                color: '#fff',       // Texto blanco
+                customClass: {
+                    popup: 'swal2-dark',
+                    title: 'swal2-title',
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        });
+    });
+</script>
 
 @endsection

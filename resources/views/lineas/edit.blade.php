@@ -6,6 +6,7 @@
 <!-- Mensajes y Notificaciones -->
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
         <strong>¡Uy!</strong> Revisa los siguientes errores antes de continuar.
         <ul>
             @foreach($errors->all() as $error)
@@ -17,9 +18,8 @@
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <i class="bi bi-pencil-square" style="font-size:150%;"> </i>
-    <h2 class="align-middle">Modificar Línea Telefónica.</h2>
+<div class="d-flex">    
+    <h2><i class="fa-solid fa-phone-volume m-2"></i>Modificar Línea Telefónica.</h2>
 </div>
 
 <!--Contenido de la Sección -->
@@ -123,7 +123,7 @@
         </div>
     </div>
 
-    <div">
+    <div>
         <label for="campo_id" class="col-sm-2 col-form-label">Ubic/Par/Campo:</label>
         <div class="d-flex justify-content-between col-7">
             <div class="col-sm-5">
@@ -194,17 +194,19 @@
             </div>
     </div>
 
-    <div class="mt-3">
+    <div class="mt-3 d-flex justify-content-between col-7">
         <a href="{{ url('lineas') }}" class="btn btn-outline-danger btn-sm">
-            <i class="bi bi-backspace"></i>
-            <span>Regresar</span>
+            <span>
+                <i class="fa-solid fa-delete-left m-2"></i>Regresar
+            </span>
         </a>
-        |
         <button type="submit" class="btn btn-outline-primary btn-sm">
-            <i class="bi bi-pencil-square"> </i>
-            <span>Actualizar</span>
+            <span>
+                <i class="fa-solid fa-phone-volume m-2"></i>Actualizar Línea
+            </span>
         </button>
     </div>
+
 </form>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
