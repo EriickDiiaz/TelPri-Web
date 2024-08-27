@@ -42,7 +42,7 @@
         </a>
         <button type="submit" class="btn btn-outline-primary btn-sm">
             <span>
-                <i class="fa-solid fa-check m-2"></i>Actualizar
+                <i class="fa-solid fa-check m-2"></i>Actualizar Localidad
             </span>
         </button>
     </div>               

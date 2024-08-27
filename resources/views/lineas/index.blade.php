@@ -101,14 +101,17 @@
             <td>{{ $linea->mac }}</td>
             <td>{{ $linea->estado }}</td>
             <td>
+                <!--Boton Detalles-->
                 <a href="{{ url('lineas/'.$linea->id)}}" target="_blank" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
+                <!--Boton Editar-->
                 @can('Editar Lineas')
                 <a href="{{ url('lineas/'.$linea->id.'/edit')}}" target="_blank" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-phone-volume"></i>
                 </a>
                 @endcan
+                <!--Boton Eliminar-->
                 @can('Eliminar Lineas')
                 <form action="{{ url('lineas/'.$linea->id)}}" id="form-eliminar-{{ $linea->id }}" action="{{ route('lineas.destroy', $linea->id) }}" class="d-inline" method="post">
                     @method("DELETE")

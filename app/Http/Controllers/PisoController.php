@@ -51,15 +51,20 @@ class PisoController extends Controller
         $request->validate([
             'nombre' =>'required',
             'localidad_id' => 'required'
-        ],$errors);
+        ], $errors);
 
         $piso = new Piso();
         $piso->nombre = $request->input('nombre');
         $piso->localidad_id = $request->input('localidad_id');
         $piso->save();
 
-        return redirect ('pisos')->with('mensaje','Piso guardado con exito.');
+        // Obtener la localidad a la que pertenece el piso recién creado
+        $localidad = Localidad::findOrFail($piso->localidad_id);
+
+        // Redirigir al método show de la sección Localidades para la localidad correspondiente
+        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
     }
+
 
     /**
      * Display the specified resource.
@@ -99,7 +104,11 @@ class PisoController extends Controller
         $piso->localidad_id = $request->input('localidad_id');
         $piso->save();
 
-        return redirect ('pisos')->with('mensaje','Piso guardado con exito.');
+        // Obtener la localidad a la que pertenece el piso recién creado
+        $localidad = Localidad::findOrFail($piso->localidad_id);
+
+        // Redirigir al método show de la sección Localidades para la localidad correspondiente
+        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
     }
 
     /**
@@ -110,7 +119,11 @@ class PisoController extends Controller
         $piso = Piso::find($id);
         $piso->delete();
 
-        return redirect('pisos')->with('mensaje','Piso eliminado con exito.');
+        // Obtener la localidad a la que pertenece el piso recién creado
+        $localidad = Localidad::findOrFail($piso->localidad_id);
+
+        // Redirigir al método show de la sección Localidades para la localidad correspondiente
+        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
     }
     
 }

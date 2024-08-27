@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\localidad;
+use App\Models\Piso;
 use Illuminate\Http\Request;
 
 class LocalidadController extends Controller
@@ -48,9 +49,16 @@ class LocalidadController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(localidad $localidad)
+    public function show($id)
     {
-        //
+        // Buscar la localidad por su ID
+        $localidad = Localidad::findOrFail($id);
+
+        // Obtener todos los pisos asociados a la localidad
+        $pisos = $localidad->pisos()->orderBy('nombre')->get();
+
+        // Retornar la vista de detalles de la localidad con los pisos asociados
+        return view('localidades.show', compact('localidad', 'pisos'));
     }
 
     /**
@@ -92,4 +100,5 @@ class LocalidadController extends Controller
 
         return redirect('localidades')->with('mensaje','Localidad eliminada con exito.');
     }
+
 }

@@ -55,7 +55,7 @@
             <td>{{ $localidad->pisos_count }}</td>
             <td>
                 <!--Boton Pisos-->
-                <a href="#" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="">
+                <a href="{{ url('localidades/'.$localidad->id)}}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-elevator"></i>
                 </a>
                 <!--Boton Editar-->

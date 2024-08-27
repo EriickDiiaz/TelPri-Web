@@ -11,7 +11,7 @@
             const formId = this.id;
 
             Swal.fire({
-                title: '¿Estás seguro de que quieres eliminar este usuario?',
+                title: '¿Estás seguro de que quieres eliminar este registro?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

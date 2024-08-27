@@ -6,6 +6,7 @@
 <!-- Mensajes y Notificaciones -->
 @if ($errors->any())
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-triangle-exclamation"></i>
         <strong>¡Uy!</strong> Revisa los siguientes errores antes de continuar.
         <ul>
             @foreach($errors->all() as $error)
@@ -17,9 +18,8 @@
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <i class="bi bi-building-exclamation" style="font-size:150%;"></i>
-    <h2 class="align-middle">Modificar Piso.</h2>
+<div class="d-flex">    
+    <h2><i class="fa-solid fa-elevator m-2"></i>Modificar Piso.</h2>
 </div>
 
 <!--Contenido de la Sección -->
@@ -46,17 +46,18 @@
         </div>
     </div>
 
-    <div class="mt-3">
-        <a href="{{ url('pisos') }}" class="btn btn-outline-danger btn-sm">
-        <i class="bi bi-backspace"></i>
-        <span>Regresar</span>
-    </a>
-    |
-    <button type="submit" class="btn btn-outline-primary btn-sm">
-        <i class="bi bi-building-exclamation"></i>
-        <span>Actualizar</span>
-    </button>  
-    </div>         
+    <div class="mt-3 d-flex justify-content-between col-5">
+        <a href="{{ url('localidades/')}}" class="btn btn-outline-danger btn-sm">
+            <span>
+                <i class="fa-solid fa-delete-left m-2"></i>Regresar
+            </span>
+        </a>
+        <button type="submit" class="btn btn-outline-primary btn-sm">
+            <span>
+                <i class="fa-solid fa-check m-2"></i>Actualizar Piso
+            </span>
+        </button>
+    </div>      
 </form>
 
 @endsection
