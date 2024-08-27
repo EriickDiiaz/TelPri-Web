@@ -3,6 +3,15 @@
 @section('title','Lineas | Detalles de Linea')
 @section('contenido')
 
+<!-- Mensajes y Notificaciones -->
+@if(Session::has('mensaje'))
+    <div class="alert alert-success alert-dismissible" role="alert">
+        <i class="fa-solid fa-circle-check"></i>
+        {{ Session::get('mensaje') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 <!-- Titulo de la Sección -->
 <div class="d-flex">    
     <h2>

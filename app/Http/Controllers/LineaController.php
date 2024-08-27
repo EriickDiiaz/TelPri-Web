@@ -11,8 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 
 class LineaController extends Controller
@@ -138,7 +136,7 @@ class LineaController extends Controller
         
         $linea->save();
 
-        return redirect ('lineas')->with('mensaje','Línea agregada con exito.');
+        return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea agregada con éxito.');
     }
 
     /**
@@ -274,7 +272,6 @@ class LineaController extends Controller
             'par' => $request->input('par'),
             'directo' => $request->input('directo'),
             'observacion' => $request->input('observacion'),
-            'modificado' => $request->input('modificado'),
         ];
 
         foreach ($modificaciones as $campo => $valor_nuevo) {
@@ -296,7 +293,7 @@ class LineaController extends Controller
             }
         }
 
-        return redirect('lineas')->with('mensaje', 'Línea actualizada con éxito.');
+        return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea actualizada con éxito.');
     }
 
     /**
@@ -454,59 +451,6 @@ class LineaController extends Controller
         $campos = Campo::orderBy('nombre')->get();
 
         return view('lineas.avanzada', compact('lineas', 'localidades', 'campos'));
-    }
-
-    public function generatePDF($plataforma)
-    {
-        // Datos que quieras pasar a la vista
-        $lineas = Linea::where('plataforma', $plataforma)->get();
-
-        // Obtener el total de líneas para cada plataforma
-        list($totalAxe, $totalCisco, $totalEricsson, $totalExterno, $totalLineas) = $this->getTotalLineas();
-
-        // Renderizar la vista con los datos
-        $view = view('lineas.pdf-' . strtolower($plataforma), compact(
-            'lineas',
-            'totalAxe', 'totalCisco', 'totalEricsson', 'totalExterno', 'totalLineas'
-        ))->render();
-
-        // Inicializar Dompdf
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true);
-        $dompdf = new Dompdf($options);
-
-        // Cargar el HTML en Dompdf
-        $dompdf->loadHtml($view);
-
-        // (Opcional) Configurar el tamaño y la orientación del papel
-        $dompdf->setPaper('A4', 'landscape');
-
-        // Renderizar el PDF
-        $dompdf->render();
-
-        // Descargar el PDF
-        return $dompdf->stream('reporte_' . strtolower($plataforma) . '.pdf', ['Attachment' => false]);
-    }
-    
-    public function generatePDFAxe()
-    {
-        return $this->generatePDF('Axe');
-    }
-
-    public function generatePDFCisco()
-    {
-        return $this->generatePDF('Cisco');
-    }
-
-    public function generatePDFEricsson()
-    {
-        return $this->generatePDF('Ericsson');
-    }
-
-    public function generatePDFExterno()
-    {
-        return $this->generatePDF('Externo');
     }
 
     public function historial($id)
