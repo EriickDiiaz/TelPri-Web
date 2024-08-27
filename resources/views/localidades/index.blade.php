@@ -43,16 +43,16 @@
 <table class="table table-striped" id="datatableLocalidad">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Localidad</th>
+            <th>Pisos</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach ($localidades as $localidad)
         <tr>
-            <td>{{ $localidad->id }}</td>
             <td>{{ $localidad->nombre }}</td>
+            <td>{{ $localidad->pisos_count }}</td>
             <td>
                 <!--Boton Pisos-->
                 <a href="#" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="">

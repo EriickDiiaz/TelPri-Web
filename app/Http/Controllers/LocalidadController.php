@@ -12,7 +12,7 @@ class LocalidadController extends Controller
      */
     public function index(Request $request)
     {
-        $localidades = Localidad::orderBy('nombre')->get();
+        $localidades = Localidad::withCount('pisos')->orderBy('nombre')->get();
         $totalLocalidad = Localidad::count();
         return view('localidades.index', compact('localidades','totalLocalidad'));
     }
