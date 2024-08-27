@@ -2,6 +2,7 @@
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\CallcenterController;
 use App\Http\Controllers\CampoController;
+use App\Http\Controllers\DepositoController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\PisoController;
 use App\Http\Controllers\UsuarioController;
@@ -43,4 +44,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/campos', CampoController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permisos', PermisoController::class);
+    Route::resource('/depositos', DepositoController::class);
 });

@@ -12,7 +12,7 @@ class DepositoController extends Controller
      */
     public function index()
     {
-        //
+        return view('depositos.index');
     }
 
     /**
