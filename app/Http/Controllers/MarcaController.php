@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Deposito;
-use Illuminate\Http\Request;
 use App\Models\Marca;
-use App\Models\Modelo;
+use Illuminate\Http\Request;
 
-class DepositoController extends Controller
+class MarcaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('depositos.index');
+        //
     }
 
     /**
@@ -22,14 +20,7 @@ class DepositoController extends Controller
      */
     public function create()
     {
-        $marcas = Marca::orderBy('nombre')->get();
-        return view('depositos.create',compact('marcas'));
-    }
-
-    public function getModelosByMarcas($marca_id)
-    {
-        $modelos = Modelo::where('marca_id', $marca_id)->orderBy('id')->get();
-        return response()->json($modelos);
+        //
     }
 
     /**
@@ -43,7 +34,7 @@ class DepositoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Deposito $deposito)
+    public function show(Marca $marca)
     {
         //
     }
@@ -51,7 +42,7 @@ class DepositoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Deposito $deposito)
+    public function edit(Marca $marca)
     {
         //
     }
@@ -59,7 +50,7 @@ class DepositoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Deposito $deposito)
+    public function update(Request $request, Marca $marca)
     {
         //
     }
@@ -67,9 +58,8 @@ class DepositoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Deposito $deposito)
+    public function destroy(Marca $marca)
     {
         //
     }
-
 }

@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title','Callcenters | Crear')
+@section('title','Depósitos | Agregar')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -19,81 +19,125 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">    
-    <h2><i class="fa-solid fa-user-plus m-2"></i>Crear Usuario CallCenter.</h2>
+    <h2><i class="fa-solid fa-warehouse m-2"></i>Agregar Equipo a Depósito.</h2>
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('callcenters') }}" method="post">
+<form action="{{ url('depositos') }}" method="post">
     @csrf
 
     <div class="mb-2">
-        <label for="extension" class="col-sm-2 col-form-label">Extensión:</label>
+        <label for="inventario" class="col-sm-2 col-form-label">Código de Inventario:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="extension" id="extension" value="{{ old('extension') }}" required>
+            <input type="text" class="form-control" name="inventario" id="inventario" value="{{ old('inventario') }}" required>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="nombres" class="col-sm-2 col-form-label">Nombre y Apellido:</label>
+        <label for="serial" class="col-sm-2 col-form-label">Serial:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="nombres" id="nombres" value="{{ old('nombres') }}">
+            <input type="text" class="form-control" name="serial" id="serial" value="{{ old('serial') }}">
+        </div>
+    </div>
+
+    <div>
+        <div class="d-flex justify-content-between col-7">
+            <div class="col-sm-5">
+                <label for="marca_id" class="col-sm-2 col-form-label">Marca:</label>
+                <select name="marca_id" id="marca_id" class="form-select">
+                    <option value="{{ old('marca_id') }}">{{ old('marca_id') }}</option>
+                        @foreach($marcas as $marca)
+                        <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
+                        @endforeach
+                </select>
+            </div>
+            <div class="col-sm-5">
+                <label for="modelo_id" class="col-sm-2 col-form-label">Modelo:</label>
+                <select name="modelo_id" id="modelo_id" class="form-select">
+                    <option value="">Seleccione un Modelo</option>
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="usuario" class="col-sm-2 col-form-label">Usuario:</label>
+        <label for="ubicacion" class="col-sm-2 col-form-label">Ubicación:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="usuario" id="usuario" value="{{ old('usuario') }}">
-        </div>
-    </div>
-
-    <div class="mb-2">
-        <label for="contrasena" class="col-sm-2 col-form-label">Contraseña:</label>
-        <div class="col-sm-5">
-            <input type="text" class="form-control" name="contrasena" id="contrasena" value="{{ old('contrasena') }}">
-        </div>
-    </div>
-
-    <div class="mb-2">
-        <label for="servicio" class="col-sm-2 col-form-label">Servicio:</label>
-        <div class="col-sm-5">
-            <select name="servicio" id="servicio" class="form-select">
-                <option value="{{ old('servicio') }}">{{ old('servicio') }}</option>
-                <option value="CIC">CIC</option>
-                <option value="CSI">CSI</option>
-                <option value="HCM">HCM</option>
-                <option value="CeCom">CeCom</option>
-                <option value="PROV">Provisioning</option>
-                <option value="COR">COR</option>
+            <select name="ubicacion" id="ubicacion" class="form-select">
+                <option value="{{ old('ubicacion') }}">{{ old('ubicacion') }}</option>
+                <option value="Cortijos">Cortijos</option>
+                <option value="Nea">Nea</option>
             </select>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="acceso" class="col-sm-2 col-form-label">Acceso:</label>
+        <label for="estado" class="col-sm-2 col-form-label">Estado:</label>
         <div class="col-sm-5">
-        <select name="acceso" id="acceso" class="form-select">
-                <option value="{{ old('acceso') }}">{{ old('acceso') }}</option>
-                <option value="Agent">Agent</option>
-                <option value="Agent/Superv">Agent/Superv</option>
-                <option value="Agent/Superv/Report">Agent/Superv/Report</option>
+        <select name="estado" id="estado" class="form-select">
+                <option value="{{ old('estado') }}">{{ old('estado') }}</option>
+                <option value="Deposito">Deposito</option>
+                <option value="Por Desincorporar">Por Desincorporar</option>
+                <option value="Por Reparar">Por Reparar</option>
             </select>
+        </div>
+    </div>
+
+    <div>
+        <label for="observacion" class="col-sm-2 col-form-label">Observaciones:</label>
+        <div class="col-sm-5">
+            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10"></textarea>
+        </div>
+    </div>
+
+    <div>
+        <label for="modificado" class="col-sm-2 col-form-label">Creado por:</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" name="modificado" id="modificado" value="{{ Auth::user()->name }}" readonly>
         </div>
     </div>
 
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('callcenters') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ url('depositos') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
         <button type="submit" class="btn btn-outline-success btn-sm">
             <span>
-                <i class="fa-solid fa-user-plus m-2"></i>Agregar Usuario
+                <i class="fa-solid fa-user-plus m-2"></i>Agregar Equipo
             </span>
         </button>
     </div>
 
 </form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Script para cargar los modelos segun la marca seleccionada-->
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#marca_id').change(function() {
+        var marcaID = $(this).val();
+        if(marcaID) {
+            $.ajax({
+                url: '{{ url("/get-modelos") }}/' + marcaID,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#modelo_id').empty();
+                    $('#modelo_id').append('<option value="">Seleccione un modelo</option>');
+                    $.each(data, function(key, value) {
+                        $('#modelo_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+                    });
+                }
+            });
+        } else {
+            $('#modelo_id').empty();
+            $('#modelo_id').append('<option value="">Seleccione un modelo</option>');
+        }
+    });
+});
+</script>
 
 @endsection

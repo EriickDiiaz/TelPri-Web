@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ubicacion', 100);
             $table->string('estado', 20);
             $table->string('modificado', 50)->nullable(); // Para quien realizó el último cambio
-            $table->text('observaciones')->nullable(); // Observaciones adicionales
+            $table->text('observacion')->nullable(); // Observaciones adicionales
             $table->timestamps();
         });
     }
