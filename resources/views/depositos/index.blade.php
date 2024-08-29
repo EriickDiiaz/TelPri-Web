@@ -64,8 +64,8 @@
         <tr>
             <td>{{$deposito->inventario}}</td>
             <td>{{$deposito->serial}}</td>
-            <td>{{$deposito->marca_id}}</td>
-            <td>{{$deposito->modelo_id}}</td>
+            <td>{{$deposito->marca->nombre ?? 'N/A'}}</td>
+            <td>{{$deposito->modelo->nombre ?? 'N/A'}}</td>
             <td>{{$deposito->ubicacion}}</td>
             <td>{{$deposito->estado}}</td>
             <td>
