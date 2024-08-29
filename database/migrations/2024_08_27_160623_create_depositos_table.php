@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('depositos', function (Blueprint $table) {
             $table->id();
-            $table->string('inventario', 50)->unique();
+            $table->string('inventario', 20)->unique();
             $table->string('serial', 50)->nullable();
-            $table->string('marca', 50);
-            $table->string('modelo', 50);            
-            $table->string('ubicacion', 100);
+            $table->string('marca', 15)->nullable();
+            $table->string('modelo', 10)->nullable();            
+            $table->string('ubicacion', 10)->nullable();
             $table->string('estado', 20);
             $table->string('modificado', 50)->nullable(); // Para quien realizó el último cambio
             $table->text('observacion')->nullable(); // Observaciones adicionales

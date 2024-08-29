@@ -59,31 +59,39 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>        
+    <tbody>
+        @foreach($depositos as $deposito)
         <tr>
-            <td>XxXxXxX</td>
-            <td>XxXxXxX</td>   
-            <td>XxXxXxX</td>   
-            <td>XxXxXxX</td>                        
-            <td>XxXxXxX</td>   
-            <td>XxXxXxX</td>
+            <td>{{$deposito->inventario}}</td>
+            <td>{{$deposito->serial}}</td>
+            <td>{{$deposito->marca_id}}</td>
+            <td>{{$deposito->modelo_id}}</td>
+            <td>{{$deposito->ubicacion}}</td>
+            <td>{{$deposito->estado}}</td>
             <td>
-                <!--Boton Pisos-->
-                <a href="#" class="btn btn-outline-light btn-sm">
-                    <i class="fa-solid fa-elevator"></i>
+                <!--Boton Detalles-->
+                <a href="{{ url('depositos/'.$deposito->id)}}" target="_blank" class="btn btn-outline-light btn-sm">
+                    <i class="fa-solid fa-list-ul"></i>
                 </a>
                 <!--Boton Editar-->
-                <a href="#" class="btn btn-outline-primary btn-sm">
+                @can('Editar Equipos')
+                <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" target="_blank" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
+                @endcan
                 <!--Boton Eliminar-->
-                
+                @can('Eliminar Equipos')
+                <form action="{{ url('depositos/'.$deposito->id)}}" id="form-eliminar-{{ $deposito->id }}" action="{{ route('depositos.destroy', $deposito->id) }}" class="d-inline" method="post">
+                    @method("DELETE")
+                    @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
-                
+                </form>
+                @endcan
             </td>
-        </tr>
+        </tr>        
+        @endforeach
     </tbody>
 </table>
 

@@ -6,6 +6,7 @@ use App\Models\Deposito;
 use Illuminate\Http\Request;
 use App\Models\Marca;
 use App\Models\Modelo;
+use Illuminate\Support\Str;
 
 class DepositoController extends Controller
 {
@@ -14,7 +15,9 @@ class DepositoController extends Controller
      */
     public function index()
     {
-        return view('depositos.index');
+        $depositos = Deposito::all();
+
+        return view('depositos.index',compact('depositos'));
     }
 
     /**
@@ -26,7 +29,7 @@ class DepositoController extends Controller
         return view('depositos.create',compact('marcas'));
     }
 
-    public function getModelosByMarcas($marca_id)
+    public function getModelosByMarca($marca_id)
     {
         $modelos = Modelo::where('marca_id', $marca_id)->orderBy('id')->get();
         return response()->json($modelos);
@@ -37,7 +40,43 @@ class DepositoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $errors = [
+            'inventario.unique' => 'Este Código de Inventario ya se encuentra en Depósito.',
+            'inventario.required' => 'Debes colocar el Código de Inventario, es obligatorio.',
+            'inventario.max' => 'La extensión no puede tener más de 20 caracteres.',
+            'serial.max' => 'El Serial no puede tener más de 50 caracteres.',
+            'marca_id.max' => 'La Marca no puede tener más de 15 caracteres.',
+            'modelo_id.max' => 'El Modelo no puede tener más de 10 caracteres.',
+            'ubicacion.max' => 'La Ubicación no puede tener más de 10 caracteres.',
+            'estado.required' => 'Debes seleccionar el estado, es obligatorio.',
+            'estado.max' => 'El Estado no puede tener más de 20 caracteres.',
+            'observacion.max' => 'Las observaciones no puede tener más de 255 caracteres.'
+        ];
+
+        $request->validate([
+            'inventario' =>'required|unique:depositos|max:20',
+            'serial' =>'max:50|nullable',
+            'marca_id' =>'max:15|nullable',
+            'modelo_id' =>'max:10|nullable',
+            'ubicacion' =>'max:10|nullable',
+            'estado' => 'required|max:20',
+            'observacion' => 'max:255|nullable',
+            'modificado' => 'max:50|nullable',
+        ],$errors);
+
+        $deposito = new Deposito();
+        $deposito->inventario = $request->input('inventario');
+        $deposito->serial = Str::upper($request->input('serial'));
+        $deposito->marca_id = $request->input('marca_id');
+        $deposito->modelo_id = $request->input('modelo_id');
+        $deposito->ubicacion = $request->input('ubicacion');
+        $deposito->estado = $request->input('estado');
+        $deposito->observacion = $request->input('observacion');
+        $deposito->modificado = $request->input('modificado');
+        
+        $deposito->save();
+
+        return redirect()->route('depositos.index')->with('mensaje', 'Equipo agregado a Depósito con éxito.');
     }
 
     /**
@@ -67,9 +106,12 @@ class DepositoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Deposito $deposito)
+    public function destroy($id)
     {
-        //
+        $deposito = Deposito::find($id);
+        $deposito->delete();
+
+        return redirect('depositos')->with('mensaje','Equipo eliminado de deposito con exito.');
     }
 
 }
