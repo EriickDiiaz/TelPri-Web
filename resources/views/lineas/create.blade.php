@@ -172,7 +172,7 @@
     <div>
         <label for="observacion" class="col-sm-2 col-form-label">Observaciones:</label>
         <div class="col-sm-7">
-            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10"></textarea>
+            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10">{{ old('observacion') }}</textarea>
         </div>
     </div>
 

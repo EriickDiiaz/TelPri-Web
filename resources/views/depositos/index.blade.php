@@ -70,12 +70,12 @@
             <td>{{$deposito->estado}}</td>
             <td>
                 <!--Boton Detalles-->
-                <a href="{{ url('depositos/'.$deposito->id)}}" target="_blank" class="btn btn-outline-light btn-sm">
+                <a href="{{ url('depositos/'.$deposito->id)}}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
                 <!--Boton Editar-->
                 @can('Editar Equipos')
-                <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" target="_blank" class="btn btn-outline-primary btn-sm">
+                <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
                 @endcan

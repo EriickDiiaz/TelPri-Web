@@ -27,20 +27,20 @@
     @csrf
 
     <div class="mb-2">
-        <label for="inventario" class="col-sm-2 col-form-label">Código de Inventario:</label>
-        <div class="col-sm-5">
+        <label for="inventario" class="col-7 col-form-label">Código de Inventario:</label>
+        <div class="col-7">
             <input type="text" class="form-control" name="inventario" id="inventario" value="{{ old('inventario') }}" required>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="serial" class="col-sm-2 col-form-label">Serial:</label>
-        <div class="col-sm-5">
+        <label for="serial" class="col-7 col-form-label">Serial:</label>
+        <div class="col-7">
             <input type="text" class="form-control" name="serial" id="serial" value="{{ old('serial') }}">
         </div>
     </div>
 
-    <div>
+    <div class="mb-2">
         <div class="d-flex justify-content-between col-7">
             <div class="col-sm-5">
                 <label for="marca_id" class="col-sm-2 col-form-label">Marca:</label>
@@ -61,8 +61,8 @@
     </div>
 
     <div class="mb-2">
-        <label for="ubicacion" class="col-sm-2 col-form-label">Ubicación:</label>
-        <div class="col-sm-5">
+        <label for="ubicacion" class="col-7 col-form-label">Ubicación:</label>
+        <div class="col-7">
             <select name="ubicacion" id="ubicacion" class="form-select">
                 <option value="{{ old('ubicacion') }}">{{ old('ubicacion') }}</option>
                 <option value="Cortijos">Cortijos</option>
@@ -72,8 +72,8 @@
     </div>
 
     <div class="mb-2">
-        <label for="estado" class="col-sm-2 col-form-label">Estado:</label>
-        <div class="col-sm-5">
+        <label for="estado" class="col-7 col-form-label">Estado:</label>
+        <div class="col-7">
         <select name="estado" id="estado" class="form-select">
                 <option value="{{ old('estado') }}">{{ old('estado') }}</option>
                 <option value="Deposito">Deposito</option>
@@ -83,21 +83,21 @@
         </div>
     </div>
 
-    <div>
-        <label for="observacion" class="col-sm-2 col-form-label">Observaciones:</label>
-        <div class="col-sm-5">
-            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10"></textarea>
+    <div class="mb-2">
+        <label for="observacion" class="col-7 col-form-label">Observaciones:</label>
+        <div class="col-7">
+            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="3">{{ old('observacion') }}</textarea>
         </div>
     </div>
 
-    <div>
-        <label for="modificado" class="col-sm-2 col-form-label">Creado por:</label>
-        <div class="col-sm-5">
+    <div class="mb-2">
+        <label for="modificado" class="col-7 col-form-label">Creado por:</label>
+        <div class="col-7">
             <input type="text" class="form-control" name="modificado" id="modificado" value="{{ Auth::user()->name }}" readonly>
         </div>
     </div>
 
-    <div class="mt-3 d-flex justify-content-between col-5">
+    <div class="mt-3 d-flex justify-content-between col-7">
         <a href="{{ url('depositos') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
