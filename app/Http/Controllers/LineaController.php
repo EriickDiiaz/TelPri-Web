@@ -79,8 +79,9 @@ class LineaController extends Controller
     public function store(Request $request)
     {
         $errors = [
-            'linea.required' => 'Debes colocar la línea, es obligatorio.',
-            'linea.max' => 'La extensión no puede tener más de 10 caracteres.',
+            'linea.required' => 'Debes colocar la Línea telefónica, es obligatorio.',
+            'linea.unique' => 'La Línea telefónica ya está en uso.',
+            'linea.max' => 'La Línea telefónica no puede tener más de 10 caracteres.',
             'inventario.max' => 'El Inventario no puede tener más de 50 caracteres.',
             'serial.max' => 'El Serial no puede tener más de 50 caracteres.',
             'plataforma.max' => 'La Plataforma no puede tener más de 20 caracteres.',
@@ -97,7 +98,7 @@ class LineaController extends Controller
         ];
 
         $request->validate([
-            'linea' =>'required|max:10',
+            'linea' =>'required|unique:lineas|max:10', 
             'vip' =>'max:20|nullable',
             'inventario' =>'max:50|nullable',
             'serial' =>'max:50|nullable',
@@ -195,6 +196,7 @@ class LineaController extends Controller
     {
         $errors = [
             'linea.required' => 'Debes colocar la línea, es obligatorio.',
+            'linea.unique' => 'La Línea telefónica ya está en uso.',
             'linea.max' => 'La extensión no puede tener más de 10 caracteres.',
             'inventario.max' => 'El Inventario no puede tener más de 50 caracteres.',
             'serial.max' => 'El Serial no puede tener más de 50 caracteres.',
@@ -212,7 +214,7 @@ class LineaController extends Controller
         ];
 
         $request->validate([
-            'linea' =>'required|max:10',
+            'linea' =>'required|max:10|unique:lineas,linea,'.$id,
             'vip' =>'max:20|nullable',
             'inventario' =>'max:50|nullable',
             'serial' =>'max:50|nullable',

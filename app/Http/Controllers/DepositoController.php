@@ -76,7 +76,7 @@ class DepositoController extends Controller
         
         $deposito->save();
 
-        return redirect()->route('depositos.show', $deposito->id)->with('mensaje', 'Equipos agregado a depósito con éxito.');
+        return redirect()->route('depositos.show', $deposito->id)->with('mensaje', 'Equipo agregado a depósito con éxito.');
     }
 
     /**
