@@ -25,27 +25,25 @@
     </a>    
 </div>
 
-<!-- Resumen de Usuarios -->
-<div class="d-flex mb-2">
+<!-- Resumen de Lineas -->
+<div class="d-flex py-2">
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            Cortijos:
-            <span class="badge text-bg-primary rounded-pill mx-2">00</span>
+        <button class="btn btn-outline-light btn-sm filter-button disabled">Cortijos:
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCortijos }}</span>
         </button>
     </div>
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            Nea:
-            <span class="badge text-bg-primary rounded-pill mx-2">00</span>
+        <button class="btn btn-outline-light btn-sm filter-button disabled">Nea:
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalNea }}</span>
         </button>
     </div>
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-primary btn-sm" disabled>
-            Total:
-            <span class="badge text-bg-primary rounded-pill mx-2">00</span>
-        </button>
+        <button class="btn btn-outline-primary btn-sm filter-button disabled">Total:
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalDeposito }}</span>
+        </button>        
     </div>
 </div>
+
 <!-- Contenido de Sección -->
 <table class="table table-striped" id="datatableDepositos">
     <thead>

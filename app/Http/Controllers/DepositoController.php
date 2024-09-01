@@ -17,7 +17,13 @@ class DepositoController extends Controller
     {
         $depositos = Deposito::all();
 
-        return view('depositos.index',compact('depositos'));
+        $totalCortijos = Deposito::where('ubicacion', 'Cortijos')->count();
+        // Obtener el total de usuarios para COR
+        $totalNea = Deposito::where('ubicacion', 'Nea')->count();        
+        // Obtener el total de todos los usuarios
+        $totalDeposito = Deposito::count();
+
+        return view('depositos.index',compact('depositos','totalCortijos', 'totalNea', 'totalDeposito'));
     }
 
     /**
