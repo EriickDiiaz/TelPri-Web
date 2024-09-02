@@ -77,8 +77,10 @@
         <select name="estado" id="estado" class="form-select">
                 <option value="{{ old('estado') }}">{{ old('estado') }}</option>
                 <option value="Deposito">Deposito</option>
+                <option value="Instalado">Instalado</option>
                 <option value="Por Desincorporar">Por Desincorporar</option>
                 <option value="Por Reparar">Por Reparar</option>
+                <option value="Desincorporado">Desincorporado</option>
             </select>
         </div>
     </div>

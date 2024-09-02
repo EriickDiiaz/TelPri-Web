@@ -51,6 +51,7 @@ class DepositoController extends Controller
             'inventario.required' => 'Debes colocar el Código de Inventario, es obligatorio.',
             'inventario.max' => 'La extensión no puede tener más de 20 caracteres.',
             'serial.max' => 'El Serial no puede tener más de 50 caracteres.',
+            'serial.unique' => 'Este Serial ya se encuentra en Depósito.',
             'marca_id.max' => 'La Marca no puede tener más de 15 caracteres.',
             'modelo_id.max' => 'El Modelo no puede tener más de 10 caracteres.',
             'ubicacion.max' => 'La Ubicación no puede tener más de 10 caracteres.',
@@ -61,7 +62,7 @@ class DepositoController extends Controller
 
         $request->validate([
             'inventario' =>'required|unique:depositos|max:20',
-            'serial' =>'max:50|nullable',
+            'serial' =>'unique:depositos|max:50',
             'marca_id' =>'max:15|nullable',
             'modelo_id' =>'max:10|nullable',
             'ubicacion' =>'max:10|nullable',
@@ -116,6 +117,7 @@ class DepositoController extends Controller
             'inventario.required' => 'Debes colocar el Código de Inventario, es obligatorio.',
             'inventario.max' => 'La extensión no puede tener más de 20 caracteres.',
             'serial.max' => 'El Serial no puede tener más de 50 caracteres.',
+            'serial.unique' => 'Este Serial ya se encuentra en Depósito.',
             'marca_id.max' => 'La Marca no puede tener más de 15 caracteres.',
             'modelo_id.max' => 'El Modelo no puede tener más de 10 caracteres.',
             'ubicacion.max' => 'La Ubicación no puede tener más de 10 caracteres.',
@@ -126,7 +128,7 @@ class DepositoController extends Controller
         
         $request->validate([
             'inventario' =>'required|max:20|unique:depositos,inventario,'.$id,
-            'serial' =>'max:50|nullable',
+            'serial' =>'max:50|unique:depositos,serial,'.$id,
             'marca_id' =>'max:15|nullable',
             'modelo_id' =>'max:10|nullable',
             'ubicacion' =>'max:10|nullable',
