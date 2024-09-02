@@ -18,11 +18,19 @@
 </div>
 
 <!-- Botones Agregar -->   
-<div class="d-flex mb-2">
-    <a href="{{ url('depositos/create') }}" class="btn btn-outline-success btn-sm">
-        <i class="fa-solid fa-plus m-2"></i>
-        <span>Agregar Equipo</span>
-    </a>    
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <a href="{{ url('depositos/create') }}" class="btn btn-outline-success btn-sm">
+            <i class="fa-solid fa-plus m-2"></i>
+            <span>Agregar Equipo</span>
+        </a>
+    </div>
+    <div>
+        <a href="{{ url('depositos/marcas/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-plus m-2"></i>
+            <span>Adm. Marcas / Modelos</span>
+        </a>
+    </div>
 </div>
 
 <!-- Resumen de Lineas -->

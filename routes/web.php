@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/campos', CampoController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permisos', PermisoController::class);
+    Route::resource('/depositos/marcas', MarcaController::class);
     Route::resource('/depositos', DepositoController::class);
-    Route::resource('/marcas', MarcaController::class);
-    Route::resource('/marcas', ModeloController::class);
+    Route::resource('/modelos', ModeloController::class);
 });
