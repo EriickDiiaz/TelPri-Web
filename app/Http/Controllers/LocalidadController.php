@@ -76,18 +76,18 @@ class LocalidadController extends Controller
     public function update(Request $request, $id)
     {
         $errors = [
-            'nombre.required' => 'El Nombre de la Marca es obligatorio.',
+            'nombre.required' => 'El Nombre de la Localidad es obligatorio.',
         ];
         
         $request->validate([
             'nombre' =>'required',
         ], $errors);
 
-        $marca = Marca::find($id);
-        $marca->nombre = $request->input('nombre');        
-        $marca->save();
+        $localidad = Localidad::find($id);
+        $localidad->nombre = $request->input('nombre');        
+        $localidad->save();
 
-        return redirect ('depositos')->with('mensaje','La Marca de equipo ha sido actualizada con exito.');
+        return redirect ('localidades')->with('mensaje','La Localidad ha sido actualizada con exito.');
     }
 
     /**
