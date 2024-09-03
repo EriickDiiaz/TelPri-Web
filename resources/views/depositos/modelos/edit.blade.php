@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title','Pisos | Crear')
+@section('title','Modelos | Modificar Modelo')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -19,43 +19,45 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">    
-    <h2><i class="fa-solid fa-elevator m-2"></i>Crear Piso.</h2>
+    <h2><i class="fa-solid fa-pen-to-square m-2"></i>Modificar Modelo.</h2>
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('pisos') }}" method="post">
+<form action="{{ url('depositos/modelos/' .$modelo->id) }}" method="post">
+    @method("PUT")
     @csrf
+
     <div>
-        <label for="nombre" class="col-sm-2 col-form-label">Nombre de piso:</label>
+        <label for="nombre" class="col-sm-2 col-form-label">Nombre del Modelo:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre') }}" required>
+            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ $modelo->nombre }}" required>
         </div>
     </div>
 
     <div>
-        <label for="localidad_id" class="col-sm-2 col-form-label">Localidad:</label>
+        <label for="marca_id" class="col-sm-2 col-form-label">Marca:</label>
         <div class="col-sm-5">
-            <select name="localidad_id" id="localidad_id" class="form-select">
-                <option value="{{ old('localidad_id') }}">{{ old('localidad_id') }}</option>
-                @foreach($localidades as $localidad)
-                <option value="{{ $localidad->id }}">{{ $localidad->nombre }}</option>
+            <select name="marca_id" id="marca_id" class="form-select">
+                <option value="{{ $modelo->marca_id }}">{{ $modelo->marca->nombre }}</option>
+                @foreach($marcas as $marca)
+                <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
                 @endforeach
             </select>
         </div>
     </div>
 
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('localidades/')}}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ url('depositos/modelos')}}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
-        <button type="submit" class="btn btn-outline-success btn-sm">
+        <button type="submit" class="btn btn-outline-primary btn-sm">
             <span>
-                <i class="fa-solid fa-plus m-2"></i>Agregar Piso
+                <i class="fa-solid fa-check m-2"></i>Actualizar Modelo
             </span>
         </button>
-    </div>                
+    </div>      
 </form>
 
 @endsection

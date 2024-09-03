@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title','Marcas | Crear')
+@section('title','Modelos | Crear')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -18,33 +18,44 @@
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="d-flex">
-    <h2><i class="fa-solid fa-plus m-2"></i>Agregar Marca de Equipo.</h2>
+<div class="d-flex">    
+    <h2><i class="fa-solid fa-plus m-2"></i>Agregar Modelo de Equipo.</h2>
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('depositos/marcas') }}" method="post">
+<form action="{{ url('depositos/modelos') }}" method="post">
     @csrf
-
-    <div class="mb-2">
-        <label for="nombre" class="col-sm-2 col-form-label">Nombre de Marca:</label>
+    <div>
+        <label for="nombre" class="col-sm-2 col-form-label">Nombre de Modelo:</label>
         <div class="col-sm-5">
             <input type="text" class="form-control" name="nombre" id="nombre" value="{{ old('nombre') }}" required>
         </div>
     </div>
 
+    <div>
+        <label for="marca_id" class="col-sm-2 col-form-label">Marca:</label>
+        <div class="col-sm-5">
+            <select name="marca_id" id="marca_id" class="form-select">
+                <option value="{{ old('marca_id') }}">{{ old('marca_id') }}</option>
+                @foreach($marcas as $marca)
+                <option value="{{ $marca->id }}">{{ $marca->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('depositos') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ url('depositos/')}}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
         <button type="submit" class="btn btn-outline-success btn-sm">
             <span>
-                <i class="fa-solid fa-plus m-2"></i>Agregar Marca
+                <i class="fa-solid fa-plus m-2"></i>Agregar Modelo
             </span>
         </button>
-    </div>       
+    </div>                
 </form>
 
 @endsection

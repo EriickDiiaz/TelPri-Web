@@ -44,15 +44,22 @@ class MarcaController extends Controller
         $marca->nombre = Str::title($request->input('nombre'));
         $marca->save();
 
-        return redirect ('depositos')->with('mensaje','La Marca de equipo ha sido guardada con exito.');
+        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo agregado con éxito.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Marca $marca)
+    public function show($id)
     {
-        //
+        // Buscar la marca por su ID
+        $marca = Marca::findOrFail($id);
+
+        // Obtener todos los modelos asociados a la marca
+        $modelos = $marca->modelos()->orderBy('nombre')->get();
+
+        // Retornar la vista de detalles de la marca con los modelos asociados
+        return view('depositos/marcas.show', compact('marca', 'modelos'));
     }
 
     /**
@@ -81,7 +88,7 @@ class MarcaController extends Controller
         $marca->nombre = $request->input('nombre');        
         $marca->save();
 
-        return redirect ('depositos')->with('mensaje','La Marca de equipo ha sido actualizada con exito.');
+        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo agregado con éxito.');
     }
 
     /**

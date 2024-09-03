@@ -54,6 +54,10 @@
             <td>{{ $marca->nombre }}</td>
             <td>{{ $marca->modelos_count }}</td>
             <td>
+                <!--Boton Modelos-->
+                <a href="{{ url('depositos/marcas/'.$marca->id)}}" class="btn btn-outline-light btn-sm">
+                    <i class="fa-solid fa-gears"></i>
+                </a>
                 <!--Boton Editar-->
                 <a href="{{ url('depositos/marcas/'.$marca->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
