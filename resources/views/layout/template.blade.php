@@ -36,6 +36,9 @@
         .admin-navbar {
             background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
         }
+        .btn-telpri {
+            background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
+        }
         /* Ajuste de espaciado para el contenido principal */
         body {
             padding-top: 4%; /* Altura del navbar */
