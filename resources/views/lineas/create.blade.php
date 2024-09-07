@@ -70,7 +70,7 @@
     <div>
         <div class="d-flex justify-content-between col-7">
             <div class="col-sm-5">
-                <label for="localidad" class="col-sm-2 col-form-label">Localidad:</label>
+                <label for="localidad_id" class="col-sm-2 col-form-label">Localidad:</label>
                 <select name="localidad_id" id="localidad_id" class="form-select">
                     <option value="{{ old('localidad_id') }}">{{ old('localidad_id') }}</option>
                         @foreach($localidades as $localidad)
@@ -172,15 +172,15 @@
     <div>
         <label for="observacion" class="col-sm-2 col-form-label">Observaciones:</label>
         <div class="col-sm-7">
-            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10"></textarea>
+            <textarea class="form-control" name="observacion" id="observacion" cols="10" rows="10">{{ old('observacion') }}</textarea>
         </div>
     </div>
 
     <div>
         <label for="modificado" class="col-sm-2 col-form-label">Creado por:</label>
-            <div class="col-sm-7">
-                <input type="text" class="form-control" name="modificado" id="modificado" value="{{ Auth::user()->name }}" readonly>
-            </div>
+        <div class="col-sm-7">
+            <input type="text" class="form-control" name="modificado" id="modificado" value="{{ Auth::user()->name }}" readonly>
+        </div>
     </div>
     
     <div class="mt-3 d-flex justify-content-between col-sm-7">

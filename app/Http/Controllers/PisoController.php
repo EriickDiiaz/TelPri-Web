@@ -44,7 +44,7 @@ class PisoController extends Controller
     public function store(Request $request)
     {
         $errors = [
-            'piso.required' => 'El nombre del piso es obligatorio.',
+            'nombre.required' => 'El nombre del piso es obligatorio.',
             'localidad_id.required' => 'Debes seleccionar la Localidad a la que pertenece este Piso.',
         ];
 
@@ -108,7 +108,7 @@ class PisoController extends Controller
         $localidad = Localidad::findOrFail($piso->localidad_id);
 
         // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
+        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso actualizado con éxito.');
     }
 
     /**

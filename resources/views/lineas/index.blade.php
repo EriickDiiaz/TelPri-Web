@@ -18,19 +18,30 @@
 </div>
 
 <!-- Botones de Acción -->
-<div class="d-flex">   
-    @can('Crear Lineas')
-    <a href="{{ url('lineas/create') }}" class="btn btn-outline-success btn-sm me-2">
-        <span>
-            <i class="fa-solid fa-phone-volume m-2"></i>Agregar Línea
-        </span>
-    </a>
-    @endcan
-    <a href="{{ url('lineas/avanzada') }}" class="btn btn-outline-light btn-sm me-2">
-        <span>
-            <i class="fa-solid fa-binoculars m-2"></i>Busqueda Avanzada
-        </span>
-    </a>
+<div class="d-flex justify-content-between">
+    <div>
+        @can('Crear Lineas')
+        <a href="{{ url('lineas/create') }}" class="btn btn-outline-success btn-sm me-2">
+            <span>
+                <i class="fa-solid fa-phone-volume m-2"></i>Agregar Línea
+            </span>
+        </a>
+        @endcan
+        <a href="{{ url('lineas/avanzada') }}" class="btn btn-outline-light btn-sm me-2">
+            <span>
+                <i class="fa-solid fa-binoculars m-2"></i>Busqueda Avanzada
+            </span>
+        </a>
+    </div>
+    <div>
+        <form class="d-flex" role="search" action="{{ route('lineas.index') }}" method="get">
+            <input class="form-control me-2" type="search" placeholder="Busqueda" aria-label="Search" name="busqueda" value="{{ $busqueda }}">
+            <button class="btn btn-outline-success" type="submit">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
+    </div>
+    
 </div>
 
 <!-- Resumen de Lineas -->

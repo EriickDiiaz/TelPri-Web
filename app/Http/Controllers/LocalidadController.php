@@ -76,7 +76,7 @@ class LocalidadController extends Controller
     public function update(Request $request, $id)
     {
         $errors = [
-            'nombre.required' => 'El campo nombre es obligatorio.',
+            'nombre.required' => 'El Nombre de la Localidad es obligatorio.',
         ];
         
         $request->validate([
@@ -87,7 +87,7 @@ class LocalidadController extends Controller
         $localidad->nombre = $request->input('nombre');        
         $localidad->save();
 
-        return redirect ('localidades')->with('mensaje','Localidad actualizada con exito.');
+        return redirect ('localidades')->with('mensaje','La Localidad ha sido actualizada con exito.');
     }
 
     /**
