@@ -147,8 +147,8 @@
                     <a class="btn btn-dark btn-sm text-start" href="#">
                         <i class="fa-solid fa-network-wired m-2"></i>Redes Corp.
                     </a>
-                    <div class="border-top my-2 nav-item"></div>
                     @can('Menu Localidades')
+                    <div class="border-top my-2 nav-item"></div>                    
                     <a class="btn btn-dark btn-sm text-start" href="{{ url('/localidades') }}">
                         <i class="fa-solid fa-location-dot m-2"></i>Adm. de Localidades
                     </a>
@@ -159,8 +159,8 @@
                         <i class="fa-solid fa-person m-2"></i>Adm. de Usuarios
                     </a>
                     @endcan
-                    <div class="border-top my-2 nav-item"></div>
                     @can('Menu Sistema')
+                    <div class="border-top my-2 nav-item"></div>                    
                     <a class="btn btn-dark btn-sm text-start" href="{{ url('/roles') }}">
                         <i class="fa-solid fa-address-card m-2"></i>Adm. de Roles
                     </a>

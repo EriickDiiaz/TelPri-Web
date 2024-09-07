@@ -17,7 +17,8 @@
     <h2><i class="fa-solid fa-warehouse m-2"></i>Administración de Depósitos.</h2>
 </div>
 
-<!-- Botones Agregar -->   
+<!-- Botones Agregar -->
+@can('Agregar Equipos')
 <div class="d-flex justify-content-between mb-2">
     <div>
         <a href="{{ url('depositos/create') }}" class="btn btn-outline-success btn-sm">
@@ -32,6 +33,7 @@
         </a>
     </div>
 </div>
+@endcan
 
 <!-- Resumen de Lineas -->
 <div class="d-flex py-2">
