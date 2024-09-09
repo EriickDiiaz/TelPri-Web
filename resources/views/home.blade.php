@@ -252,77 +252,77 @@
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Depósito:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depCrtDep }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Instalado:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depCrtIns }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Reparar:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depCrtPRep }}</h4>
                         </div>
                     </div>        
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Por Desincorporar:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depCrtPDes }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Desincorporado:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depCrtDes }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $totalDepCrt }}</h4>
                         </div>
                     </div>
                 </div>
 
                 <h5 style="color: #0098DA;">NEA.</h5>
                 <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
+                <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Depósito:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depNeaDep }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Instalado:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depNeaIns }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Reparar:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depNeaPRep }}</h4>
                         </div>
                     </div>        
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Por Desincorporar:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depNeaPDes }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Desincorporado:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $depNeaDes }}</h4>
                         </div>
                     </div>
                     <div class="btn btn-telpri px-4 me-1">
                         <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
                         <div>
-                            <h4>00</h4>
+                            <h4>{{ $totalDepNea }}</h4>
                         </div>
                     </div>
                 </div>

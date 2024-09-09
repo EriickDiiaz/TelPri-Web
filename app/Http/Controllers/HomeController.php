@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Linea;
+use App\Models\Deposito;
 
 class HomeController extends Controller
 {
@@ -64,11 +65,30 @@ class HomeController extends Controller
         $totalElim = Linea::where('estado', 'Por Eliminar')->count();
         $totalLineas = Linea::count();
 
+        // Resumen de Deposito Cortijos
+        $depCrtDep = Deposito::where('ubicacion', 'Cortijos')->where('estado', 'Deposito')->count();
+        $depCrtIns = Deposito::where('ubicacion', 'Cortijos')->where('estado', 'Instalado')->count();
+        $depCrtPRep = Deposito::where('ubicacion', 'Cortijos')->where('estado', 'Por Reparar')->count();
+        $depCrtPDes = Deposito::where('ubicacion', 'Cortijos')->where('estado', 'Por Desincorporar')->count();        
+        $depCrtDes = Deposito::where('ubicacion', 'Cortijos')->where('estado', 'Desincorporado')->count();
+        $totalDepCrt = Deposito::where('ubicacion', 'Cortijos')->count();
+
+        // Resumen de Deposito Nea
+        $depNeaDep = Deposito::where('ubicacion', 'Nea')->where('estado', 'Deposito')->count();
+        $depNeaIns = Deposito::where('ubicacion', 'Nea')->where('estado', 'Instalado')->count();
+        $depNeaPRep = Deposito::where('ubicacion', 'Nea')->where('estado', 'Por Reparar')->count();
+        $depNeaPDes = Deposito::where('ubicacion', 'Nea')->where('estado', 'Por Desincorporar')->count();        
+        $depNeaDes = Deposito::where('ubicacion', 'Nea')->where('estado', 'Desincorporado')->count();
+        $totalDepNea = Deposito::where('ubicacion', 'Nea')->count();
+
         return view('home', compact('axeAsig', 'axeDisp', 'axeBloq', 'axeVeri', 'axeElim', 'totalAxe',
                 'ciscoAsig', 'ciscoDisp', 'ciscoBloq', 'ciscoVeri', 'ciscoElim', 'totalCisco', 
                 'ericssonAsig', 'ericssonDisp', 'ericssonBloq', 'ericssonVeri', 'ericssonElim', 'totalEricsson', 
                 'externoAsig', 'externoDisp', 'externoBloq', 'externoVeri', 'externoElim', 'totalExterno',
-                'totalAsig', 'totalDisp', 'totalBloq', 'totalVeri', 'totalElim', 'totalLineas'));
+                'totalAsig', 'totalDisp', 'totalBloq', 'totalVeri', 'totalElim', 'totalLineas', 
+                'depCrtDep', 'depCrtIns', 'depCrtPDes', 'depCrtPRep', 'depCrtDes', 'totalDepCrt',
+                'depNeaDep', 'depNeaIns', 'depNeaPDes', 'depNeaPRep', 'depNeaDes', 'totalDepNea',
+            ));
     }
 
 }

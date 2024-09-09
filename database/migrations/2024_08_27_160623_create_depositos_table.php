@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('inventario', 20)->unique();
             $table->string('serial', 50)->nullable();
-            $table->string('marca', 15)->nullable();
-            $table->string('modelo', 10)->nullable();            
+            $table->string('marca_id', 15)->nullable();
+            $table->string('modelo_id', 10)->nullable();            
             $table->string('ubicacion', 10)->nullable();
             $table->string('estado', 20);
             $table->string('modificado', 50)->nullable(); // Para quien realizó el último cambio

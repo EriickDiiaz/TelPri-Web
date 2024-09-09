@@ -73,7 +73,7 @@
         <label for="ubicacion" class="col-7 col-form-label">Ubicación:</label>
         <div class="col-7">
             <select name="ubicacion" id="ubicacion" class="form-select">
-                <option value="{{ old('ubicacion') }}">{{ $deposito->ubicacion }}</option>
+                <option value="{{ $deposito->ubicacion }}">{{ $deposito->ubicacion }}</option>
                 <option value="Cortijos">Cortijos</option>
                 <option value="Nea">Nea</option>
             </select>
@@ -86,9 +86,9 @@
         <select name="estado" id="estado" class="form-select">
                 <option value="{{ $deposito->estado }}">{{ $deposito->estado }}</option>
                 <option value="Deposito">Deposito</option>
-                <option value="Instalado">Instalado</option>
-                <option value="Por Desincorporar">Por Desincorporar</option>
+                <option value="Instalado">Instalado</option>                
                 <option value="Por Reparar">Por Reparar</option>
+                <option value="Por Desincorporar">Por Desincorporar</option>
                 <option value="Desincorporado">Desincorporado</option>
             </select>
         </div>
