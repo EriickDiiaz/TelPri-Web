@@ -100,7 +100,7 @@ class ModeloController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Modelo $modelo)
+    public function destroy($id)
     {
         $modelo = Modelo::find($id);
         $modelo->delete();
