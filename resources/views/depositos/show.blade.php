@@ -67,6 +67,15 @@
 </div>
 @endif
 
+@if(!empty($deposito->observacion))
+<div class="mb-2">
+    <label for="estado" class="col-7 col-form-label fw-bold">Observaciones:</label>
+    <div class="col-7 px-4">
+        <p>{{ $deposito->observacion }}</p>
+    </div>
+</div>
+@endif
+
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
