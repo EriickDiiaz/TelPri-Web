@@ -21,11 +21,24 @@
         }
         .sidebar {
             background-color: #2B3035;
-            height: 90%;
+            height: calc(100vh - 56px); /* Altura total menos la altura del navbar */
             position: fixed;
-            top: 5;
+            top: 56px; /* Altura del navbar */
             left: 0;
-            border-radius: 50px;
+            border-radius: 0 50px 50px 0;
+            overflow-y: auto; /* Habilita el scroll vertical independiente */
+            scrollbar-width: thin; /* Para Firefox */
+            scrollbar-color: #0098DA #2B3035; /* Para Firefox */
+        }
+        .sidebar::-webkit-scrollbar {
+            width: 6px; /* Para Chrome, Safari y Opera */
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #2B3035;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #0098DA;
+            border-radius: 3px;
         }
         .sidebar a {
             color: #0098DA;
@@ -36,29 +49,44 @@
         .admin-navbar {
             background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
         }
-        .btn-telpri {
-            background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
-        }
         /* Ajuste de espaciado para el contenido principal */
         body {
-            padding-top: 4%; /* Altura del navbar */
+            padding-top: 56px; /* Altura del navbar */
             display: flex;
             flex-direction: column;
         }
-        .contenido{
-            margin-left: 18%;
-            min-height: 570px;
+        .contenido {
+            margin-left: 250px; /* Ancho del sidebar */
+            padding: 20px;
+            min-height: calc(80vh - 56px); /* Altura total menos la altura del navbar */
         }
         .container-fluid {
             flex: 1;
         }
-        .footer{
-            margin-left: 18%;            
-            padding: 10px 0;    
-            position: relative;
-            bottom: 0;
-            text-align: center;
-        }               
+        .footer {
+            border-radius: 50px 50px 0 0;
+            margin-left: 250px; /* Ancho del sidebar */
+            padding: 10px 0;
+            background-color: #2B3035;
+        }
+        
+        /* Nueva clase para botones con borde gradiente */
+        .btn-gradient-outline {
+            border-radius: 10px;
+            background-color: transparent;
+            border: 2px solid transparent;
+            background-image: linear-gradient(#2B3035, #2B3035), linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            box-shadow: 2px 1000px 1px #2B3035 inset;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient-outline:hover {
+            box-shadow: none;
+            transform: translateY(-3px);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -128,43 +156,43 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="sidebar col-2 m-2">
-            <div class="container d-flex flex-column h-100">
+        <nav class="sidebar col-md-3 col-lg-2">
+            <div class="d-flex flex-column h-100">
                 <div class="d-grid gap-2 col-12 mx-auto">
                     <a class="navbar-brand" href="{{ url('/home') }}">
                         <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 90%;" class="m-2 pt-2">
                     </a>
                     <div class="border-top my-2 nav-item"></div>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/lineas') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/lineas') }}">
                         <i class="fa-solid fa-phone m-2"></i>Líneas
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/callcenters') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/callcenters') }}">
                         <i class="fa-solid fa-headset m-2"></i>CallCenters
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/depositos') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/depositos') }}">
                         <i class="fa-solid fa-warehouse m-2"></i>Depósitos
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="#">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="#">
                         <i class="fa-solid fa-network-wired m-2"></i>Redes Corp.
                     </a>
                     @can('Menu Localidades')
                     <div class="border-top my-2 nav-item"></div>                    
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/localidades') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/localidades') }}">
                         <i class="fa-solid fa-location-dot m-2"></i>Adm. de Localidades
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/campos') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/campos') }}">
                         <i class="fa-solid fa-ethernet m-2"></i>Adm. de Campos
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/usuarios') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/usuarios') }}">
                         <i class="fa-solid fa-person m-2"></i>Adm. de Usuarios
                     </a>
                     @endcan
                     @can('Menu Sistema')
                     <div class="border-top my-2 nav-item"></div>                    
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/roles') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/roles') }}">
                         <i class="fa-solid fa-address-card m-2"></i>Adm. de Roles
                     </a>
-                    <a class="btn btn-dark btn-sm text-start" href="{{ url('/permisos') }}">
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/permisos') }}">
                         <i class="fa-solid fa-list-check m-2"></i>Adm. de Permisos
                     </a>
                     @endcan 
@@ -175,12 +203,9 @@
             </div>
         </nav>
 
-
         <!-- Contenido principal -->
-        <main class="col-10 offset-2">
-            <div class="m-2">
-                @yield('contenido')
-            </div>
+        <main class="contenido col-md-9 col-lg-10 ms-sm-auto">
+            @yield('contenido')
         </main>
     </div>
 </div>

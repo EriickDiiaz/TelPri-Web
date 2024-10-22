@@ -1,388 +1,116 @@
 @extends('layout/template')
 
-@section('title','Telpri-Web')
+@section('title', 'Telpri-Web')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
 @if(Session::has('mensaje'))
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <i class="bi bi-check2-circle"></i>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
         {{ Session::get('mensaje') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
 
 <!-- Titulo de la Sección -->
-<div class="row justify-content-center">
-    <div class="justify-content-center text-center">
-        <div class="">
-            <h4>Bienvenido, {{ Auth::user()->name }}:</h4>
-            <div class=" text-center">
-                <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Imagen 2" class="img-fluid" style="width: 10%;">
-            </div>
-        </div>
+<div class="row justify-content-center mb-4">
+    <div class="col-md-8 text-center">
+        <h5 class="mb-3">Bienvenido, {{ Auth::user()->name }}</h5>
+        <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="TelPri Logo" class="img-fluid" style="max-width: 150px;">
     </div>
 </div>
+
+<!-- Estilos para los elementos dentro de los acordeones -->
+<style>
+    .stat-card {
+        border: 2px solid transparent;
+        border-image: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9) 1;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .accordion-button:not(.collapsed) {
+        background: linear-gradient(to right, #7F24EE, #0098DA, #0E15F9);
+        color: white;
+    }
+</style>
 
 <!-- Contenido de la Sección -->
-<div class="accordion my-3" id="acordeonLineas">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed btn-telpri" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                <h4><i class="fa-solid fa-phone m-2"></i>Resumen de Líneas Telefónicas.</h4>
-            </button>
-        </h2>
-        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
-            <div class="accordion-body">
-                <h5 style="color: #0098DA;">Axe.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Asignadas:</span>
-                        <div>
-                            <h4>{{ $axeAsig }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Disponibles:</span>
-                        <div>
-                            <h4>{{ $axeDisp }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Bloqueadas:</span>
-                        <div>
-                            <h4>{{ $axeBloq }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Verificar:</span>
-                        <div>
-                            <h4>{{ $axeVeri }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Por Eliminar:</span>
-                        <div>
-                            <h4>{{ $axeElim }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>{{ $totalAxe }}</h4>
-                        </div>
-                    </div>
-                </div>
+@php
+    $accordions = [
+        [
+            'id' => 'acordeonLineas',
+            'title' => 'Resumen de Líneas Telefónicas',
+            'icon' => 'fa-phone',
+            'sections' => ['axe', 'cisco', 'ericsson', 'externo', 'total'],
+            'data' => $lineas
+        ],
+        [
+            'id' => 'acordeonDeposito',
+            'title' => 'Resumen de Equipos en Depósito',
+            'icon' => 'fa-warehouse',
+            'sections' => ['cortijos', 'nea'],
+            'data' => $depositos
+        ],
+        [
+            'id' => 'acordeonRedes',
+            'title' => 'Resumen Redes Corporativas',
+            'icon' => 'fa-network-wired',
+            'sections' => ['titulo'],
+            'data' => []
+        ]
+    ];
+@endphp
 
-                <h5 style="color: #0098DA;">Cisco.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Asignadas:</span>
-                        <div>
-                            <h4>{{ $ciscoAsig }}</h4>
+@foreach($accordions as $accordion)
+    <div class="accordion mb-3" id="{{ $accordion['id'] }}">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $accordion['id'] }}-content" aria-expanded="false" aria-controls="{{ $accordion['id'] }}-content">
+                    <i class="fa-solid {{ $accordion['icon'] }} me-2"></i>{{ $accordion['title'] }}
+                </button>
+            </h2>
+            <div id="{{ $accordion['id'] }}-content" class="accordion-collapse collapse">
+                <div class="accordion-body p-2">
+                    @foreach($accordion['sections'] as $section)
+                        <h6 class="text-primary mb-2">{{ ucfirst($section) }}</h6>
+                        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-2 mb-3">
+                            @php
+                                $items = [
+                                    'asignada' => ['icon' => 'fa-check', 'color' => '#63E6BE', 'label' => 'Asignadas'],
+                                    'disponible' => ['icon' => 'fa-arrow-up', 'color' => '#397ef3', 'label' => 'Disponibles'],
+                                    'bloqueada' => ['icon' => 'fa-ban', 'color' => '#fc883b', 'label' => 'Bloqueadas'],
+                                    'porverificar' => ['icon' => 'fa-exclamation', 'color' => '#FFD43B', 'label' => 'Por Verificar'],
+                                    'poreliminar' => ['icon' => 'fa-xmark', 'color' => '#f53246', 'label' => 'Por Eliminar'],
+                                    'total' => ['icon' => 'fa-hashtag', 'color' => '#d158e9', 'label' => 'Total']
+                                ];
+                            @endphp
+                            @foreach($items as $key => $item)
+                                <div class="col">
+                                    <div class="btn-gradient-outline p-2 text-center">
+                                        <small class="d-block mb-1">
+                                            <i class="fa-solid {{ $item['icon'] }}" style="color: {{ $item['color'] }};"></i>
+                                            {{ $item['label'] }}
+                                        </small>
+                                        <span class="fs-5 fw-bold">
+                                            @if($accordion['id'] == 'acordeonRedes')
+                                                00
+                                            @else
+                                                {{ $accordion['data'][$section][$key] ?? 0 }}
+                                            @endif
+                                        </span>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Disponibles:</span>
-                        <div>
-                            <h4>{{ $ciscoDisp }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Bloqueadas:</span>
-                        <div>
-                            <h4>{{ $ciscoBloq }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Verificar:</span>
-                        <div>
-                            <h4>{{ $ciscoVeri }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Por Eliminar:</span>
-                        <div>
-                            <h4>{{ $ciscoElim }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>{{ $totalCisco }}</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 style="color: #0098DA;">Ericsson.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Asignadas:</span>
-                        <div>
-                            <h3>{{ $ericssonAsig }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Disponibles:</span>
-                        <div>
-                            <h3>{{ $ericssonDisp }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Bloqueadas:</span>
-                        <div>
-                            <h4>{{ $ericssonBloq }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Verificar:</span>
-                        <div>
-                            <h3>{{ $ericssonVeri }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Por Eliminar:</span>
-                        <div>
-                            <h3>{{ $ericssonElim }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h3>{{ $totalEricsson }}</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 style="color: #0098DA;">Externo.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Asignadas:</span>
-                        <div>
-                            <h3>{{ $externoAsig }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Disponibles:</span>
-                        <div>
-                            <h3>{{ $externoDisp }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Bloqueadas:</span>
-                        <div>
-                            <h4>{{ $externoBloq }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Verificar:</span>
-                        <div>
-                            <h3>{{ $externoVeri }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Por Eliminar:</span>
-                        <div>
-                            <h3>{{ $externoElim }}</h3>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h3>{{ $totalExterno }}</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 style="color: #0098DA;">Total.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Asignadas:</span>
-                        <div>
-                            <h4>{{ $totalAsig }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Disponibles:</span>
-                        <div>
-                            <h4>{{ $totalDisp }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Bloqueadas:</span>
-                        <div>
-                            <h4>{{ $totalBloq }}</h4>
-                        </div>
-                    </div>                    
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Verificar:</span>
-                        <div>
-                            <h4>{{ $totalVeri }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Por Eliminar:</span>
-                        <div>
-                            <h4>{{ $totalElim }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>{{ $totalLineas }}</h4>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="accordion my-3" id="acordeonDeposito">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed btn-telpri" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseTwo">
-                <h4><i class="fa-solid fa-warehouse m-2"></i>Resumen de Equipos en Depósito.</h4>
-            </button>
-        </h2>
-        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-            <div class="accordion-body">
-                <h5 style="color: #0098DA;">Cortijos.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Depósito:</span>
-                        <div>
-                            <h4>{{ $depCrtDep }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Instalado:</span>
-                        <div>
-                            <h4>{{ $depCrtIns }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Reparar:</span>
-                        <div>
-                            <h4>{{ $depCrtPRep }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Por Desincorporar:</span>
-                        <div>
-                            <h4>{{ $depCrtPDes }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Desincorporado:</span>
-                        <div>
-                            <h4>{{ $depCrtDes }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>{{ $totalDepCrt }}</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 style="color: #0098DA;">NEA.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Depósito:</span>
-                        <div>
-                            <h4>{{ $depNeaDep }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Instalado:</span>
-                        <div>
-                            <h4>{{ $depNeaIns }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Por Reparar:</span>
-                        <div>
-                            <h4>{{ $depNeaPRep }}</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Por Desincorporar:</span>
-                        <div>
-                            <h4>{{ $depNeaPDes }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Desincorporado:</span>
-                        <div>
-                            <h4>{{ $depNeaDes }}</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>{{ $totalDepNea }}</h4>
-                        </div>
-                    </div>
-                </div>
-             
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="accordion my-3" id="acordeonRedes">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button collapsed btn-telpri" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTree" aria-expanded="true" aria-controls="panelsStayOpen-collapseTree">
-                <h4><i class="fa-solid fa-network-wired m-2"></i>Resumen Redes Corporativas.</h4>
-            </button>
-        </h2>
-        <div id="panelsStayOpen-collapseTree" class="accordion-collapse collapse">
-            <div class="accordion-body">
-                <h5 style="color: #0098DA;">Titulo.</h5>
-                <div class="d-flex justify-content-between mb-2">
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-check m-2" style="color: #63E6BE;"></i>Item 1:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-arrow-up m-2" style="color: #397ef3;"></i>Item 2:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-exclamation m-2" style="color: #FFD43B;"></i>Item 3:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>        
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-ban m-2" style="color: #fc883b;"></i>Item 4:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-xmark m-2" style="color: #f53246;"></i>Item 5:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>
-                    <div class="btn btn-telpri px-4 me-1">
-                        <span><i class="fa-solid fa-hashtag m-2" style="color: #d158e9;"></i>Total:</span>
-                        <div>
-                            <h4>00</h4>
-                        </div>
-                    </div>
-                </div>             
-            </div>
-        </div>
-    </div>
-</div>
+@endforeach
 
 @endsection
