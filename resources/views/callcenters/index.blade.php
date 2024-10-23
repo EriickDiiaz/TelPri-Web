@@ -12,6 +12,8 @@
     </div>
 @endif
 
+
+
 <!-- Titulo de la Sección -->
 <div class="d-flex">    
     <h2><i class="fa-solid fa-headset m-2"></i>Usuarios CallCenter.</h2>
@@ -27,49 +29,22 @@
 
 <!-- Resumen de Usuarios -->
 <div class="d-flex mb-2">
+    @foreach(['CIC', 'CSI', 'HCM', 'CeCom', 'PROV', 'COR'] as $service)
+        <div class="align-items-center me-2">
+            <button class="btn-gradient-outline" disabled>
+                {{ $service }}:
+                <span class="badge text-bg-primary rounded-pill mx-2">{{ $totals[$service] }}</span>
+            </button>
+        </div>
+    @endforeach
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            CIC:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCIC }}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            CSI:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCSI }}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            HCM:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalHCM }}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            CeCOM:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCeCom }}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            PRO:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalPRO}}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm" disabled>
-            COR:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCOR }}</span>
-        </button>
-    </div>
-    <div class="align-items-center me-2">
-        <button class="btn btn-outline-primary btn-sm" disabled>
+        <button class="btn-gradient-outline" disabled>
             Total:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCallcenter }}</span>
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totals['total'] }}</span>
         </button>
     </div>
 </div>
+
 <!-- Contenido de Sección -->
 <table class="table table-striped" id="datatableCallcenter">
     <thead>
@@ -97,7 +72,7 @@
                     <i class="fa-solid fa-user-pen"></i>
                 </a>
                 @can('Eliminar Usuario CallCenter')
-                <form action="{{ url('callcenters/'.$callcenter->id)}}" id="form-eliminar-{{ $callcenter->id }}" action="{{ route('callcenters.destroy', $callcenter->id) }}" class="d-inline" method="post">
+                <form action="{{ url('callcenters/'.$callcenter->id)}}" id="form-eliminar-{{ $callcenter->id }}" class="d-inline" method="post">
                     @method("DELETE")
                     @csrf
                     <button type="submit" class="btn btn-outline-danger btn-sm">
@@ -114,7 +89,29 @@
 @endsection
 
 @push('scripts')
-    @include('partials.datatableCallcenter')
-    @include('partials.sweetalert')
-@endpush
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableCallcenter', {
+            // Add any specific options for this table
+        });
 
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
