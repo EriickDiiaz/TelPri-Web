@@ -18,18 +18,16 @@
 </div>
 
 <!-- Botón Agregar -->
-<div class="d-flex"> 
-    <a href="{{ url('campos/create') }}" class="btn btn-outline-success btn-sm me-2">
-        <span>
-            <i class="fa-solid fa-plus m-2"></i>Agregar Campo
-        </span>
+<div class="d-flex mb-2"> 
+    <a href="{{ route('campos.create') }}" class="btn btn-outline-success btn-sm me-2">
+        <i class="fa-solid fa-plus m-2"></i>Agregar Campo
     </a>
 </div>
 
 <!-- Resumen de Campos -->
-<div class="d-flex py-2 col-8">
-    <div class="align-items-center">
-        <button class="btn btn-outline-primary btn-sm" disabled>
+<div class="d-flex mb-2">
+    <div class="align-items-center me-2">
+        <button class="btn-gradient-outline" disabled>
             Total:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCampo }}</span>
         </button>
@@ -40,25 +38,25 @@
 <table class="table table-striped" id="datatableCampos">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Campo</th>
             <th>Descripción</th>
-            <th></th>
+            <th>Número de Líneas</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($campos as $campo)
         <tr>
-            <td>{{ $campo->id }}</td>
             <td>{{ $campo->nombre }}</td>
-            <td>{{ $campo->descripcion}}</td>
+            <td>{{ $campo->descripcion }}</td>
+            <td>{{ $campo->lineas_count }}</td>
             <td>
-                <a href="{{ url('campos/'.$campo->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('campos.edit', $campo->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <form action="{{ url('campos/'.$campo->id)}}" id="form-eliminar-{{ $campo->id }}" action="{{ route('campos.destroy', $campo->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('campos.destroy', $campo->id) }}" id="form-eliminar-{{ $campo->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -69,9 +67,32 @@
     </tbody>
 </table>
 
-@push('scripts')
-    @include('partials.datatableCampos')
-    @include('partials.sweetalert')
-@endpush
-
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableCampos', {
+            // Add any specific options for this table
+        });
+
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
