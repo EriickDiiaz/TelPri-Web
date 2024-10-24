@@ -9,16 +9,22 @@ class Deposito extends Model
 {
     use HasFactory;
 
-    /**
-     * Obtener la LOCALIDAD a la que pertenece la linea. 
-     */
+    protected $fillable = [
+        'inventario',
+        'serial',
+        'marca_id',
+        'modelo_id',
+        'ubicacion',
+        'estado',
+        'observacion',
+        'modificado',
+    ];
+
     public function marca()
     {
         return $this->belongsTo(Marca::class);
     }
-    /**
-     * Obtener el PISO al que pertenece la linea. 
-     */
+
     public function modelo()
     {
         return $this->belongsTo(Modelo::class, 'modelo_id');

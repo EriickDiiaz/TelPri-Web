@@ -21,7 +21,7 @@
 @can('Agregar Equipos')
 <div class="d-flex justify-content-between mb-2">
     <div>
-        <a href="{{ url('depositos/create') }}" class="btn btn-outline-success btn-sm">
+        <a href="{{ route('depositos.create') }}" class="btn btn-outline-success btn-sm">
             <i class="fa-solid fa-plus m-2"></i>
             <span>Agregar Equipo</span>
         </a>
@@ -36,19 +36,19 @@
 @endcan
 
 <!-- Resumen de Lineas -->
-<div class="d-flex py-2">
+<div class="d-flex mb-2">
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm filter-button disabled">Cortijos:
+        <button class="btn-gradient-outline" disabled>Cortijos:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCortijos }}</span>
         </button>
     </div>
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-light btn-sm filter-button disabled">Nea:
+        <button class="btn-gradient-outline" disabled>Nea:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalNea }}</span>
         </button>
     </div>
     <div class="align-items-center me-2">
-        <button class="btn btn-outline-primary btn-sm filter-button disabled">Total:
+        <button class="btn-gradient-outline" disabled>Total:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalDeposito }}</span>
         </button>        
     </div>
@@ -64,7 +64,7 @@
             <th>Modelo</th>
             <th>Ubicación</th>
             <th>Estado</th>
-            <th></th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -77,21 +77,18 @@
             <td>{{$deposito->ubicacion}}</td>
             <td>{{$deposito->estado}}</td>
             <td>
-                <!--Boton Detalles-->
-                <a href="{{ url('depositos/'.$deposito->id)}}" class="btn btn-outline-light btn-sm">
+                <a href="{{ route('depositos.show', $deposito->id) }}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
-                <!--Boton Editar-->
                 @can('Editar Equipos')
-                <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('depositos.edit', $deposito->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
                 @endcan
-                <!--Boton Eliminar-->
                 @can('Eliminar Equipos')
-                <form action="{{ url('depositos/'.$deposito->id)}}" id="form-eliminar-{{ $deposito->id }}" action="{{ route('depositos.destroy', $deposito->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('depositos.destroy', $deposito->id) }}" id="form-eliminar-{{ $deposito->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -106,7 +103,29 @@
 @endsection
 
 @push('scripts')
-    @include('partials.datatableDepositos')
-    @include('partials.sweetalert')
-@endpush
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableDepositos', {
+            // Add any specific options for this table
+        });
 
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
