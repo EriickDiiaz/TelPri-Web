@@ -23,14 +23,13 @@
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('usuarios') }}" method="post">
+<form action="{{ route('usuarios.store') }}" method="POST">
     @csrf
 
     <div class="mb-2">
         <label for="name" class="col-sm-2 col-form-label">Nombre y Apellido:</label>
         <div class="col-sm-5">
             <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
             @error('name')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -40,10 +39,9 @@
     </div>
 
     <div class="mb-2">
-        <label for="name" class="col-sm-2 col-form-label">Usuario:</label>
+        <label for="email" class="col-sm-2 col-form-label">Usuario:</label>
         <div class="col-sm-5">
             <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
             @error('email')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -55,20 +53,24 @@
     <div class="mb-2">
         <label for="role" class="col-sm-2 col-form-label">Rol:</label>
         <div class="col-sm-5">
-            <select name="role" id="roel" class="form-select">
+            <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
                 <option value="">Seleccione</option>
                 @foreach ($roles as $role)
-                <option value="{{ $role->id }}" name="role[]" id="role{{ $role->id }}">{{ $role->name }}</option>
+                <option value="{{ $role->id }}" {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
                 @endforeach
             </select>
+            @error('role')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="name" class="col-sm-2 col-form-label">Contraseña:</label>
+        <label for="password" class="col-sm-2 col-form-label">Contraseña:</label>
         <div class="col-sm-5">
             <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
             @error('password')
                 <span class="invalid-feedback" role="alert">
                     <strong>{{ $message }}</strong>
@@ -77,8 +79,15 @@
         </div>
     </div>
 
+    <div class="mb-2">
+        <label for="password_confirmation" class="col-sm-2 col-form-label">Confirmar Contraseña:</label>
+        <div class="col-sm-5">
+            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+        </div>
+    </div>
+
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('usuarios') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ route('usuarios.index') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>

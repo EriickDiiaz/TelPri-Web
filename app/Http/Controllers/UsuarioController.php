@@ -6,126 +6,97 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $role = Role::all();
-        $usuarios = User::orderBy('name')->get();
-        $totalUsuarios = User::count();
-        return view('usuarios.index', compact('usuarios','totalUsuarios', 'role'));
+        $usuarios = User::with('roles')->orderBy('name')->get();
+        $totalUsuarios = $usuarios->count();
+        return view('usuarios.index', compact('usuarios', 'totalUsuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $roles = Role::all();
-        return view('usuarios.create',compact('roles'));
+        return view('usuarios.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $errors = [
-            'name.required' => 'Debes colocar el Nombre y Apellido.',
-            'name.sting' => 'El Nombre y Apellido solo puede estar compuesto por letras.',
-            'name.max' => 'Los Nombres y Apellidos no puede tener más de 255 caracteres.',
-            'email.required' => 'Debes colocar el Usuario de red.',
-            'email.sting' => 'El Usuario solo puede estar compuesto por letras y/o números.',
-            'email.max' => 'El usuario no puede tener más de 10 caracteres.',
-            'email.unique' =>'El usuario ya esta en uso',
-            'password.required' => 'Debes colocar una Contraseña.',
-            'password.confirmed' => 'Debes confirmar la Contraseña.',
-            'password.sting' => 'El Nombre y Apellido solo puede estar compuesto por letras y/o números.',
-            'password.max' => 'Los Nombres y Apellidos no puede tener más de 6 caracteres.'
-        ];
+        $validatedData = $this->validateUsuario($request);
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
-        $request->validate([
-            'name' =>'required', 'string', 'max:255',
-            'email' =>'required', 'string', 'max:10', 'unique:users',
-            'password' =>'required', 'string', 'min:6', 'confirmed'
-        ],$errors);
-
-        $usuario = new User();
-        $usuario->name = $request->input('name');
-        $usuario->email = $request->input('email');
-        $usuario->roles()->sync($request->role);
-        $usuario->password = Hash::make($request->input('password'));
+        $usuario = User::create($validatedData);
         
-        $usuario->save();
+        if ($request->filled('role')) {
+            $role = Role::findById($request->role);
+            $usuario->assignRole($role);
+        }
 
-        return redirect ('usuarios')->with('mensaje','Usuario creado con exito.');
+        return redirect()->route('usuarios.index')->with('mensaje', 'Usuario creado con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $usuario = User::find($id);
+        $usuario = User::findOrFail($id);
         $roles = Role::all();
-        return view('usuarios.edit',compact('usuario', 'roles'));
+        return view('usuarios.edit', compact('usuario', 'roles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $errors = [
-            'name.required' => 'Debes colocar el Nombre y Apellido.',
-            'name.sting' => 'El Nombre y Apellido solo puede estar compuesto por letras.',
-            'name.max' => 'Los Nombres y Apellidos no puede tener más de 255 caracteres.',
-            'email.required' => 'Debes colocar el Usuario de red.',
-            'email.sting' => 'El Usuario solo puede estar compuesto por letras y/o números.',
-            'email.max' => 'El usuario no puede tener más de 10 caracteres.',
-            'email.unique' =>'El usuario ya esta en uso',
-            'password.required' => 'Debes colocar una Contraseña.',
-            'password.confirmed' => 'Debes confirmar la Contraseña.',
-            'password.sting' => 'El Nombre y Apellido solo puede estar compuesto por letras y/o números.',
-            'password.max' => 'Los Nombres y Apellidos no puede tener más de 6 caracteres.'
-        ];
+        $validatedData = $this->validateUsuario($request, $id);
+        if ($request->filled('password')) {
+            $validatedData['password'] = Hash::make($validatedData['password']);
+        } else {
+            unset($validatedData['password']);
+        }
 
-        $request->validate([
-            'name' =>'required', 'string', 'max:255',
-            'email' =>'required', 'string', 'max:10', 'unique:users',
-            'password' =>'required', 'string', 'min:6', 'confirmed'
-        ],$errors);
+        $usuario = User::findOrFail($id);
+        $usuario->update($validatedData);
+        
+        if ($request->filled('role')) {
+            $role = Role::findById($request->role);
+            $usuario->syncRoles([$role]);
+        }
 
-        $usuario = User::find($id);
-        $usuario->name = $request->input('name');
-        $usuario->email = $request->input('email');
-        $usuario->roles()->sync($request->role);
-        $usuario->password = Hash::make($request->input('password'));
-        $usuario->save();
-
-        return redirect ('/usuarios')->with('mensaje','Usuario actualizado con exito.');
+        return redirect()->route('usuarios.index')->with('mensaje', 'Usuario actualizado con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $usuario = User::find($id);
+        $usuario = User::findOrFail($id);
         $usuario->delete();
 
-        return redirect('usuarios')->with('mensaje','Usuario eliminado con exito.');
+        return redirect()->route('usuarios.index')->with('mensaje', 'Usuario eliminado con éxito.');
+    }
+
+    protected function validateUsuario(Request $request, $id = null)
+    {
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($id)],
+            'password' => $id ? ['nullable', 'string', 'min:6', 'confirmed'] : ['required', 'string', 'min:6', 'confirmed'],
+            'role' => ['nullable', 'exists:roles,id'],
+        ];
+
+        $messages = [
+            'name.required' => 'Debes colocar el Nombre y Apellido.',
+            'name.string' => 'El Nombre y Apellido solo puede estar compuesto por letras.',
+            'name.max' => 'Los Nombres y Apellidos no pueden tener más de 255 caracteres.',
+            'email.required' => 'Debes colocar el Usuario de red.',
+            'email.string' => 'El Usuario solo puede estar compuesto por letras y/o números.',
+            'email.max' => 'El usuario no puede tener más de 255 caracteres.',
+            'email.unique' => 'El usuario ya está en uso.',
+            'password.required' => 'Debes colocar una Contraseña.',
+            'password.confirmed' => 'Debes confirmar la Contraseña.',
+            'password.string' => 'La Contraseña solo puede estar compuesta por letras y/o números.',
+            'password.min' => 'La Contraseña debe tener al menos 6 caracteres.',
+            'role.exists' => 'El rol seleccionado no existe.',
+        ];
+
+        return $request->validate($rules, $messages);
     }
 }

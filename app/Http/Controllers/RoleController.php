@@ -5,74 +5,71 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $roles = Role::all();
-
-        return view('roles.index', compact('roles'));
+        $roles = Role::withCount('permissions')->get();
+        $totalRoles = $roles->count();
+        return view('roles.index', compact('roles', 'totalRoles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('roles.create');
+        $permissions = Permission::all();
+        return view('roles.create', compact('permissions'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $role = Role::create(['name' => $request->input('name')]);
-        return redirect ('roles')->with('mensaje','Rol guardado con exito.');
+        $validatedData = $this->validateRole($request);
+        $role = Role::create($validatedData);
+        $this->syncPermissions($role, $request->input('permissions', []));
+
+        return redirect()->route('roles.index')->with('mensaje', 'Rol guardado con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Role $role)
     {
-        //$role = Role::find($id);
-        $permisos = Permission::all();
-        return view('roles.edit', compact('role', 'permisos'));
+        $permissions = Permission::all();
+        return view('roles.edit', compact('role', 'permissions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Role $role)
     {
-        //$role = Role::find($id);
-        $role->name = $request->input('name');
-        $role->permissions()->sync($request->permisos);
+        $validatedData = $this->validateRole($request, $role->id);
+        $role->update($validatedData);
+        $this->syncPermissions($role, $request->input('permissions', []));
         
-        return redirect ('roles')->with('mensaje','Rol actualizado con exito.');
+        return redirect()->route('roles.index')->with('mensaje', 'Rol actualizado con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        $role = Role::find($id);
         $role->delete();
 
-        return redirect('roles')->with('mensaje','Rol eliminado con exito.');
+        return redirect()->route('roles.index')->with('mensaje', 'Rol eliminado con éxito.');
+    }
+
+    protected function validateRole(Request $request, $id = null)
+    {
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255', Rule::unique('roles')->ignore($id)],
+            'permissions' => ['array'],
+            'permissions.*' => ['exists:permissions,id'],
+        ], [
+            'name.required' => 'El nombre del rol es obligatorio.',
+            'name.unique' => 'Este nombre de rol ya está en uso.',
+            'permissions.array' => 'Los permisos deben ser una lista.',
+            'permissions.*.exists' => 'Uno o más permisos seleccionados no existen.',
+        ]);
+    }
+
+    protected function syncPermissions(Role $role, array $permissions)
+    {
+        $permissionModels = Permission::whereIn('id', $permissions)->get();
+        $role->syncPermissions($permissionModels);
     }
 }

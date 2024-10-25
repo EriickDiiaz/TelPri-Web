@@ -23,25 +23,26 @@
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('roles/' .$role->id) }}" method="post">
+<form action="{{ route('roles.update', $role->id) }}" method="POST">
     @method("PUT")
     @csrf
 
     <div class="mb-2">
         <label for="name" class="col-sm-2 col-form-label">Nombre del Rol:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="name" id="name" value="{{ $role->name }}" required>
+            <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $role->name) }}" required>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="permisos" class="col-sm-2 col-form-label">Permisos:</label>
+        <label for="permissions" class="col-sm-2 col-form-label">Permisos:</label>
         <div class="col-sm-5">
-            @foreach ($permisos as $permiso)
+            @foreach ($permissions as $permission)
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="permisos[]" value="{{ $permiso->id }}" id="permiso{{ $permiso->id }}" {{ $role->hasPermissionTo($permiso) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="permiso{{ $permiso->id }}">
-                        {{ $permiso->name }}
+                    <input class="form-check-input" type="checkbox" name="permissions[]" value="{{ $permission->id }}" id="permission{{ $permission->id }}" 
+                        {{ in_array($permission->id, old('permissions', $role->permissions->pluck('id')->toArray())) ? 'checked' : '' }}>
+                    <label class="form-check-label" for="permission{{ $permission->id }}">
+                        {{ $permission->name }}
                     </label>
                 </div>
             @endforeach
@@ -49,7 +50,7 @@
     </div>
 
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('roles') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ route('roles.index') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>

@@ -18,15 +18,17 @@
 </div>
 
 <!-- Botón Agregar -->
-<a href="{{ url('usuarios/create') }}" class="btn btn-outline-success btn-sm me-2">
-    <span><i class="fa-solid fa-person-circle-plus m-2"></i>Agregar Usuario</span>
-</a>
+<div class="d-flex mb-2">
+    <a href="{{ route('usuarios.create') }}" class="btn btn-outline-success btn-sm me-2">
+        <i class="fa-solid fa-person-circle-plus m-2"></i>Agregar Usuario
+    </a>
+</div>
 
 <!-- Resumen de Usuarios -->
-<div class="d-flex justify-content-between py-2 col-8">
-    <div class="align-items-center">
-        <button class="btn btn-outline-primary btn-sm" disabled>
-            Total:
+<div class="d-flex mb-2">
+    <div class="align-items-center me-2">
+        <button class="btn-gradient-outline" disabled>
+            Total Usuarios:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalUsuarios }}</span>
         </button>
     </div>
@@ -39,7 +41,7 @@
             <th>Nombres</th>
             <th>Usuario</th>
             <th>Rol</th>
-            <th></th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -55,12 +57,12 @@
                 @endif
             </td>
             <td>
-                <a href="{{ url('usuarios/'.$usuario->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-person-circle-exclamation"></i>
                 </a>
-                <form action="{{ url('usuarios/'.$usuario->id)}}" id="form-eliminar-{{ $usuario->id }}" action="{{ route('usuarios.destroy', $usuario->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('usuarios.destroy', $usuario->id) }}" id="form-eliminar-{{ $usuario->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-person-circle-xmark"></i>
                     </button>
@@ -71,9 +73,32 @@
     </tbody>
 </table>
 
-@push('scripts')
-    @include('partials.datatableUsuario')
-    @include('partials.sweetalert')
-@endpush
-
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableUsuario', {
+            // Add any specific options for this table
+        });
+
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush

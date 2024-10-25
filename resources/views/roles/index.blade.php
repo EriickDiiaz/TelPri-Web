@@ -18,35 +18,43 @@
 </div>
 
 <!-- Botón Agregar -->
-<div class="mb-2">    
-    <a href="{{ url('roles/create') }}" class="btn btn-outline-success btn-sm me-2">
-        <span>
-            <i class="fa-solid fa-plus m-2"></i>Agregar Rol
-        </span>
-    </a>        
+<div class="d-flex mb-2">
+    <a href="{{ route('roles.create') }}" class="btn btn-outline-success btn-sm me-2">
+        <i class="fa-solid fa-plus m-2"></i>Agregar Rol
+    </a>
+</div>
+
+<!-- Resumen de Roles -->
+<div class="d-flex mb-2">
+    <div class="align-items-center me-2">
+        <button class="btn-gradient-outline" disabled>
+            Total Roles:
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalRoles }}</span>
+        </button>
+    </div>
 </div>
 
 <!-- Contenido de Sección -->
-<table class="table table-striped">
+<table class="table table-striped" id="datatableRoles">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Nombre de Rol</th>            
-            <th></th>
+            <th>Nombre de Rol</th>
+            <th>Permisos</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($roles as $role)
         <tr>
-            <td>{{ $role->id }}</td>
             <td>{{ $role->name }}</td>
+            <td>{{ $role->permissions_count }}</td>
             <td>
-                <a href="{{ url('roles/'.$role->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <form action="{{ url('roles/'.$role->id)}}" id="form-eliminar-{{ $role->id }}" action="{{ route('roles.destroy', $role->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('roles.destroy', $role->id) }}" id="form-eliminar-{{ $role->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -57,8 +65,32 @@
     </tbody>
 </table>
 
-@push('scripts')
-    @include('partials.sweetalert')
-@endpush
-
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableRoles', {
+            // Add any specific options for this table
+        });
+
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
