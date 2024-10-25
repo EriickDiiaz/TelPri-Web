@@ -9,11 +9,15 @@ class Modelo extends Model
 {
     use HasFactory;
 
-    /**
-     * Obtener los modelos que pertenece a la marca. 
-     */
+    protected $fillable = ['nombre', 'marca_id'];
+
     public function marca()
     {
         return $this->belongsTo(Marca::class);
+    }
+
+    public function depositos()
+    {
+        return $this->hasMany(Deposito::class);
     }
 }

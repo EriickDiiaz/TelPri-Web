@@ -254,7 +254,7 @@
     function initializeDataTable(tableId, options = {}) {
         const defaultOptions = {
             language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
+                url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json'
             },
             dom: '<"row"<"col-sm-12 col-md-6 mb-2"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rt<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
             buttons: [

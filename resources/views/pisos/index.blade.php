@@ -17,17 +17,14 @@
     <h2><i class="fa-solid fa-building m-2"></i>Administrador de Pisos.</h2>
 </div>
 
+<!-- Botones -->
 <div class="d-flex justify-content-between mb-2">
-    <!-- Botones izquierda -->
     <div>
         <a href="{{ route('pisos.create') }}" class="btn btn-outline-success btn-sm">
             <i class="fa-solid fa-plus m-2"></i>Agregar Piso
         </a>
     </div>
-
-    <!-- Botones derecha -->
-    <div class="d-flex align-items-center">
-        <label for="busqueda" class="me-2">Ver pisos de:</label>
+    <div>
         <form class="d-flex" role="search" action="{{ route('pisos.index') }}" method="get">
             <select name="busqueda" id="busqueda" class="form-select me-2">
                 <option value="">Seleccione localidad</option>
@@ -41,6 +38,12 @@
                 <i class="fa-solid fa-search"></i>
             </button>
         </form>
+    </div>
+    <div>
+        <a href="{{ url('localidades/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-delete-left m-2"></i>
+            <span>Volver a Localidades</span>
+        </a>
     </div>
 </div>
 

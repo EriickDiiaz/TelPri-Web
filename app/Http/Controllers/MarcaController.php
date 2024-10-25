@@ -6,99 +6,80 @@ use App\Models\Marca;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class MarcaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $marcas = Marca::withCount('modelos')->orderBy('nombre')->get();
-        $totalMarca = Marca::count();
-        return view('depositos/marcas.index', compact('marcas','totalMarca'));
+        $marcas = Marca::withCount(['modelos', 'depositos'])->orderBy('nombre')->get();
+        $totalMarca = $marcas->count();
+        return view('depositos.marcas.index', compact('marcas', 'totalMarca'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('depositos/marcas.create');
+        return view('depositos.marcas.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $errors = [
-            'nombre.required' => 'El Nombre de la Marca es obligatorio.',
-        ];
+        $validatedData = $this->validateMarca($request);
+        $validatedData['nombre'] = Str::title($validatedData['nombre']);
+        
+        $marca = Marca::create($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-        ],$errors);
-
-        $marca = new Marca();
-        $marca->nombre = Str::title($request->input('nombre'));
-        $marca->save();
-
-        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo agregado con éxito.');
+        return redirect()->route('marcas.show', $marca->id)
+            ->with('mensaje', 'Marca agregada con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        // Buscar la marca por su ID
         $marca = Marca::findOrFail($id);
-
-        // Obtener todos los modelos asociados a la marca
         $modelos = $marca->modelos()->orderBy('nombre')->get();
 
-        // Retornar la vista de detalles de la marca con los modelos asociados
-        return view('depositos/marcas.show', compact('marca', 'modelos'));
+        return view('depositos.marcas.show', compact('marca', 'modelos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $marca = Marca::find($id);
-        return view('depositos/marcas.edit',['marca'=>$marca]);
+        $marca = Marca::findOrFail($id);
+        return view('depositos.marcas.edit', compact('marca'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $errors = [
-            'nombre.required' => 'El Nombre de la Marca es obligatorio.',
-        ];
-        
-        $request->validate([
-            'nombre' =>'required',
-        ], $errors);
+        $validatedData = $this->validateMarca($request, $id);
+        $validatedData['nombre'] = Str::title($validatedData['nombre']);
 
-        $marca = Marca::find($id);
-        $marca->nombre = $request->input('nombre');        
-        $marca->save();
+        $marca = Marca::findOrFail($id);
+        $marca->update($validatedData);
 
-        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo agregado con éxito.');
+        return redirect()->route('marcas.show', $marca->id)
+            ->with('mensaje', 'Marca actualizada con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $marca = Marca::find($id);
+        $marca = Marca::findOrFail($id);
         $marca->delete();
 
-        return redirect('depositos')->with('mensaje','La marca ha sido eliminada con exito.');
+        return redirect()->route('depositos.index')
+            ->with('mensaje', 'La marca ha sido eliminada con éxito.');
+    }
+
+    protected function validateMarca(Request $request, $id = null)
+    {
+        return $request->validate([
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('marcas')->ignore($id),
+            ],
+        ], [
+            'nombre.required' => 'El Nombre de la Marca es obligatorio.',
+            'nombre.unique' => 'Esta Marca ya existe.',
+        ]);
     }
 }

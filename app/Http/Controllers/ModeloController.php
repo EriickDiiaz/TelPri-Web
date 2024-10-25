@@ -5,106 +5,76 @@ namespace App\Http\Controllers;
 use App\Models\Modelo;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ModeloController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $modelos = Modelo::with('marca')->withCount('depositos')->orderBy('nombre')->get();
+        $totalModelos = $modelos->count();
+        return view('depositos.modelos.index', compact('modelos', 'totalModelos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $marcas = Marca::orderBy('nombre')->get();
-        return view('depositos/modelos.create',compact('marcas'));
+        return view('depositos.modelos.create', compact('marcas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $errors = [
-            'nombre.required' => 'El nombre del modelo es obligatorio.',
-            'marca_id.required' => 'Debes seleccionar la Marca a la que pertenece este Modelo.',
-        ];
+        $validatedData = $this->validateModelo($request);
+        $modelo = Modelo::create($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-            'marca_id' => 'required'
-        ], $errors);
-
-        $modelo = new Modelo();
-        $modelo->nombre = $request->input('nombre');
-        $modelo->marca_id = $request->input('marca_id');
-        $modelo->save();
-
-        // Obtener la localidad a la que pertenece el piso recién creado
-        $marca = Marca::findOrFail($modelo->marca_id);
-
-        // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo agregado con éxito.');
+        return redirect()->route('marcas.show', $modelo->marca_id)
+            ->with('mensaje', 'Modelo de equipo agregado con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Modelo $modelo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $marcas = Marca::orderBy('nombre')->get();
-        $modelo = Modelo::find($id);
-        return view('depositos/modelos.edit',compact ('modelo', 'marcas'));
+        $modelo = Modelo::findOrFail($id);
+        return view('depositos.modelos.edit', compact('modelo', 'marcas'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $errors = [
-            'nombre.required' => 'El nombre del modelo es obligatorio.',
-            'marca_id.required' => 'Debes seleccionar la Marca a la que pertenece este Modelo.',
-        ];
+        $validatedData = $this->validateModelo($request);
+        $modelo = Modelo::findOrFail($id);
+        $modelo->update($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-            'marca_id' => 'required'
-        ],$errors);
-
-        $modelo = Modelo::find($id);
-        $modelo->nombre = $request->input('nombre');
-        $modelo->marca_id = $request->input('marca_id');
-        $modelo->save();
-
-        // Obtener la localidad a la que pertenece el piso recién creado
-        $marca = Marca::findOrFail($modelo->marca_id);
-
-        // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('marcas.show', $marca->id)->with('mensaje', 'Modelo de equipo actualizado con éxito.');
+        return redirect()->route('marcas.show', $modelo->marca_id)
+            ->with('mensaje', 'Modelo de equipo actualizado con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $modelo = Modelo::find($id);
+        $modelo = Modelo::findOrFail($id);
+        $marca_id = $modelo->marca_id;
         $modelo->delete();
 
-        return redirect('depositos')->with('mensaje','El Modelo ha sido eliminado con exito.');
+        return redirect()->route('marcas.show', $marca_id)
+            ->with('mensaje', 'El Modelo ha sido eliminado con éxito.');
+    }
+
+    protected function validateModelo(Request $request)
+    {
+        return $request->validate([
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('modelos')->where(function ($query) use ($request) {
+                    return $query->where('marca_id', $request->marca_id);
+                }),
+            ],
+            'marca_id' => 'required|exists:marcas,id',
+        ], [
+            'nombre.required' => 'El nombre del modelo es obligatorio.',
+            'nombre.unique' => 'Este modelo ya existe para esta marca.',
+            'marca_id.required' => 'Debes seleccionar la Marca a la que pertenece este Modelo.',
+            'marca_id.exists' => 'La marca seleccionada no existe.',
+        ]);
     }
 }

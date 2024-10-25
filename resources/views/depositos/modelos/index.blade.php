@@ -1,12 +1,12 @@
 @extends('layout/template')
 
-@section('title','TelPri-Web | Pisos')
+@section('title','TelPri-Web | Modelos')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
 @if(Session::has('mensaje'))
     <div class="alert alert-success alert-dismissible" role="alert">
-        <i class="bi bi-check2-circle"></i>
+        <i class="fa-solid fa-circle-check"></i>
         {{ Session::get('mensaje') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -14,130 +14,93 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">
-    <i class="bi bi-building align-middle" style="font-size:150%;"></i>
-    <h2 class="align-middle">Administrador de Pisos.</h2>
+    <h2><i class="fa-solid fa-microchip m-2"></i>Administrador de Modelos.</h2>
 </div>
 
-<div class="d-flex justify-content-between">
-    <!-- Botones izquierda -->
-    <div class="d-flex">
-        <a href="{{ url('pisos/create') }}" class="btn btn-outline-success btn-sm me-2">
-            <i class="bi bi-building-add"></i>
-            <span class="align-middle">Agregar Piso</span>
+<!-- Botones Agregar -->
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <a href="{{ route('modelos.create') }}" class="btn btn-outline-success btn-sm me-2">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Modelo
         </a>
     </div>
-
-    <!-- Botones derecha -->
-    <div class="d-flex">
-        <label for="localidad" class="col-form-label me-2">Ver pisos de:</label>
-        
-        <form class="d-flex" role="search" action="{{ route('pisos.index') }}" method="get">
-            <select name="busqueda" id="busqueda" class="me-2 form-select">
-                <option value="">Seleccione localidad</option>
-                @foreach($localidades as $localidad)
-                <option value="{{ $localidad->id }}">{{ $localidad->nombre }}</option>
-                @endforeach
-            </select>
-            <button class="btn btn-outline-success" type="submit">
-                <i class="bi bi-search align-middle"></i>
-            </button>
-        </form>
-
+    <div>
+        <a href="{{ url('depositos/marcas/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-delete-left m-2"></i>
+            <span>Volver a Marcas</span>
+        </a>
     </div>
 </div>
 
-<!-- Resumen de Pisos -->
-<div class="d-flex justify-content-between mx-2 py-2 col-8">
-    <div class="align-items-center">
-        <button class="btn btn-outline-primary btn-sm" disabled>
-            Total:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalPiso }}</span>
+<!-- Resumen de Modelos -->
+<div class="d-flex mb-2">
+    <div class="align-items-center me-2">
+        <button class="btn-gradient-outline" disabled>
+            Total Modelos:
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalModelos }}</span>
         </button>
     </div>
 </div>
 
 <!-- Contenido de Sección -->
-<table class="table table-striped">
+<table class="table table-striped" id="datatableModelos">
     <thead>
         <tr>
-            <th>Piso</th>            
-            <th>Nombre Localidad</th>
-            <th></th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Equipos en Depósito</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @if(count($pisos)<=0)
-            <tr>
-                <td colspan="7">                      
-                    <div class="alert alert-warning d-flex align-items-center p-2" role="alert">
-                        <i class="bi bi-exclamation-diamond align-middle"></i>
-                        <div class="p-2">
-                            ¡Uy! No hay nada que mostrar.
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        @else
-        @foreach ($pisos as $piso)
+        @foreach ($modelos as $modelo)
         <tr>
-            <td>{{ $piso->nombre }}</td>            
-            <td>{{ $piso->localidad->nombre }}</td>
+            <td>{{ $modelo->nombre }}</td>
+            <td>{{ $modelo->marca->nombre }}</td>
+            <td>{{ $modelo->depositos_count }}</td>
             <td>
-                <a href="{{ url('pisos/'.$piso->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-pencil-square"></i>
+                <a href="{{ route('modelos.edit', $modelo->id) }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                |
-
-                <form action="{{ url('pisos/'.$piso->id)}}" id="form-eliminar-{{ $piso->id }}" action="{{ route('pisos.destroy', $piso->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('modelos.destroy', $modelo->id) }}" id="form-eliminar-{{ $modelo->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
-                        <i class="bi bi-building-dash"></i>
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </form>
             </td>
         </tr>
         @endforeach
-        @endif
     </tbody>
-    <tfoot>
-        <tr>
-            <td colspan="8">{{$pisos->appends(['busqueda'=>$busqueda])}}</td>
-        </tr>
-    </tfoot>
-    
 </table>
 
-<script>
-    document.querySelectorAll('form[id^="form-eliminar-"]').forEach(form => {
-        form.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const formId = this.id;
+@endsection
 
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableModelos', {
+            // Add any specific options for this table
+        });
+
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
             Swal.fire({
-                title: '¿Estás seguro de que quieres eliminar este piso?',
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
-                background: '#333',  // Fondo oscuro
-                color: '#fff',       // Texto blanco
-                customClass: {
-                    popup: 'swal2-dark',
-                    title: 'swal2-title',
-                    confirmButton: 'swal2-confirm',
-                    cancelButton: 'swal2-cancel'
-                }
+                confirmButtonText: 'Sí, eliminarlo!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById(formId).submit();
+                    event.target.submit();
                 }
             });
         });
     });
 </script>
-
-@endsection
-
+@endpush
