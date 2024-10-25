@@ -5,126 +5,78 @@ namespace App\Http\Controllers;
 use App\Models\Localidad;
 use App\Models\Piso;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PisoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         $localidades = Localidad::all();
-        
         $busqueda = $request->busqueda;
-        $pisosQuery = Piso::query()->orderBy('localidad_id');
+        
+        $pisosQuery = Piso::with('localidad')->withCount('lineas')->orderBy('localidad_id');
 
         if ($busqueda) {
             $pisosQuery->where('localidad_id', $busqueda);
         }
 
-        $pisos = $pisosQuery->paginate(50);
-
-        $totalPiso = Piso::count();
+        $pisos = $pisosQuery->get();
+        $totalPiso = $pisos->count();
 
         return view('pisos.index', compact('pisos', 'totalPiso', 'localidades', 'busqueda'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $localidades = Localidad::orderBy('nombre')->get();
-        return view('pisos.create',compact('localidades'));
+        return view('pisos.create', compact('localidades'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $errors = [
-            'nombre.required' => 'El nombre del piso es obligatorio.',
-            'localidad_id.required' => 'Debes seleccionar la Localidad a la que pertenece este Piso.',
-        ];
+        $validatedData = $this->validatePiso($request);
+        $piso = Piso::create($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-            'localidad_id' => 'required'
-        ], $errors);
-
-        $piso = new Piso();
-        $piso->nombre = $request->input('nombre');
-        $piso->localidad_id = $request->input('localidad_id');
-        $piso->save();
-
-        // Obtener la localidad a la que pertenece el piso recién creado
-        $localidad = Localidad::findOrFail($piso->localidad_id);
-
-        // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
+        return redirect()->route('localidades.show', $piso->localidad_id)
+            ->with('mensaje', 'Piso agregado con éxito.');
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(piso $piso)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $localidades = Localidad::orderBy('nombre')->get();
-        $piso = Piso::find($id);
-        return view('pisos.edit',compact ('piso', 'localidades'));
+        $piso = Piso::findOrFail($id);
+        return view('pisos.edit', compact('piso', 'localidades'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $errors = [
-            'piso.required' => 'El nombre del piso es obligatorio.',
-            'localidad_id.required' => 'Debes seleccionar la Localidad a la que pertenece este Piso.'
-        ];
+        $validatedData = $this->validatePiso($request);
+        $piso = Piso::findOrFail($id);
+        $piso->update($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-            'localidad_id' => 'required'
-        ],$errors);
-
-        $piso = Piso::find($id);
-        $piso->nombre = $request->input('nombre');
-        $piso->localidad_id = $request->input('localidad_id');
-        $piso->save();
-
-        // Obtener la localidad a la que pertenece el piso recién creado
-        $localidad = Localidad::findOrFail($piso->localidad_id);
-
-        // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso actualizado con éxito.');
+        return redirect()->route('localidades.show', $piso->localidad_id)
+            ->with('mensaje', 'Piso actualizado con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $piso = Piso::find($id);
+        $piso = Piso::findOrFail($id);
+        $localidad_id = $piso->localidad_id;
         $piso->delete();
 
-        // Obtener la localidad a la que pertenece el piso recién creado
-        $localidad = Localidad::findOrFail($piso->localidad_id);
-
-        // Redirigir al método show de la sección Localidades para la localidad correspondiente
-        return redirect()->route('localidades.show', $localidad->id)->with('mensaje', 'Piso agregado con éxito.');
+        return redirect()->route('localidades.show', $localidad_id)
+            ->with('mensaje', 'Piso eliminado con éxito.');
     }
-    
-}
 
+    protected function validatePiso(Request $request)
+    {
+        return $request->validate([
+            'nombre' => ['required', 'string', 'max:255'],
+            'localidad_id' => ['required', 'exists:localidades,id'],
+        ], [
+            'nombre.required' => 'El nombre del piso es obligatorio.',
+            'localidad_id.required' => 'Debes seleccionar la Localidad a la que pertenece este Piso.',
+            'localidad_id.exists' => 'La Localidad seleccionada no existe.',
+        ]);
+    }
+}

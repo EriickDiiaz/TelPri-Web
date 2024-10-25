@@ -9,11 +9,15 @@ class Piso extends Model
 {
     use HasFactory;
 
-    /**
-     * Obtener la localidad que pertenece al piso. 
-     */
+    protected $fillable = ['nombre', 'localidad_id'];
+
     public function localidad()
     {
         return $this->belongsTo(Localidad::class);
+    }
+
+    public function lineas()
+    {
+        return $this->hasMany(Linea::class);
     }
 }

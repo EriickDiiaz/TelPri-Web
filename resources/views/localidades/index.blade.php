@@ -18,13 +18,22 @@
 </div>
 
 <!-- Botones Agregar -->
-<div class="d-flex mb-2">
-    <a href="{{ route('localidades.create') }}" class="btn btn-outline-success btn-sm me-2">
-        <i class="fa-solid fa-plus m-2"></i>Agregar Localidad
-    </a>
-    <a href="{{ route('pisos.create') }}" class="btn btn-outline-success btn-sm me-2">
-        <i class="fa-solid fa-plus m-2"></i>Agregar Piso
-    </a>
+
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <a href="{{ route('localidades.create') }}" class="btn btn-outline-success btn-sm me-2">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Localidad
+        </a>
+        <a href="{{ route('pisos.create') }}" class="btn btn-outline-success btn-sm me-2">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Piso
+        </a>
+    </div>
+    <div>
+        <a href="{{ url('pisos/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-elevator m-2"></i>
+            <span>Ver Pisos</span>
+        </a>
+    </div>
 </div>
 
 <!-- Resumen de Localidades -->
