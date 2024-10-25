@@ -2,103 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\localidad;
+use App\Models\Localidad;
 use App\Models\Piso;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class LocalidadController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request)
+    public function index()
     {
-        $localidades = Localidad::withCount('pisos')->orderBy('nombre')->get();
-        $totalLocalidad = Localidad::count();
-        return view('localidades.index', compact('localidades','totalLocalidad'));
+        $localidades = Localidad::withCount(['pisos', 'lineas'])->orderBy('nombre')->get();
+        $totalLocalidad = $localidades->count();
+        return view('localidades.index', compact('localidades', 'totalLocalidad'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('localidades.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $errors = [
-            'nombre.required' => 'El campo localidad es obligatorio.',
-        ];
+        $validatedData = $this->validateLocalidad($request);
+        Localidad::create($validatedData);
 
-        $request->validate([
-            'nombre' =>'required',
-        ],$errors);
-
-        $localidad = new Localidad();
-        $localidad->nombre = $request->input('nombre');
-        $localidad->save();
-
-        return redirect ('localidades')->with('mensaje','Localidad guardada con exito.');
+        return redirect()->route('localidades.index')->with('mensaje', 'Localidad guardada con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($id)
     {
-        // Buscar la localidad por su ID
         $localidad = Localidad::findOrFail($id);
-
-        // Obtener todos los pisos asociados a la localidad
         $pisos = $localidad->pisos()->orderBy('nombre')->get();
 
-        // Retornar la vista de detalles de la localidad con los pisos asociados
         return view('localidades.show', compact('localidad', 'pisos'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
-        $localidad = Localidad::find($id);
-        return view('localidades.edit',['localidad'=>$localidad]);
+        $localidad = Localidad::findOrFail($id);
+        return view('localidades.edit', compact('localidad'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $errors = [
-            'nombre.required' => 'El Nombre de la Localidad es obligatorio.',
-        ];
-        
-        $request->validate([
-            'nombre' =>'required',
-        ], $errors);
+        $validatedData = $this->validateLocalidad($request, $id);
+        $localidad = Localidad::findOrFail($id);
+        $localidad->update($validatedData);
 
-        $localidad = Localidad::find($id);
-        $localidad->nombre = $request->input('nombre');        
-        $localidad->save();
-
-        return redirect ('localidades')->with('mensaje','La Localidad ha sido actualizada con exito.');
+        return redirect()->route('localidades.index')->with('mensaje', 'La Localidad ha sido actualizada con éxito.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $localidad = Localidad::find($id);
+        $localidad = Localidad::findOrFail($id);
         $localidad->delete();
 
-        return redirect('localidades')->with('mensaje','Localidad eliminada con exito.');
+        return redirect()->route('localidades.index')->with('mensaje', 'Localidad eliminada con éxito.');
     }
 
+    protected function validateLocalidad(Request $request, $id = null)
+    {
+        $rules = [
+            'nombre' => ['required', 'string', 'max:255', Rule::unique('localidades')->ignore($id)],
+        ];
+
+        $messages = [
+            'nombre.required' => 'El Nombre de la Localidad es obligatorio.',
+            'nombre.unique' => 'Esta Localidad ya existe.',
+        ];
+
+        return $request->validate($rules, $messages);
+    }
 }

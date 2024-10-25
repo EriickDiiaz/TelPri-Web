@@ -17,22 +17,20 @@
     <h2 class="align-middle"><i class="fa-solid fa-location-dot m-2"></i>Administrador de Localidades.</h2>
 </div>
 
-<!-- Botón Agregar -->
-<a href="{{ url('localidades/create') }}" class="btn btn-outline-success btn-sm me-2">
-    <span>
+<!-- Botones Agregar -->
+<div class="d-flex mb-2">
+    <a href="{{ route('localidades.create') }}" class="btn btn-outline-success btn-sm me-2">
         <i class="fa-solid fa-plus m-2"></i>Agregar Localidad
-    </span>
-</a>
-<a href="{{ url('pisos/create') }}" class="btn btn-outline-success btn-sm me-2">
-    <span>
+    </a>
+    <a href="{{ route('pisos.create') }}" class="btn btn-outline-success btn-sm me-2">
         <i class="fa-solid fa-plus m-2"></i>Agregar Piso
-    </span>
-</a>
+    </a>
+</div>
 
 <!-- Resumen de Localidades -->
-<div class="d-flex py-2 col-8">
-    <div class="align-items-center">
-        <button class="btn btn-outline-primary btn-sm" disabled>
+<div class="d-flex mb-2">
+    <div class="align-items-center me-2">
+        <button class="btn-gradient-outline" disabled>
             Total Localidades:
             <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalLocalidad }}</span>
         </button>
@@ -45,7 +43,8 @@
         <tr>
             <th>Localidad</th>
             <th>Pisos</th>
-            <th></th>
+            <th>Líneas</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -53,19 +52,17 @@
         <tr>
             <td>{{ $localidad->nombre }}</td>
             <td>{{ $localidad->pisos_count }}</td>
+            <td>{{ $localidad->lineas_count }}</td>
             <td>
-                <!--Boton Pisos-->
-                <a href="{{ url('localidades/'.$localidad->id)}}" class="btn btn-outline-light btn-sm">
+                <a href="{{ route('localidades.show', $localidad->id) }}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-elevator"></i>
                 </a>
-                <!--Boton Editar-->
-                <a href="{{ url('localidades/'.$localidad->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('localidades.edit', $localidad->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <!--Boton Eliminar-->
-                <form action="{{ url('localidades/'.$localidad->id)}}" id="form-eliminar-{{ $localidad->id }}" action="{{ route('localidades.destroy', $localidad->id) }}" class="d-inline" method="post">
-                    @method("DELETE")
+                <form action="{{ route('localidades.destroy', $localidad->id) }}" id="form-eliminar-{{ $localidad->id }}" class="d-inline" method="POST">
                     @csrf
+                    @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -79,6 +76,29 @@
 @endsection
 
 @push('scripts')
-    @include('partials.datatableLocalidad')
-    @include('partials.sweetalert')
+<script>
+    $(document).ready(function() {
+        initializeDataTable('#datatableLocalidad', {
+            // Add any specific options for this table
+        });
+
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
 @endpush
