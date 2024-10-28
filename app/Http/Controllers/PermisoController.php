@@ -4,73 +4,59 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Validation\Rule;
 
 class PermisoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $permisos = Permission::all();
-    
-        return view('permisos.index', compact('permisos'));
+        $totalPermisos = $permisos->count();
+        return view('permisos.index', compact('permisos', 'totalPermisos'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('permisos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $permiso = Permission::create(['name' => $request->input('name')]);
-        return redirect ('permisos')->with('mensaje','Permiso guardado con exito.');
+        $validatedData = $this->validatePermiso($request);
+        $permiso = Permission::create($validatedData);
+
+        return redirect()->route('permisos.index')->with('mensaje', 'Permiso guardado con éxito.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Permission $permiso)
     {
-        //
+        return view('permisos.edit', compact('permiso'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function update(Request $request, Permission $permiso)
     {
-        $permiso = Permission::find($id);
-        return view('permisos.edit',['permiso'=>$permiso]);
+        $validatedData = $this->validatePermiso($request, $permiso->id);
+        $permiso->update($validatedData);
+        
+        return redirect()->route('permisos.index')->with('mensaje', 'Permiso actualizado con éxito.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
+    public function destroy(Permission $permiso)
     {
-        $permiso = Permission::find($id);
-        $permiso->name = $request->input('name');
-        $permiso->save();
-
-        return redirect ('permisos')->with('mensaje','Permiso actualizado con exito.');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $permiso = Permission::find($id);
         $permiso->delete();
 
-        return redirect('permisos')->with('mensaje','Permiso eliminado con exito.');
+        return redirect()->route('permisos.index')->with('mensaje', 'Permiso eliminado con éxito.');
+    }
+
+    protected function validatePermiso(Request $request, $id = null)
+    {
+        return $request->validate([
+            'name' => ['required', 'string', 'max:255', Rule::unique('permissions')->ignore($id)],
+        ], [
+            'name.required' => 'El nombre del permiso es obligatorio.',
+            'name.string' => 'El nombre del permiso debe ser una cadena de texto.',
+            'name.max' => 'El nombre del permiso no puede tener más de 255 caracteres.',
+            'name.unique' => 'Este nombre de permiso ya está en uso.',
+        ]);
     }
 }
