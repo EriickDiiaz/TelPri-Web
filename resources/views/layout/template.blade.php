@@ -172,6 +172,9 @@
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/callcenters') }}">
                         <i class="fa-solid fa-headset m-2"></i>CallCenters
                     </a>
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/hatillo') }}">
+                        <i class="fa-solid fa-database m-2"></i>DC El Hatillo
+                    </a>
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/depositos') }}">
                         <i class="fa-solid fa-warehouse m-2"></i>Depósitos
                     </a>
