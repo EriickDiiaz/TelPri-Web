@@ -260,8 +260,8 @@
             buttons: [
                 'excel', 'pdf', 'print'
             ],
-            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
-            pageLength: 10,
+            lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+            pageLength: 20,
             buttons: [
                 {
                     extend: 'excelHtml5',

@@ -9,35 +9,33 @@ class Linea extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'linea', 'vip', 'inventario', 'serial', 'plataforma', 'estado', 'titular',
+        'acceso', 'localidad_id', 'piso_id', 'mac', 'campo_id', 'par', 'directo',
+        'observacion', 'modificado'
+    ];
+
     protected $casts = [
         'acceso' => 'array',
     ];
 
-    /**
-     * Obtener la LOCALIDAD a la que pertenece la linea. 
-     */
     public function localidad()
     {
         return $this->belongsTo(Localidad::class);
     }
-    /**
-     * Obtener el PISO al que pertenece la linea. 
-     */
+
     public function piso()
     {
         return $this->belongsTo(Piso::class, 'piso_id');
     }
 
-    /**
-     * Obtener el CAMPO al que pertenece la linea. 
-     */
     public function campo()
     {
         return $this->belongsTo(Campo::class);
     }
 
     public function historial()
-{
-    return $this->hasMany(Historial::class);
-}
+    {
+        return $this->hasMany(Historial::class);
+    }
 }

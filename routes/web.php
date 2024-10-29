@@ -37,7 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/get-modelos/{marca_id}', [DepositoController::class, 'getModelosByMarca'])->name('getModelosByMarca');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
   
-    Route::get('lineas/avanzada', [LineaController::class, 'avanzada'])->name('lineas/avanzada');
+    Route::get('lineas/avanzada', [LineaController::class, 'avanzada'])->name('lineas.avanzada');
     Route::get('lineas/historial', [LineaController::class, 'historial'])->name('lineas/historial');
     Route::resource('/lineas', LineaController::class);
 
