@@ -1,223 +1,197 @@
 @extends('layout/template')
 
-@section('title','TelPri-Web | Busqueda Avanzada')
+@section('title', 'TelPri-Web | Búsqueda Avanzada de Líneas')
 @section('contenido')
-
-<!-- Mensajes y Notificaciones -->
-@if(Session::has('mensaje'))
-    <div class="alert alert-success alert-dismissible" role="alert">
-        <i class="bi bi-check2-circle"></i>
-        {{ Session::get('mensaje') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">
-    <i class="bi bi-telephone" style="font-size:150%;"></i>
-    <h2 class="align-middle">Busqueda Avanzada de Líneas Telefónicas.</h2>
+    <h2><i class="fa-solid fa-binoculars m-2"></i>Búsqueda Avanzada de Líneas.</h2>
 </div>
 
-<div class="d-flex justify-content-between">
-    <!-- Botones izquierda -->
-    <div class="d-flex">
-        <a href="{{ url('lineas/create') }}" class="btn btn-outline-success btn-sm me-2">
-            <i class="bi bi-telephone-plus"></i>
-            <span>Agregar Línea</span>
-        </a>
-    </div>
-</div>
-
-<!-- Campos de Busqueda -->
-<form class="d-flex flex-wrap" role="search" action="{{ route('lineas/avanzada') }}" method="get">
-    <div class="d-flex flex-wrap w-100">
-        <div class="col-sm-2 me-3">
-            <label for="linea" class="col-form-label">Línea:</label>
-            <input type="text" class="form-control" name="linea" id="linea" value="{{ request('linea') }}">
+<!-- Formulario de Búsqueda Avanzada -->
+<form id="searchForm" class="mb-4">
+    <div class="row g-3">
+        <div class="col-md-3">
+            <label for="linea" class="form-label">Línea</label>
+            <input type="text" class="form-control" id="linea" name="linea">
         </div>
-
-        <div class="col-sm-1 me-3">
-            <label for="vip" class="col-form-label">¿VIP?</label>
-            <select name="vip" id="vip" class="form-select">
-                <option value="">{{ request('vip') ? request('vip') : 'Seleccione' }}</option>
-                <option value="No" {{ request('vip') == 'No' ? 'selected' : '' }}>No</option>
-                <option value="Presidente" {{ request('vip') == 'Presidente' ? 'selected' : '' }}>Presidente</option>
-                <option value="Vice Presidente" {{ request('vip') == 'Vice Presidente' ? 'selected' : '' }}>Vice Presidente</option>
-                <option value="Gerente General" {{ request('vip') == 'Gerente General' ? 'selected' : '' }}>Gerente General</option>
-                <option value="Asesor" {{ request('vip') == 'Asesor' ? 'selected' : '' }}>Asesor</option>
-                <option value="Asistente" {{ request('vip') == 'Asistente' ? 'selected' : '' }}>Asistente</option>
+        <div class="col-md-3">
+            <label for="vip" class="form-label">VIP</label>
+            <select class="form-select" id="vip" name="vip">
+                <option value="">No</option>
+                <option value="Presidente">Presidente</option>
+                <option value="Vice Presidente">Vice Presidente</option>
+                <option value="Gerente General">Gerente General</option>
+                <option value="Asesor">Asesor</option>
+                <option value="Asistente">Asistente</option>
             </select>
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="inventario" class="col-form-label">Cod. Inventario:</label>
-            <input type="text" class="form-control" name="inventario" id="inventario" value="{{ request('inventario') }}">
+        <div class="col-md-3">
+            <label for="inventario" class="form-label">Inventario</label>
+            <input type="text" class="form-control" id="inventario" name="inventario">
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="serial" class="col-form-label">Serial:</label>
-            <input type="text" class="form-control" name="serial" id="serial" value="{{ request('serial') }}">
+        <div class="col-md-3">
+            <label for="serial" class="form-label">Serial</label>
+            <input type="text" class="form-control" id="serial" name="serial">
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="plataforma" class="col-form-label">Plataforma:</label>
+        <div class="col-md-3">
+            <label for="plataforma" class="form-label">Plataforma</label>
             <select name="plataforma" id="plataforma" class="form-select">
-                <option value="">{{ request('plataforma') ? request('plataforma') : 'Seleccione' }}</option>
-                <option value="Axe" {{ request('plataforma') == 'Axe' ? 'selected' : '' }}>Axe</option>
-                <option value="Cisco" {{ request('plataforma') == 'Cisco' ? 'selected' : '' }}>Cisco</option>
-                <option value="Ericsson" {{ request('plataforma') == 'Ericsson' ? 'selected' : '' }}>Ericsson</option>
-                <option value="Externo" {{ request('plataforma') == 'Externo' ? 'selected' : '' }}>Externo</option>
+                <option value="">Cualquiera</option>
+                <option value="Axe">Axe</option>
+                <option value="Cisco">Cisco</option>
+                <option value="Ericsson">Ericsson</option>
+                <option value="Externo">Externo</option>
             </select>
         </div>
-
-        <div class="col-sm-1 me-3">
-            <label for="estado" class="col-form-label">Estado:</label>
+        <div class="col-md-3">
+            <label for="estado" class="form-label">Estado</label>
             <select name="estado" id="estado" class="form-select">
-                <option value="">{{ request('estado') ? request('estado') : 'Seleccione' }}</option>
-                <option value="Disponible" {{ request('estado') == 'Disponible' ? 'selected' : '' }}>Disponible</option>
-                <option value="Asignada" {{ request('estado') == 'Asignada' ? 'selected' : '' }}>Asignada</option>
-                <option value="Bloqueada" {{ request('estado') == 'Bloqueada' ? 'selected' : '' }}>Bloqueada</option>
-                <option value="Por Verificar" {{ request('estado') == 'Por Verificar' ? 'selected' : '' }}>Por Verificar</option>
-                <option value="Por Eliminar" {{ request('estado') == 'Por Eliminar' ? 'selected' : '' }}>Por Eliminar</option>
+            <option value="">Cualquiera</option>
+                <option value="Disponible">Disponible</option>
+                <option value="Asignada">Asignada</option>
+                <option value="Bloqueada">Bloqueada</option>
+                <option value="Por Verificar">Por Verificar</option>
+                <option value="Por Eliminar">Por Eliminar</option>
             </select>
         </div>
-    </div>
-
-    <div class="d-flex flex-wrap w-100">
-        <div class="col-sm-2 me-3 mb-3">
-            <label for="titular" class="col-form-label">Titular:</label>
-            <input type="text" class="form-control" name="titular" id="titular" value="{{ request('titular') }}">
+        <div class="col-md-3">
+            <label for="titular" class="form-label">Titular</label>
+            <input type="text" class="form-control" id="titular" name="titular">
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="localidad_id" class="col-form-label">Localidad:</label>
-            <select name="localidad_id" id="localidad_id" class="form-select">
-                <option value="">{{ request('localidad_id') ? request('localidad_id') : 'Seleccione' }}</option>
+        <div class="col-md-3">
+            <label for="localidad_id" class="form-label">Localidad</label>
+            <select class="form-select" id="localidad_id" name="localidad_id">
+                <option value="">Seleccione</option>
                 @foreach($localidades as $localidad)
-                    <option value="{{ $localidad->id }}" {{ request('localidad_id') == $localidad->id ? 'selected' : '' }}>{{ $localidad->nombre }}</option>
+                    <option value="{{ $localidad->id }}">{{ $localidad->nombre }}</option>
                 @endforeach
             </select>
         </div>
-
-        <div class="col-sm-1 me-3">
-            <label for="piso_id" class="col-form-label">Piso:</label>
-            <select name="piso_id" id="piso_id" class="form-select">
-                <option value="{{ request('piso') }}">Seleccione un Piso</option>
+        <div class="col-md-3">
+            <label for="piso_id" class="form-label">Piso</label>
+            <select class="form-select" id="piso_id" name="piso_id">
+                <option value="">Seleccione</option>
             </select>
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="mac" class="col-form-label">Mac/EQ/LI3:</label>
-            <input type="text" class="form-control" name="mac" id="mac" value="{{ request('mac') }}">
+        <div class="col-md-3">
+            <label for="mac" class="form-label">Mac</label>
+            <input type="text" class="form-control" id="mac" name="mac">
         </div>
-
-        <div class="col-sm-2 me-3">
-            <label for="campo_id" class="col-form-label">Ubicación:</label>
-            <select name="campo_id" id="campo_id" class="form-select">
-                <option value="">{{ request('campo_id') ? request('campo_id') : 'Seleccione' }}</option>
+        <div class="col-md-3">
+            <label for="campo_id" class="form-label">Campo</label>
+            <select class="form-select" id="campo_id" name="campo_id">
+                <option value="">Seleccione</option>
                 @foreach($campos as $campo)
-                    <option value="{{ $campo->id }}" {{ request('campo_id') == $campo->id ? 'selected' : '' }}>{{ $campo->nombre }}</option>
+                    <option value="{{ $campo->id }}">{{ $campo->nombre }}</option>
                 @endforeach
             </select>
         </div>
-
-        <div class="col-sm-1 me-3">
-            <label for="par" class="col-form-label">Campo:</label>
-            <input type="text" class="form-control" name="par" id="par" value="{{ request('par') }}">
+        <div class="col-md-3">
+            <label for="par" class="form-label">Par</label>
+            <input type="text" class="form-control" id="par" name="par">
         </div>
     </div>
-
     <div class="mt-3">
-        <a href="{{ url('lineas') }}" class="btn btn-outline-danger">
-            <i class="bi bi-backspace"></i>
-            <span>Regresar</span>
-        </a>
-        |
-        <a href="{{ route('lineas/avanzada') }}" class="btn btn-outline-secondary">
-            <i class="bi bi-x-circle"></i>
-            <span>Reestablecer</span>
-        </a>
-        |
-        <button type="submit" class="btn btn-outline-success">
-            <i class="bi bi-binoculars"></i>
-            <span>Búsqueda Avanzada</span>
-        </button>
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <button type="reset" class="btn btn-secondary">Limpiar</button>
     </div>
 </form>
-<!-- Tabla donde se muestran resultados -->
-@if(isset($lineas))
-    <div class="mt-5">
-        <h3>Resultados de la búsqueda</h3>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Línea</th>
-                    <th>VIP</th>
-                    <th>Cod. Inv.</th>
-                    <th>Serial</th>
-                    <th>Plataforma</th>
-                    <th>Estado</th>
-                    <th>Titular</th>
-                    <th>Localidad</th>
-                    <th>Piso</th>
-                    <th>Mac/EQ/LI3</th>
-                    <th>Campo</th>
-                    <th>Par</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lineas as $linea)
-                    <tr>
-                        <td>
-                            <a href="{{ url('lineas/'.$linea->id)}}" target="_blank">{{ $linea->linea }}</a>
-                        </td>
-                        <td>{{ $linea->vip }}</td>
-                        <td>{{ $linea->inventario }}</td>
-                        <td>{{ $linea->serial }}</td>
-                        <td>{{ $linea->plataforma }}</td>
-                        <td>{{ $linea->estado }}</td>
-                        <td>{{ $linea->titular }}</td>
-                        <td>{{ $linea->localidad->nombre ?? 'N/A' }}</td>
-                        <td>{{ $linea->piso->nombre ?? 'N/A'}}</td>
-                        <td>{{ $linea->mac }}</td>
-                        <td>{{ $linea->campo->nombre ?? 'N/A' }}</td>
-                        <td>{{ $linea->par }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="12">{{ $lineas->appends(request()->query())->links() }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-@endif
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
+<!-- Tabla de Resultados -->
+<table class="table table-striped" id="datatableLineas">
+    <thead>
+        <tr>
+            <th>Línea</th>
+            <th>Inventario</th>
+            <th>Serial</th>
+            <th>Plataforma</th>
+            <th>Estado</th>
+            <th>Titular</th>
+            <th>Localidad</th>
+            <th>Piso</th>
+            <th>Mac</th>
+            <th>Campo</th>
+            <th>Par</th>
+        </tr>
+    </thead>
+</table>
+
+@endsection
+
+@push('scripts')
+<script>
 $(document).ready(function() {
+    var table = $('#datatableLineas').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ route('lineas.avanzada') }}",
+            type: 'GET',
+            data: function(d) {
+                d.linea = $('#linea').val();
+                d.vip = $('#vip').val();
+                d.inventario = $('#inventario').val();
+                d.serial = $('#serial').val();
+                d.plataforma = $('#plataforma').val();
+                d.estado = $('#estado').val();
+                d.titular = $('#titular').val();
+                d.localidad_id = $('#localidad_id').val();
+                d.piso_id = $('#piso_id').val();
+                d.mac = $('#mac').val();
+                d.campo_id = $('#campo_id').val();
+                d.par = $('#par').val();
+            }
+        },
+        columns: [
+            {data: 'linea_with_vip', name: 'linea', orderable: true, searchable: true},
+            {data: 'inventario', name: 'inventario'},
+            {data: 'serial', name: 'serial'},
+            {data: 'plataforma', name: 'plataforma'},
+            {data: 'estado', name: 'estado'},
+            {data: 'titular', name: 'titular'},
+            {data: 'localidad.nombre', name: 'localidad.nombre'},
+            {data: 'piso.nombre', name: 'piso.nombre'},
+            {data: 'mac', name: 'mac'},
+            {data: 'campo.nombre', name: 'campo.nombre'},
+            {data: 'par', name: 'par'}
+        ],
+        language: {
+            url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        }
+    });
+
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        table.draw();
+    });
+
+    $('#searchForm button[type="reset"]').on('click', function() {
+        $('#searchForm')[0].reset();
+        table.draw();
+    });
+
+    // Dependent select for localidad and piso
     $('#localidad_id').change(function() {
-        var localidadID = $(this).val();
-        if(localidadID) {
+        var localidadId = $(this).val();
+        if (localidadId) {
             $.ajax({
-                url: '{{ url("/get-pisos") }}/' + localidadID,
+                url: '{{ route("getPisos") }}',
                 type: 'GET',
-                dataType: 'json',
+                data: { localidad_id: localidadId },
                 success: function(data) {
                     $('#piso_id').empty();
-                    $('#piso_id').append('<option value="">Seleccione un piso</option>');
+                    $('#piso_id').append('<option value="">Seleccione</option>');
                     $.each(data, function(key, value) {
-                        $('#piso_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
+                        $('#piso_id').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                     });
                 }
             });
         } else {
             $('#piso_id').empty();
-            $('#piso_id').append('<option value="">Seleccione un piso</option>');
+            $('#piso_id').append('<option value="">Seleccione</option>');
         }
     });
 });
 </script>
-
-@endsection
+@endpush

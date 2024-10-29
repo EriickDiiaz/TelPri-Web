@@ -33,7 +33,7 @@ Route::get('/', function () {
 Auth::routes(['register'=>false, 'reset'=>false]);
 
 Route::middleware('auth')->group(function () {
-    Route::get('/get-pisos/{localidad_id}', [LineaController::class, 'getPisosByLocalidad'])->name('getPisosByLocalidad');
+    Route::get('/get-pisos', [LineaController::class, 'getPisos'])->name('getPisos');
     Route::get('/get-modelos/{marca_id}', [DepositoController::class, 'getModelosByMarca'])->name('getModelosByMarca');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
   

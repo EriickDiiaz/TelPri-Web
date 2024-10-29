@@ -49,7 +49,7 @@
     <div>
         <label for="estado" class="col-sm-2 col-form-label">Estado:</label>
         <div class="col-sm-7">
-        <select name="estado" id="estado" class="form-select">
+            <select name="estado" id="estado" class="form-select">
                 <option value="{{ old('estado') }}">{{ old('estado') }}</option>
                 <option value="Disponible">Disponible</option>
                 <option value="Asignada">Asignada</option>

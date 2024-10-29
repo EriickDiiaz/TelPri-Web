@@ -185,56 +185,81 @@ class LineaController extends Controller
         }
     }
 
-    // Other methods (getPisosByLocalidad, axe, cisco, ericsson, externo, avanzada, historial) remain unchanged
-
     public function avanzada(Request $request)
     {
-        $query = Linea::query();
+        if ($request->ajax()) {
+            $query = Linea::with(['localidad', 'piso', 'campo']);
 
-        if ($request->filled('linea')) {
-            $query->where('linea', 'like', '%' . $request->linea . '%');
-        }
-        if ($request->filled('vip')) {
-            $query->where('vip', $request->vip);
-        }
-        if ($request->filled('inventario')) {
-            $query->where('inventario', 'like', '%' . $request->inventario . '%');
-        }
-        if ($request->filled('serial')) {
-            $query->where('serial', 'like', '%' . $request->serial . '%');
-        }
-        if ($request->filled('plataforma')) {
-            $query->where('plataforma', $request->plataforma);
-        }
-        if ($request->filled('estado')) {
-            $query->where('estado', $request->estado);
-        }
-        if ($request->filled('titular')) {
-            $query->where('titular', 'like', '%' . $request->titular . '%');
-        }
-        if ($request->filled('localidad_id')) {
-            $query->where('localidad_id', $request->localidad_id);
-        }
-        if ($request->filled('piso_id')) {
-            $query->where('piso_id', 'like', '%' . $request->piso_id . '%');
-        }
-        if ($request->filled('mac')) {
-            $query->where('mac', 'like', '%' . $request->mac . '%');
-        }
-        if ($request->filled('campo_id')) {
-            $query->where('campo_id', $request->campo_id);
-        }
-        if ($request->filled('par')) {
-            $query->where('par', 'like', '%' . $request->par . '%');
-        }
+            // Apply filters
+            $filters = ['linea', 'inventario', 'serial', 'plataforma', 'estado', 'titular', 'mac', 'par'];
+            foreach ($filters as $filter) {
+                if ($request->filled($filter)) {
+                    $query->where($filter, 'like', '%' . $request->input($filter) . '%');
+                }
+            }
 
-        // Paginar los resultados en grupos de 50
-        $lineas = $query->paginate(50);
+            if ($request->filled('localidad_id')) {
+                $query->where('localidad_id', $request->localidad_id);
+            }
+            if ($request->filled('piso_id')) {
+                $query->where('piso_id', $request->piso_id);
+            }
+            if ($request->filled('campo_id')) {
+                $query->where('campo_id', $request->campo_id);
+            }
+            if ($request->filled('vip')) {
+                $query->where('vip', $request->vip);
+            }
+
+            return DataTables::of($query)
+                ->addColumn('linea_with_vip', function ($linea) {
+                    $vipIcon = $linea->vip ? '<i class="fa-solid fa-star text-warning"></i> ' : '';
+                    return '<a href="' . route('lineas.show', $linea->id) . '">' . $vipIcon . $linea->linea . '</a>';
+                })
+                ->editColumn('inventario', function ($linea) {
+                    return $linea->inventario ?: 'N/A';
+                })
+                ->editColumn('serial', function ($linea) {
+                    return $linea->serial ?: 'N/A';
+                })
+                ->editColumn('plataforma', function ($linea) {
+                    return $linea->plataforma ?: 'N/A';
+                })
+                ->editColumn('estado', function ($linea) {
+                    return $linea->estado ?: 'N/A';
+                })
+                ->editColumn('titular', function ($linea) {
+                    return $linea->titular ?: 'N/A';
+                })
+                ->editColumn('localidad.nombre', function ($linea) {
+                    return $linea->localidad ? $linea->localidad->nombre : 'N/A';
+                })
+                ->editColumn('piso.nombre', function ($linea) {
+                    return $linea->piso ? $linea->piso->nombre : 'N/A';
+                })
+                ->editColumn('mac', function ($linea) {
+                    return $linea->mac ?: 'N/A';
+                })
+                ->editColumn('campo.nombre', function ($linea) {
+                    return $linea->campo ? $linea->campo->nombre : 'N/A';
+                })
+                ->editColumn('par', function ($linea) {
+                    return $linea->par ?: 'N/A';
+                })
+                ->rawColumns(['linea_with_vip'])
+                ->make(true);
+        }
 
         $localidades = Localidad::orderBy('nombre')->get();
         $campos = Campo::orderBy('nombre')->get();
 
-        return view('lineas.avanzada', compact('lineas', 'localidades', 'campos'));
+        return view('lineas.avanzada', compact('localidades', 'campos'));
+    }
+
+    public function getPisos(Request $request)
+    {
+        $pisos = Piso::where('localidad_id', $request->localidad_id)->orderBy('nombre')->get();
+        return response()->json($pisos);
     }
 
     public function historial($id)
