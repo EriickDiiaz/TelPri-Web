@@ -40,7 +40,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($hatillos as $hatillo)
+        @foreach ($hatillo as $hatillo)
         <tr>
             <td>{{ $hatillo->linea }}</td>
             <td>{{ $hatillo->titular }}</td>   

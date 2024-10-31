@@ -13,9 +13,9 @@ class HatilloController extends Controller
      */
     public function index()
     {
-        $hatillos = Hatillo::all();
+        $hatillo = Hatillo::all();
 
-        return view('hatillo.index', compact('hatillos'));
+        return view('hatillo.index', compact('hatillo'));
     }
 
     /**
@@ -34,40 +34,48 @@ class HatilloController extends Controller
         $validatedData = $this->validateHatillo($request);
         Hatillo::create($validatedData);
 
-        return redirect()->route('hatillo.show', $hatillo->id)
-            ->with('mensaje', 'Línea agregada con éxito.');
+        return redirect()->route('hatillo.show', $hatillo->id)->with('mensaje', 'Línea agregada con éxito.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Hatillo $hatillo)
+    public function show($id)
     {
-        //
+        $hatillo = Hatillo::findOrFail($id);
+        return view('hatillo.show', compact('hatillo'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Hatillo $hatillo)
+    public function edit($id)
     {
-        //
+        $hatillo = Hatillo::findOrFail($id);
+        return view('hatillo.edit', compact('hatillo'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hatillo $hatillo)
+    public function update(Request $request, $id)
     {
-        //
+        $validatedData = $this->validateHatillo($request, $id);
+        $hatillo = Hatillo::findOrFail($id);
+        $hatillo->update($validatedData);
+
+        return redirect()->route('hatillo.show', $hatillo->id)->with('mensaje', 'Línea modificada con éxito.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Hatillo $hatillo)
+    public function destroy($id)
     {
-        //
+        $hatillo = Hatillo::findOrFail($id);
+        $hatillo->delete();
+
+        return redirect()->route('hatillo.index')->with('mensaje', 'Línea eliminada con éxito.');
     }
 
     protected function validateHatillo(Request $request, $id = null)
