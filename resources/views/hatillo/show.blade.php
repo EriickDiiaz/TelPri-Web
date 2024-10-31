@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title','Depositos | Equipo en Depósito')
+@section('title','DC Hatillo | Ver Línea')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->

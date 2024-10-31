@@ -32,7 +32,7 @@ class HatilloController extends Controller
     public function store(Request $request)
     {
         $validatedData = $this->validateHatillo($request);
-        Hatillo::create($validatedData);
+        $hatillo = Hatillo::create($validatedData);
 
         return redirect()->route('hatillo.show', $hatillo->id)->with('mensaje', 'Línea agregada con éxito.');
     }

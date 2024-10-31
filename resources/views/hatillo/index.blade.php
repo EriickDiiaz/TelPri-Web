@@ -48,7 +48,7 @@
             <td>{{ $hatillo->mac }}</td>                        
             <td>{{ $hatillo->estado }}</td>   
             <td>
-                <a href="#" class="btn btn-outline-light btn-sm">
+                <a href="{{ url('hatillo/'.$hatillo->id ) }} " class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
                 @can('Editar Hatillo')
