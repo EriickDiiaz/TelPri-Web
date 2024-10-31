@@ -3,6 +3,7 @@
 use App\Http\Controllers\CallcenterController;
 use App\Http\Controllers\CampoController;
 use App\Http\Controllers\DepositoController;
+use App\Http\Controllers\HatilloController;
 use App\Http\Controllers\LineaController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\MarcaController;
@@ -51,4 +52,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/depositos/marcas', MarcaController::class);
     Route::resource('/depositos/modelos', ModeloController::class);
     Route::resource('/depositos', DepositoController::class);
+    Route::resource('/hatillo', HatilloController::class);
 });
