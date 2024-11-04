@@ -90,7 +90,9 @@
             transform: translateY(-3px);
             color: #fff;
         }
+        
     </style>
+    @stack('styles')
 </head>
 <body>
 

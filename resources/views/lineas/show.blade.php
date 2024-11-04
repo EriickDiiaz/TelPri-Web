@@ -1,6 +1,15 @@
 @extends('layout/template')
 
+@php
+use App\Helpers\FieldNameHelper;
+@endphp
+
 @section('title','Lineas | Detalles de Linea')
+
+@push('styles')
+    <link href="{{ asset('css/timeline.css') }}" rel="stylesheet">
+@endpush
+
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -187,58 +196,88 @@
 <div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header admin-navbar text-white">
                 <h5 class="modal-title" id="historialModalLabel">
-                    <i class="fa-solid fa-clock-rotate-left m-2"></i>Historial de Modificaciones
+                    <i class="fa-solid fa-clock-rotate-left me-2"></i>Historial de Modificaciones
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <table class="table table-striped">
-                    @foreach($linea->historial as $modificacion)
-                    <tr>
-                        <td>
-                            <div><strong>Modificado por: </strong>{{ $modificacion->usuario->name }}</div>
-                            <div>{{ $modificacion->formatted_date }}</div>
-                        </td>
-                        <td>
-                            <div><strong>Campo modificado: </strong>{{ $columnNames[$modificacion->campo] ?? $modificacion->campo }}</div>
-                            <div>
-                                @if($modificacion->campo == 'localidad_id')
-                                    <strong>Valor anterior: </strong>{{ \App\Models\Localidad::find($modificacion->valor_anterior)->nombre ?? $modificacion->valor_anterior }}
-                                @elseif($modificacion->campo == 'piso_id')
-                                    <strong>Valor anterior: </strong>{{ \App\Models\Piso::find($modificacion->valor_anterior)->nombre ?? $modificacion->valor_anterior }}
-                                @elseif($modificacion->campo == 'campo_id')
-                                    <strong>Valor anterior: </strong>{{ \App\Models\Campo::find($modificacion->valor_anterior)->nombre ?? $modificacion->valor_anterior }}
-                                @elseif($modificacion->campo == 'acceso')
-                                    @php
-                                        $valorAnteriorAcceso = json_decode($modificacion->valor_anterior, true);
-                                    @endphp
-                                    <strong>Valor anterior: </strong>{{ is_array($valorAnteriorAcceso) ? implode(', ', $valorAnteriorAcceso) : $modificacion->valor_anterior }}
-                                @else
-                                    <strong>Valor anterior: </strong>{{ $modificacion->valor_anterior }}
-                                @endif
+                <!-- Debug information -->
+                <div class="alert alert-info">
+                    <p>Total de cambios realizados: {{ $linea->historial->count() }}</p>
+                    <p>Línea: {{ $linea->linea }}</p>
+                </div>
+
+                @if($linea->historial->isEmpty())
+                    <div class="alert alert-warning">
+                        No hay registros de historial para esta línea.
+                    </div>
+                @else
+                    <div class="timeline">
+                        @foreach($linea->historial as $historial)
+                            <div class="timeline-item">
+                                <div class="timeline-badge 
+                                    @switch($historial->evento)
+                                        @case('created') bg-success @break
+                                        @case('updated') bg-primary @break
+                                        @case('deleted') bg-danger @break
+                                    @endswitch
+                                ">
+                                    @switch($historial->evento)
+                                        @case('created')
+                                            <i class="fa-solid fa-plus"></i>
+                                            @break
+                                        @case('updated')
+                                            <i class="fa-solid fa-pen"></i>
+                                            @break
+                                        @case('deleted')
+                                            <i class="fa-solid fa-trash"></i>
+                                            @break
+                                    @endswitch
+                                </div>
+                                <div class="timeline-panel">
+                                    <div class="timeline-heading">
+                                        <h6 class="timeline-title">
+                                            @switch($historial->evento)
+                                                @case('created')
+                                                    Creación
+                                                    @break
+                                                @case('updated')
+                                                    Actualización
+                                                    @break
+                                                @case('deleted')
+                                                    Eliminación
+                                                    @break
+                                            @endswitch
+                                        </h6>
+                                        <p><small class="text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $historial->created_at->format('d/m/Y H:i:s') }}</small></p>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <p><strong>Usuario:</strong> {{ $historial->user ? $historial->user->name : 'Sistema' }}</p>
+                                        @if($historial->nombre_campo)
+                                            <p><strong>Campo:</strong> {{ FieldNameHelper::getAestheticName($historial->nombre_campo) }}</p>
+                                            <p><strong>Valor Anterior:</strong> 
+                                                @if(is_array(json_decode($historial->valor_anterior, true)))
+                                                    <pre>{{ json_encode(json_decode($historial->valor_anterior, true), JSON_PRETTY_PRINT) }}</pre>
+                                                @else
+                                                    {{ $historial->valor_anterior ?: 'N/A' }}
+                                                @endif
+                                            </p>
+                                            <p><strong>Valor Nuevo:</strong>
+                                                @if(is_array(json_decode($historial->valor_nuevo, true)))
+                                                    <pre>{{ json_encode(json_decode($historial->valor_nuevo, true), JSON_PRETTY_PRINT) }}</pre>
+                                                @else
+                                                    {{ $historial->valor_nuevo ?: 'N/A' }}
+                                                @endif
+                                            </p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                @if($modificacion->campo == 'localidad_id')
-                                    <strong>Valor actual: </strong>{{ \App\Models\Localidad::find($modificacion->valor_nuevo)->nombre ?? $modificacion->valor_nuevo }}
-                                @elseif($modificacion->campo == 'piso_id')
-                                    <strong>Valor actual: </strong>{{ \App\Models\Piso::find($modificacion->valor_nuevo)->nombre ?? $modificacion->valor_nuevo }}
-                                @elseif($modificacion->campo == 'campo_id')
-                                    <strong>Valor actual: </strong>{{ \App\Models\Campo::find($modificacion->valor_nuevo)->nombre ?? $modificacion->valor_nuevo }}
-                                @elseif($modificacion->campo == 'acceso')
-                                    @php
-                                        $valorNuevoAcceso = json_decode($modificacion->valor_nuevo, true);
-                                    @endphp
-                                    <strong>Valor actual: </strong>{{ is_array($valorNuevoAcceso) ? implode(', ', $valorNuevoAcceso) : $modificacion->valor_nuevo }}
-                                @else
-                                    <strong>Valor actual: </strong>{{ $modificacion->valor_nuevo }}
-                                @endif
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </table>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </div>

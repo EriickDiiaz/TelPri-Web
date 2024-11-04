@@ -36,6 +36,6 @@ class Linea extends Model
 
     public function historial()
     {
-        return $this->hasMany(Historial::class);
+        return $this->hasMany(LineaHistorial::class);
     }
 }

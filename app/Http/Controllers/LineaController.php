@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Linea;
 use App\Models\Localidad;
 use App\Models\Campo;
-use App\Models\Historial;
+use App\Models\LineaHistorial;
 use App\Models\Piso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,38 +64,18 @@ class LineaController extends Controller
         $validatedData = $this->validateLinea($request);
         $linea = Linea::create($validatedData);
 
+        $this->registrarHistorial($linea, 'created');
+
         return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea agregada con éxito.');
     }
 
     public function show($id)
     {
         $linea = Linea::with(['historial' => function($query) {
-            $query->orderBy('created_at', 'desc');
+            $query->with('user')->orderBy('created_at', 'desc');
         }, 'localidad', 'piso', 'campo'])->findOrFail($id);
 
-        foreach ($linea->historial as $modificacion) {
-            $modificacion->formatted_date = Carbon::parse($modificacion->created_at)->format('d/m/Y h:i:s A');
-        }
-
-        $columnNames = [
-            'linea' => 'Línea',
-            'vip' => 'VIP',
-            'inventario' => 'Inventario',
-            'serial' => 'Serial',
-            'plataforma' => 'Plataforma',
-            'estado' => 'Estado',
-            'titular' => 'Titular',
-            'acceso' => 'Acceso',
-            'localidad_id' => 'Localidad',
-            'piso_id' => 'Piso',
-            'mac' => 'Mac/EQ/LI3',
-            'campo_id' => 'Campo',
-            'par' => 'Par',
-            'directo' => 'Directo',
-            'observacion' => 'Observación'
-        ];
-
-        return view('lineas.show', compact('linea', 'columnNames'));
+        return view('lineas.show', compact('linea'));
     }
 
     public function edit($id)
@@ -116,7 +96,7 @@ class LineaController extends Controller
 
         $linea->update($validatedData);
 
-        $this->saveHistorial($linea, $oldValues, $validatedData);
+        $this->registrarHistorial($linea, 'updated', $oldValues);
 
         return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea actualizada con éxito.');
     }
@@ -124,6 +104,9 @@ class LineaController extends Controller
     public function destroy($id)
     {
         $linea = Linea::findOrFail($id);
+        
+        $this->registrarHistorial($linea, 'deleted');
+        
         $linea->delete();
 
         return response()->json(['mensaje' => 'Línea Telefónica eliminada con éxito.']);
@@ -162,26 +145,60 @@ class LineaController extends Controller
         return $request->validate($rules, $messages);
     }
 
-    protected function saveHistorial($linea, $oldValues, $newValues)
+    protected function registrarHistorial(Linea $linea, $evento, $oldValues = null)
     {
         $user = Auth::user();
-
-        foreach ($newValues as $campo => $valor_nuevo) {
-            $valor_anterior = $oldValues[$campo] ?? null;
-            if ($campo === 'acceso') {
-                $valor_anterior = json_encode($oldValues['acceso']);
-                $valor_nuevo = json_encode($valor_nuevo);
+    
+        if ($evento === 'updated') {
+            $changes = [];
+            $excludeFields = ['updated_at', 'modificado'];
+    
+            foreach ($linea->getAttributes() as $key => $value) {
+                if (in_array($key, $excludeFields)) {
+                    continue; // Ignorar los campos excluidos
+                }
+    
+                $oldValue = $oldValues[$key] ?? null;
+    
+                if (is_array($value) || is_array($oldValue)) {
+                    // Si el valor nuevo o el antiguo es un array, convertirlos a JSON para comparación
+                    $oldValueJson = is_array($oldValue) ? json_encode($oldValue) : $oldValue;
+                    $newValueJson = is_array($value) ? json_encode($value) : $value;
+    
+                    if ($oldValueJson !== $newValueJson) {
+                        $changes[$key] = [
+                            'old' => $oldValueJson,
+                            'new' => $newValueJson
+                        ];
+                    }
+                } elseif ($oldValue !== $value) {
+                    $changes[$key] = [
+                        'old' => $oldValue,
+                        'new' => $value
+                    ];
+                }
             }
-
-            if ($valor_nuevo != $valor_anterior) {
-                Historial::create([
+    
+            foreach ($changes as $campo => $valores) {
+                LineaHistorial::create([
                     'linea_id' => $linea->id,
-                    'usuario_id' => $user->id,
-                    'campo' => $campo,
-                    'valor_anterior' => $valor_anterior,
-                    'valor_nuevo' => $valor_nuevo,
+                    'user_id' => $user ? $user->id : null,
+                    'evento' => $evento,
+                    'nombre_campo' => $campo,
+                    'valor_anterior' => $valores['old'],
+                    'valor_nuevo' => $valores['new'],
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent()
                 ]);
             }
+        } else {
+            LineaHistorial::create([
+                'linea_id' => $linea->id,
+                'user_id' => $user ? $user->id : null,
+                'evento' => $evento,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent()
+            ]);
         }
     }
 
@@ -262,9 +279,4 @@ class LineaController extends Controller
         return response()->json($pisos);
     }
 
-    public function historial($id)
-    {
-        $linea = Linea::with(['localidad', 'piso.localidad'])->findOrFail($id);
-        return view('lineas/historial', compact('linea'));
-    }
 }
