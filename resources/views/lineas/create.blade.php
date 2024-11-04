@@ -207,8 +207,9 @@ $(document).ready(function() {
         var localidadID = $(this).val();
         if(localidadID) {
             $.ajax({
-                url: '{{ url("/get-pisos") }}/' + localidadID,
+                url: '{{ route("getPisos") }}',
                 type: 'GET',
+                data: { localidad_id: localidadID },
                 dataType: 'json',
                 success: function(data) {
                     $('#piso_id').empty();
@@ -216,6 +217,9 @@ $(document).ready(function() {
                     $.each(data, function(key, value) {
                         $('#piso_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
                     });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error en la petición AJAX:', error);
                 }
             });
         } else {

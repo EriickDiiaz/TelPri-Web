@@ -224,7 +224,8 @@ class LineaController extends Controller
 
     public function getPisos(Request $request)
     {
-        $pisos = Piso::where('localidad_id', $request->localidad_id)->orderBy('nombre')->get();
+        $localidad_id = $request->input('localidad_id');
+        $pisos = Piso::where('localidad_id', $localidad_id)->orderBy('nombre')->get();
         return response()->json($pisos);
     }
 }

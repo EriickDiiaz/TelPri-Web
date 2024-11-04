@@ -216,17 +216,17 @@
 $(document).ready(function() {
     $('#localidad_id').change(function() {
         var localidadID = $(this).val();
-        if (localidadID) {
+        if(localidadID) {
             $.ajax({
-                url: '{{ url("/get-pisos") }}/' + localidadID,
+                url: '{{ route("getPisos") }}',
                 type: 'GET',
+                data: { localidad_id: localidadID },
                 dataType: 'json',
                 success: function(data) {
-                    console.log(data); // Para verificar los datos recibidos
                     $('#piso_id').empty();
                     $('#piso_id').append('<option value="">Seleccione un piso</option>');
                     $.each(data, function(key, value) {
-                        $('#piso_id').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                        $('#piso_id').append('<option value="'+ value.id +'">'+ value.nombre +'</option>');
                     });
                 },
                 error: function(xhr, status, error) {
