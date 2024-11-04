@@ -96,7 +96,8 @@ class LineaController extends Controller
         $linea = Linea::findOrFail($id);
         $linea->delete();
 
-        return response()->json(['mensaje' => 'Línea Telefónica eliminada con éxito.']);
+        return redirect()->route('lineas.index') ->with('mensaje', 'Línea eliminada con éxito.');
+        //return response()->json(['mensaje' => 'Línea Telefónica eliminada con éxito.']);
     }
 
     protected function validateLinea(Request $request, $id = null)

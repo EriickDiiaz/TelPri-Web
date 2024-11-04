@@ -6,10 +6,6 @@ use Carbon\Carbon;
 
 @section('title','Lineas | Detalles de Linea')
 
-@push('styles')
-    <link href="{{ asset('css/timeline.css') }}" rel="stylesheet">
-@endpush
-
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
