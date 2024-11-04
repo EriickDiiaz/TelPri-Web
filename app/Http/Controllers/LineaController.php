@@ -5,12 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Linea;
 use App\Models\Localidad;
 use App\Models\Campo;
-use App\Models\LineaHistorial;
 use App\Models\Piso;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
 class LineaController extends Controller
@@ -64,18 +61,15 @@ class LineaController extends Controller
         $validatedData = $this->validateLinea($request);
         $linea = Linea::create($validatedData);
 
-        $this->registrarHistorial($linea, 'created');
-
         return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea agregada con éxito.');
     }
 
     public function show($id)
     {
-        $linea = Linea::with(['historial' => function($query) {
-            $query->with('user')->orderBy('created_at', 'desc');
-        }, 'localidad', 'piso', 'campo'])->findOrFail($id);
+        $linea = Linea::with(['localidad', 'piso', 'campo'])->findOrFail($id);
+        $activities = $linea->activities()->with('causer')->latest()->get();
 
-        return view('lineas.show', compact('linea'));
+        return view('lineas.show', compact('linea', 'activities'));
     }
 
     public function edit($id)
@@ -92,11 +86,7 @@ class LineaController extends Controller
     {
         $validatedData = $this->validateLinea($request, $id);
         $linea = Linea::findOrFail($id);
-        $oldValues = $linea->getOriginal();
-
         $linea->update($validatedData);
-
-        $this->registrarHistorial($linea, 'updated', $oldValues);
 
         return redirect()->route('lineas.show', $linea->id)->with('mensaje', 'Línea actualizada con éxito.');
     }
@@ -104,9 +94,6 @@ class LineaController extends Controller
     public function destroy($id)
     {
         $linea = Linea::findOrFail($id);
-        
-        $this->registrarHistorial($linea, 'deleted');
-        
         $linea->delete();
 
         return response()->json(['mensaje' => 'Línea Telefónica eliminada con éxito.']);
@@ -139,67 +126,29 @@ class LineaController extends Controller
             'linea.unique' => 'La Línea telefónica ya está en uso.',
             'linea.max' => 'La Línea telefónica no puede tener más de 10 caracteres.',
             'estado.required' => 'Debes colocar el Estado de la línea, es obligatorio.',
-            // Add other custom messages here
+            'titular.max' => 'El nombre del titular no puede tener más de 100 caracteres.',
+            'mac.max' => 'El MAC/EQ/LI3 no puede tener más de 50 caracteres.',
+            'serial.max' => 'El número de serie no puede tener más de 50 caracteres.',
         ];
 
-        return $request->validate($rules, $messages);
-    }
+        // Aplicar transformaciones antes de la validación
+        $input = $request->all();
+        $input['titular'] = $request->has('titular') ? Str::title($request->input('titular')) : null;
+        $input['mac'] = $request->has('mac') ? Str::upper($request->input('mac')) : null;
+        $input['serial'] = $request->has('serial') ? Str::upper($request->input('serial')) : null;
 
-    protected function registrarHistorial(Linea $linea, $evento, $oldValues = null)
-    {
-        $user = Auth::user();
-    
-        if ($evento === 'updated') {
-            $changes = [];
-            $excludeFields = ['updated_at', 'modificado'];
-    
-            foreach ($linea->getAttributes() as $key => $value) {
-                if (in_array($key, $excludeFields)) {
-                    continue; // Ignorar los campos excluidos
-                }
-    
-                $oldValue = $oldValues[$key] ?? null;
-    
-                if (is_array($value) || is_array($oldValue)) {
-                    // Si el valor nuevo o el antiguo es un array, convertirlos a JSON para comparación
-                    $oldValueJson = is_array($oldValue) ? json_encode($oldValue) : $oldValue;
-                    $newValueJson = is_array($value) ? json_encode($value) : $value;
-    
-                    if ($oldValueJson !== $newValueJson) {
-                        $changes[$key] = [
-                            'old' => $oldValueJson,
-                            'new' => $newValueJson
-                        ];
-                    }
-                } elseif ($oldValue !== $value) {
-                    $changes[$key] = [
-                        'old' => $oldValue,
-                        'new' => $value
-                    ];
-                }
-            }
-    
-            foreach ($changes as $campo => $valores) {
-                LineaHistorial::create([
-                    'linea_id' => $linea->id,
-                    'user_id' => $user ? $user->id : null,
-                    'evento' => $evento,
-                    'nombre_campo' => $campo,
-                    'valor_anterior' => $valores['old'],
-                    'valor_nuevo' => $valores['new'],
-                    'ip_address' => request()->ip(),
-                    'user_agent' => request()->userAgent()
-                ]);
-            }
-        } else {
-            LineaHistorial::create([
-                'linea_id' => $linea->id,
-                'user_id' => $user ? $user->id : null,
-                'evento' => $evento,
-                'ip_address' => request()->ip(),
-                'user_agent' => request()->userAgent()
-            ]);
-        }
+        // Reemplazar los datos de la solicitud con los datos transformados
+        $request->replace($input);
+
+        // Realizar la validación
+        $validatedData = $request->validate($rules, $messages);
+
+        // Asegurarse de que los campos transformados se incluyan en los datos validados
+        $validatedData['titular'] = $input['titular'];
+        $validatedData['mac'] = $input['mac'];
+        $validatedData['serial'] = $input['serial'];
+
+        return $validatedData;
     }
 
     public function avanzada(Request $request)
@@ -278,5 +227,4 @@ class LineaController extends Controller
         $pisos = Piso::where('localidad_id', $request->localidad_id)->orderBy('nombre')->get();
         return response()->json($pisos);
     }
-
 }

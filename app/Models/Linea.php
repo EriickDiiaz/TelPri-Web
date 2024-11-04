@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Linea extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'linea', 'vip', 'inventario', 'serial', 'plataforma', 'estado', 'titular',
@@ -18,6 +20,15 @@ class Linea extends Model
     protected $casts = [
         'acceso' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['*'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Esta línea ha sido {$eventName}");
+    }
 
     public function localidad()
     {
@@ -32,10 +43,5 @@ class Linea extends Model
     public function campo()
     {
         return $this->belongsTo(Campo::class);
-    }
-
-    public function historial()
-    {
-        return $this->hasMany(LineaHistorial::class);
     }
 }

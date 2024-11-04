@@ -1,7 +1,7 @@
 @extends('layout/template')
 
 @php
-use App\Helpers\FieldNameHelper;
+use Carbon\Carbon;
 @endphp
 
 @section('title','Lineas | Detalles de Linea')
@@ -162,9 +162,10 @@ use App\Helpers\FieldNameHelper;
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $linea->modificado }} {{ $linea->updated_at }}</p>
+        <p>{{ $linea->modificado }} {{ Carbon::parse($linea->updated_at)->format('d/m/Y H:i:s') }}</p>
     </div>
 </div>
+
 <a href="{{ url('lineas') }}" class="btn btn-outline-danger btn-sm">
     <span>
         <i class="fa-solid fa-delete-left m-2"></i>Regresar
@@ -203,80 +204,78 @@ use App\Helpers\FieldNameHelper;
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <!-- Debug information -->
-                <div class="alert alert-info">
-                    <p>Total de cambios realizados: {{ $linea->historial->count() }}</p>
-                    <p>Línea: {{ $linea->linea }}</p>
-                </div>
-
-                @if($linea->historial->isEmpty())
+                @if($activities->isEmpty())
                     <div class="alert alert-warning">
                         No hay registros de historial para esta línea.
                     </div>
                 @else
-                    <div class="timeline">
-                        @foreach($linea->historial as $historial)
-                            <div class="timeline-item">
-                                <div class="timeline-badge 
-                                    @switch($historial->evento)
-                                        @case('created') bg-success @break
-                                        @case('updated') bg-primary @break
-                                        @case('deleted') bg-danger @break
-                                    @endswitch
-                                ">
-                                    @switch($historial->evento)
-                                        @case('created')
-                                            <i class="fa-solid fa-plus"></i>
-                                            @break
-                                        @case('updated')
-                                            <i class="fa-solid fa-pen"></i>
-                                            @break
-                                        @case('deleted')
-                                            <i class="fa-solid fa-trash"></i>
-                                            @break
-                                    @endswitch
-                                </div>
-                                <div class="timeline-panel">
-                                    <div class="timeline-heading">
-                                        <h6 class="timeline-title">
-                                            @switch($historial->evento)
-                                                @case('created')
-                                                    Creación
-                                                    @break
-                                                @case('updated')
-                                                    Actualización
-                                                    @break
-                                                @case('deleted')
-                                                    Eliminación
-                                                    @break
-                                            @endswitch
-                                        </h6>
-                                        <p><small class="text-muted"><i class="fa-regular fa-clock me-1"></i>{{ $historial->created_at->format('d/m/Y H:i:s') }}</small></p>
-                                    </div>
-                                    <div class="timeline-body">
-                                        <p><strong>Usuario:</strong> {{ $historial->user ? $historial->user->name : 'Sistema' }}</p>
-                                        @if($historial->nombre_campo)
-                                            <p><strong>Campo:</strong> {{ FieldNameHelper::getAestheticName($historial->nombre_campo) }}</p>
-                                            <p><strong>Valor Anterior:</strong> 
-                                                @if(is_array(json_decode($historial->valor_anterior, true)))
-                                                    <pre>{{ json_encode(json_decode($historial->valor_anterior, true), JSON_PRETTY_PRINT) }}</pre>
-                                                @else
-                                                    {{ $historial->valor_anterior ?: 'N/A' }}
-                                                @endif
-                                            </p>
-                                            <p><strong>Valor Nuevo:</strong>
-                                                @if(is_array(json_decode($historial->valor_nuevo, true)))
-                                                    <pre>{{ json_encode(json_decode($historial->valor_nuevo, true), JSON_PRETTY_PRINT) }}</pre>
-                                                @else
-                                                    {{ $historial->valor_nuevo ?: 'N/A' }}
-                                                @endif
-                                            </p>
-                                        @endif
-                                    </div>
+                    @foreach($activities as $activity)
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>
+                                        @switch($activity->event)
+                                            @case('created')
+                                                <i class="fa-solid fa-plus text-success me-2"></i>Creación
+                                                @break
+                                            @case('updated')
+                                                <i class="fa-solid fa-pen text-primary me-2"></i>Actualización
+                                                @break
+                                            @case('deleted')
+                                                <i class="fa-solid fa-trash text-danger me-2"></i>Eliminación
+                                                @break
+                                            @default
+                                                <i class="fa-solid fa-info text-info me-2"></i>Otro
+                                        @endswitch
+                                    </span>
+                                    <small class="text-muted">
+                                        <i class="fa-regular fa-clock me-1"></i>{{ Carbon::parse($activity->created_at)->format('d/m/Y H:i:s') }}
+                                    </small>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
+                            <div class="card-body">
+                                <p><strong>Modificado por:</strong> {{ $activity->causer ? $activity->causer->name : 'Sistema' }}</p>
+                                @if($activity->properties->has('attributes'))
+                                    <h6 class="mt-3">Valores actuales:</h6>
+                                    <ul class="list-unstyled">
+                                        @foreach($activity->properties['attributes'] as $key => $value)
+                                            @if($key !== 'updated_at' && $key !== 'created_at')
+                                                <li>
+                                                    <strong>{{ ucfirst($key) }}:</strong> 
+                                                    @if($key === 'localidad_id' && isset($value))
+                                                        {{ \App\Models\Localidad::find($value)->nombre ?? 'N/A' }}
+                                                    @elseif($key === 'piso_id' && isset($value))
+                                                        {{ \App\Models\Piso::find($value)->nombre ?? 'N/A' }}
+                                                    @else
+                                                        {{ is_array($value) ? json_encode($value) : $value }}
+                                                    @endif
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
+                                @if($activity->properties->has('old'))
+                                    <h6 class="mt-3">Valores anteriores:</h6>
+                                    <ul class="list-unstyled">
+                                        @foreach($activity->properties['old'] as $key => $value)
+                                            @if($key !== 'updated_at' && $key !== 'created_at')
+                                                <li>
+                                                    <strong>{{ ucfirst($key) }}:</strong> 
+                                                    @if($key === 'localidad_id' && isset($value))
+                                                        {{ \App\Models\Localidad::find($value)->nombre ?? 'N/A' }}
+                                                    @elseif($key === 'piso_id' && isset($value))
+                                                        {{ \App\Models\Piso::find($value)->nombre ?? 'N/A' }}
+                                                    @else
+                                                        {{ is_array($value) ? json_encode($value) : $value }}
+                                                    @endif
+                                                </li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
                 @endif
             </div>
         </div>
