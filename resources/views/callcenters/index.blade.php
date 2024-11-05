@@ -68,9 +68,11 @@
             <td>{{ $callcenter->servicio }}</td>   
             <td>{{ $callcenter->acceso }}</td>
             <td>
+                @can('Editar Usuario CallCenter')
                 <a href="{{ url('callcenters/'.$callcenter->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-user-pen"></i>
                 </a>
+                @endcan
                 @can('Eliminar Usuario CallCenter')
                 <form action="{{ url('callcenters/'.$callcenter->id)}}" id="form-eliminar-{{ $callcenter->id }}" class="d-inline" method="post">
                     @method("DELETE")

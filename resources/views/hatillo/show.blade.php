@@ -121,14 +121,14 @@
 </a>
 
 <!--Boton Editar-->
-@can('Editar Equipos')
+@can('Editar Hatillo')
 <a href="{{ url('hatillo/'.$hatillo->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
     <i class="fa-solid fa-pen-to-square m-2"></i>Modificar Línea
 </a>
 @endcan
 
 <!--Boton Eliminar-->
-@can('Eliminar Equipos')
+@can('Eliminar Hatillo')
 <form action="{{ url('hatillo/'.$hatillo->id)}}" id="form-eliminar-{{ $hatillo->id }}" action="{{ route('hatillo.destroy', $hatillo->id) }}" class="d-inline" method="post">
     @method("DELETE")
     @csrf

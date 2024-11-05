@@ -91,19 +91,18 @@
 </a>
 
 <!--Boton Editar-->
-@can('Editar Equipos')
+@can('Editar Deposito')
 <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
     <i class="fa-solid fa-pen-to-square m-2"></i>Modificar Equipo
 </a>
 @endcan
-<!--
 <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#historialModal">
     <i class="fa-solid fa-clock-rotate-left"></i>
     <span>Historial</span>
-</a>-->
+</a>
 
 <!--Boton Eliminar-->
-@can('Eliminar Equipos')
+@can('Eliminar Deposito')
 <form action="{{ url('depositos/'.$deposito->id)}}" id="form-eliminar-{{ $deposito->id }}" action="{{ route('depositos.destroy', $deposito->id) }}" class="d-inline" method="post">
     @method("DELETE")
     @csrf
@@ -113,8 +112,35 @@
 </form>
 @endcan
 
-@endsection
+<script>
+    document.querySelectorAll('form[id^="form-eliminar-"]').forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formId = this.id;
 
-@push('scripts')
-    @include('partials.sweetalert')
-@endpush
+            Swal.fire({
+                title: '¿Estás seguro de que quieres eliminar esta línea?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#333',  // Fondo oscuro
+                color: '#fff',       // Texto blanco
+                customClass: {
+                    popup: 'swal2-dark',
+                    title: 'swal2-title',
+                    confirmButton: 'swal2-confirm',
+                    cancelButton: 'swal2-cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        });
+    });
+</script>
+
+@endsection
