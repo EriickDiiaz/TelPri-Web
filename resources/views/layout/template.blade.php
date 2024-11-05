@@ -90,6 +90,37 @@
             transform: translateY(-3px);
             color: #fff;
         }
+
+        /* Estilos para el breadcrumb */
+    .breadcrumb-container {
+        height: 100%;
+    }
+
+    .breadcrumb-container .breadcrumb {
+        margin-bottom: 0;
+        background-color: transparent;
+        padding: 0;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: ">";
+        color: rgba(255, 255, 255, 0.55);
+    }
+
+    .breadcrumb-item a {
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+    }
+
+    .breadcrumb-item.active {
+        color: #ffffff;
+    }
+
+    /* Ajuste para alinear el icono con el texto */
+    .breadcrumb-container i {
+        font-size: 1rem;
+        line-height: 1;
+    }
         
     </style>
     @stack('styles')
@@ -99,11 +130,14 @@
 <!-- Navbar para administración de usuario -->
 <nav class="navbar navbar-expand-lg admin-navbar fixed-top">
     <div class="container-fluid">
-        <div class="col-4">
-            <i class="fa-solid fa-shoe-prints"></i> ... Breadcrumb ... 
+        <div class="col-4 d-flex align-items-center">
+            <div class="breadcrumb-container d-flex align-items-center">
+                <i class="fa-solid fa-shoe-prints me-2"></i> 
+                <span class="">{{ Breadcrumbs::render() }}</span>
+            </div>
         </div>
         <div class="col-4 text-center">
-            <i class="fa-regular fa-calendar"></i>
+            <i class="fa-regular fa-calendar m-2"></i>
             <span id="fechaHora">{{ $fechaHoraActual }}</span>
         </div>
         <div class="col-4">
