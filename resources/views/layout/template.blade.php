@@ -161,7 +161,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="sidebar col-md-3 col-lg-2">
+        <nav class="sidebar col-md-3 col-lg-2 my-2">
             <div class="d-flex flex-column h-100">
                 <div class="d-grid gap-2 col-12 mx-auto">
                     <a class="navbar-brand" href="{{ url('/home') }}">
