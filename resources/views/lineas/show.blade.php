@@ -174,6 +174,7 @@ use Carbon\Carbon;
     </span>
 </a>
 
+<!--Boton Historial-->
 <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#historialModal">
     <i class="fa-solid fa-clock-rotate-left"></i>
     <span>Historial</span>
@@ -232,7 +233,7 @@ use Carbon\Carbon;
                             <div class="card-body">
                                 <p><strong>Modificado por:</strong> {{ $activity->causer ? $activity->causer->name : 'Sistema' }}</p>
                                 @if($activity->properties->has('attributes'))
-                                    <h6 class="mt-3">Valores actuales:</h6>
+                                    <h5 class="mt-3"><u>Valores actuales:</u></h5>
                                     <ul class="list-unstyled">
                                         @foreach($activity->properties['attributes'] as $key => $value)
                                             @if($key !== 'updated_at' && $key !== 'created_at')
@@ -251,7 +252,7 @@ use Carbon\Carbon;
                                     </ul>
                                 @endif
                                 @if($activity->properties->has('old'))
-                                    <h6 class="mt-3">Valores anteriores:</h6>
+                                    <h5 class="mt-3"><u>Valores anteriores:</u></h5>
                                     <ul class="list-unstyled">
                                         @foreach($activity->properties['old'] as $key => $value)
                                             @if($key !== 'updated_at' && $key !== 'created_at')

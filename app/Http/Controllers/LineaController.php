@@ -31,9 +31,9 @@ class LineaController extends Controller
             return DataTables::of($query)
                 ->addColumn('action', function ($linea) {
                     $actions = '';
-                    $actions .= '<a href="' . route('lineas.show', $linea->id) . '" class="btn btn-outline-light btn-sm" target="_blank"><i class="fa-solid fa-list-ul"></i></a>';
+                    $actions .= '<a href="' . route('lineas.show', $linea->id) . '" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-list-ul"></i></a>';
                     if (auth()->user()->can('Editar Lineas')) {
-                        $actions .= ' <a href="' . route('lineas.edit', $linea->id) . '" class="btn btn-outline-primary btn-sm" target="_blank"><i class="fa-solid fa-phone-volume"></i></a>';
+                        $actions .= ' <a href="' . route('lineas.edit', $linea->id) . '" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-phone-volume"></i></a>';
                     }
                     if (auth()->user()->can('Eliminar Lineas')) {
                         $actions .= ' <button class="btn btn-outline-danger btn-sm delete-linea" data-id="' . $linea->id . '"><i class="fa-solid fa-phone-slash"></i></button>';

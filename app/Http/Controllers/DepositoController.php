@@ -46,7 +46,8 @@ class DepositoController extends Controller
     public function show($id)
     {
         $deposito = Deposito::findOrFail($id);
-        return view('depositos.show', compact('deposito'));
+        $activities = $deposito->activities()->with('causer')->latest()->get();
+        return view('depositos.show', compact('deposito', 'activities'));
     }
 
     public function edit($id)
