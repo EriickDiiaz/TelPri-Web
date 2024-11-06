@@ -4,18 +4,25 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 use App\Models\Callcenter;
+use App\Models\Campo;
 use App\Models\Deposito;
 use App\Models\Hatillo;
 use App\Models\Linea;
+use App\Models\Localidad;
 use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Piso;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Models\User;
 
 // Home
 Breadcrumbs::for('home', function (BreadcrumbTrail $trail) {
     $trail->push('Inicio', route('home'));
 });
 
-//BreadCrumbs Callcenter
 
+//BreadCrumbs Callcenter
 // Home > Callcenter
 Breadcrumbs::for('callcenters.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -33,8 +40,27 @@ Breadcrumbs::for('callcenters.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push('Modificar', route('callcenters.edit', $id));
 });
 
-//BreadCrumbs Depósitos
 
+//BreadCrumbs Campos
+// Home > Campos
+Breadcrumbs::for('campos.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Campos', route('campos.index'));
+});
+// Home > Campos > Crear
+Breadcrumbs::for('campos.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('campos.index');
+    $trail->push('Agregar Campo', route('campos.create'));
+});
+// Home > Campos > Editar
+Breadcrumbs::for('campos.edit', function (BreadcrumbTrail $trail, $id) {
+    $campo = Campo::findOrFail($id);
+    $trail->parent('campos.index', $id);
+    $trail->push('Modificar Campo', route('campos.edit', $id));
+});
+
+
+//BreadCrumbs Depósitos
 // Home > Depósitos
 Breadcrumbs::for('depositos.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -58,8 +84,8 @@ Breadcrumbs::for('depositos.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push('Modificar Equipo', route('depositos.edit', $id));
 });
 
-//BreadCrumbs DataCenter El Hatillo
 
+//BreadCrumbs DataCenter El Hatillo
 // Home > Hatillo
 Breadcrumbs::for('hatillo.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -83,8 +109,8 @@ Breadcrumbs::for('hatillo.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->push('Modificar Línea DC Hatillo', route('hatillo.edit', $id));
 });
 
-//BreadCrumbs Líneas
 
+//BreadCrumbs Líneas
 // Home > Líneas
 Breadcrumbs::for('lineas.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
@@ -113,8 +139,8 @@ Breadcrumbs::for('lineas.avanzada', function (BreadcrumbTrail $trail) {
     $trail->push('Búsqueda Avanzada', route('lineas.avanzada'));
 });
 
-//BreadCrumbs Depósito-Marcas
 
+//BreadCrumbs Depósito-Marcas
 // Home > Marcas
 Breadcrumbs::for('marcas.index', function (BreadcrumbTrail $trail) {
     $trail->parent('depositos.index');
@@ -136,4 +162,133 @@ Breadcrumbs::for('marcas.edit', function (BreadcrumbTrail $trail, $id) {
     $marca = Marca::findOrFail($id);
     $trail->parent('marcas.show', $id);
     $trail->push('Modificar Marca', route('marcas.edit', $id));
+});
+
+
+//BreadCrumbs Depósito-Modelos
+// Home > Modelos
+Breadcrumbs::for('modelos.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('marcas.index');
+    $trail->push('Modelos', route('modelos.index'));
+});
+// Home > Modelos > Crear
+Breadcrumbs::for('modelos.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('modelos.index');
+    $trail->push('Agregar Modelo', route('modelos.create'));
+});
+// Home > Modelos > Ver
+Breadcrumbs::for('modelos.show', function (BreadcrumbTrail $trail, $id) {
+    $modelo = Modelo::findOrFail($id);
+    $trail->parent('modelos.index');
+    $trail->push($modelo->nombre, route('modelos.show', $id));
+});
+// Home > Modelos > Editar
+Breadcrumbs::for('modelos.edit', function (BreadcrumbTrail $trail, $id) {
+    $modelo = Modelo::findOrFail($id);
+    $trail->parent('modelos.show', $id);
+    $trail->push('Modificar Modelo', route('modelos.edit', $id));
+});
+
+//BreadCrumbs Localidades
+// Home > Localidades
+Breadcrumbs::for('localidades.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Localidades', route('localidades.index'));
+});
+// Home > Localidades > Crear
+Breadcrumbs::for('localidades.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('localidades.index');
+    $trail->push('Agregar Localidad', route('localidades.create'));
+});
+// Home > Localidades > Ver
+Breadcrumbs::for('localidades.show', function (BreadcrumbTrail $trail, $id) {
+    $localidad = Localidad::findOrFail($id);
+    $trail->parent('localidades.index');
+    $trail->push($localidad->nombre, route('localidades.show', $id));
+});
+// Home > Localidades > Editar
+Breadcrumbs::for('localidades.edit', function (BreadcrumbTrail $trail, $id) {
+    $localidad = Localidad::findOrFail($id);
+    $trail->parent('localidades.show', $id);
+    $trail->push('Modificar Localidad', route('localidades.edit', $id));
+});
+
+//BreadCrumbs Pisos
+// Home > Pisos
+Breadcrumbs::for('pisos.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('localidades.index');
+    $trail->push('Pisos', route('pisos.index'));
+});
+// Home > Pisos > Crear
+Breadcrumbs::for('pisos.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('pisos.index');
+    $trail->push('Agregar Piso', route('pisos.create'));
+});
+// Home > Pisos > Editar
+Breadcrumbs::for('pisos.edit', function (BreadcrumbTrail $trail, $id) {
+    $piso = Piso::findOrFail($id);
+    $trail->parent('pisos.index', $id);
+    $trail->push('Modificar Piso', route('pisos.edit', $id));
+});
+
+//BreadCrumbs Permisos
+// Home > Permisos
+Breadcrumbs::for('permisos.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Permisos', route('permisos.index'));
+});
+// Home > Permisos > Crear
+Breadcrumbs::for('permisos.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('permisos.index');
+    $trail->push('Crear Nuevo Permiso', route('permisos.create'));
+});
+// Home > Permisos > Editar
+Breadcrumbs::for('permisos.edit', function (BreadcrumbTrail $trail, Permission $permiso) {
+    $trail->parent('permisos.index');
+    $trail->push($permiso->name, route('permisos.index', $permiso));
+    $trail->push('Editar', route('permisos.edit', $permiso));
+});
+
+
+//BreadCrumbs Roles
+// Home > Roles
+Breadcrumbs::for('roles.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Roles', route('roles.index'));
+});
+// Home > Roles > Crear
+Breadcrumbs::for('roles.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('roles.index');
+    $trail->push('Agregar Rol', route('roles.create'));
+});
+// Home > Roles > Editar
+Breadcrumbs::for('roles.edit', function (BreadcrumbTrail $trail, Role $role) {
+    $trail->parent('roles.index');
+    $trail->push($role->name, route('roles.index', $role));
+    $trail->push('Modificar Rol', route('roles.edit', $role));
+});
+
+
+//BreadCrumbs Usuarios
+// Home > Usuarios
+Breadcrumbs::for('usuarios.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Usuarios', route('usuarios.index'));
+});
+// Home > Usuarios > Crear
+Breadcrumbs::for('usuarios.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('usuarios.index');
+    $trail->push('Agregar Usuario', route('usuarios.create'));
+});
+// Home > Usuarios > Ver
+Breadcrumbs::for('usuarios.show', function (BreadcrumbTrail $trail, $id) {
+    $usuario = User::findOrFail($id);
+    $trail->parent('usuarios.index');
+    $trail->push($usuario->name, route('usuarios.show', $id));
+});
+// Home > Usuarios > Editar
+Breadcrumbs::for('usuarios.edit', function (BreadcrumbTrail $trail, $id) {
+    $usuario = User::findOrFail($id);
+    $trail->parent('usuarios.show', $id);
+    $trail->push('Modificar Usuario', route('usuarios.edit', $id));
 });

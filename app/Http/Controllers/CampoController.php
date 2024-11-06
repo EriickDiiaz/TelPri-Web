@@ -29,8 +29,9 @@ class CampoController extends Controller
         return redirect()->route('campos.index')->with('mensaje', 'Campo guardado con éxito.');
     }
 
-    public function edit(Campo $campo)
+    public function edit($id) 
     {
+        $campo = Campo::findOrFail($id);
         return view('campos.edit', compact('campo'));
     }
 
