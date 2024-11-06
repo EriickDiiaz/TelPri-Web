@@ -34,7 +34,7 @@
     </div>
 
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('depositos') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ url('marcas') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
