@@ -91,36 +91,71 @@
             color: #fff;
         }
 
+
         /* Estilos para el breadcrumb */
-    .breadcrumb-container {
-        height: 100%;
-    }
+        .breadcrumb-container {
+            height: 100%;
+            overflow: hidden;
+        }
 
-    .breadcrumb-container .breadcrumb {
-        margin-bottom: 0;
-        background-color: transparent;
-        padding: 0;
-    }
+        .breadcrumb-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+            flex: 1;
+        }
 
-    .breadcrumb-item + .breadcrumb-item::before {
-        content: ">";
-        color: rgba(255, 255, 255, 0.55);
-    }
+        .breadcrumb-text .breadcrumb {
+            margin-bottom: 0;
+            background-color: transparent;
+            padding: 0;
+            display: inline-flex;
+            flex-wrap: nowrap;
+        }
 
-    .breadcrumb-item a {
-        color: rgba(255, 255, 255, 0.55);
-        text-decoration: none;
-    }
+        .breadcrumb-item {
+            display: inline-block;
+            white-space: nowrap;
+        }
 
-    .breadcrumb-item.active {
-        color: #ffffff;
-    }
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: ">";
+            color: rgba(255, 255, 255, 0.55);
+        }
 
-    /* Ajuste para alinear el icono con el texto */
-    .breadcrumb-container i {
-        font-size: 1rem;
-        line-height: 1;
-    }
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: #ffffff;
+        }
+
+        @media (max-width: 1200px) {
+            .breadcrumb-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .breadcrumb-text {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .breadcrumb-text {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Ajuste para alinear el icono con el texto */
+        .breadcrumb-container i {
+            font-size: 1rem;
+            line-height: 1;
+        }
         
     </style>
     @stack('styles')
@@ -131,9 +166,9 @@
 <nav class="navbar navbar-expand-lg admin-navbar fixed-top">
     <div class="container-fluid">
         <div class="col-4 d-flex align-items-center">
-            <div class="breadcrumb-container d-flex align-items-center">
-                <i class="fa-solid fa-shoe-prints me-2"></i> 
-                <span class="">{{ Breadcrumbs::render() }}</span>
+            <div class="breadcrumb-container d-flex align-items-center w-100">
+                <i class="fa-solid fa-shoe-prints me-2 flex-shrink-0"></i> 
+                <span class="breadcrumb-text">{{ Breadcrumbs::render() }}</span>
             </div>
         </div>
         <div class="col-4 text-center">

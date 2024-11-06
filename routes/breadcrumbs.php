@@ -68,7 +68,7 @@ Breadcrumbs::for('hatillo.index', function (BreadcrumbTrail $trail) {
 // Home > Hatillo > Crear
 Breadcrumbs::for('hatillo.create', function (BreadcrumbTrail $trail) {
     $trail->parent('hatillo.index');
-    $trail->push('Agregar Línea Hatillo', route('hatillo.create'));
+    $trail->push('Agregar Línea DC Hatillo', route('hatillo.create'));
 });
 // Home > Hatillo > Ver
 Breadcrumbs::for('hatillo.show', function (BreadcrumbTrail $trail, $id) {
@@ -80,7 +80,7 @@ Breadcrumbs::for('hatillo.show', function (BreadcrumbTrail $trail, $id) {
 Breadcrumbs::for('hatillo.edit', function (BreadcrumbTrail $trail, $id) {
     $hatillo = Hatillo::findOrFail($id);
     $trail->parent('hatillo.show', $id);
-    $trail->push('Modificar Línea Hatillo', route('hatillo.edit', $id));
+    $trail->push('Modificar Línea DC Hatillo', route('hatillo.edit', $id));
 });
 
 //BreadCrumbs Líneas
