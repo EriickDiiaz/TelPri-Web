@@ -32,7 +32,7 @@ class LocalidadController extends Controller
     public function show($id)
     {
         $localidad = Localidad::findOrFail($id);
-        $pisos = $localidad->pisos()->orderBy('nombre')->get();
+        $pisos = $localidad->pisos()->withCount('lineas')->orderBy('nombre')->get();
 
         return view('localidades.show', compact('localidad', 'pisos'));
     }

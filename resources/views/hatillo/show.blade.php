@@ -139,7 +139,3 @@
 @endcan
 
 @endsection
-
-@push('scripts')
-    @include('partials.sweetalert')
-@endpush
