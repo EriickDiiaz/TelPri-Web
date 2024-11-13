@@ -125,7 +125,7 @@ Breadcrumbs::for('lineas.create', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('lineas.show', function (BreadcrumbTrail $trail, $id) {
     $linea = Linea::findOrFail($id);
     $trail->parent('lineas.index');
-    $trail->push($linea->inventario, route('lineas.show', $id));
+    $trail->push($linea->linea, route('lineas.show', $id));
 });
 // Home > Líneas > Editar
 Breadcrumbs::for('lineas.edit', function (BreadcrumbTrail $trail, $id) {
