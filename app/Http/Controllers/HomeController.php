@@ -15,12 +15,48 @@ class HomeController extends Controller
 
     public function index()
     {
-        $data = [
-            'lineas' => $this->getLineasData(),
-            'depositos' => $this->getDepositosData(),
+        $accordions = [
+            [
+                'id' => 'acordeonLineas',
+                'title' => 'Resumen de Líneas Telefónicas',
+                'icon' => 'fa-phone',
+                'data' => $this->getLineasData(),
+                'sections' => ['axe', 'cisco', 'ericsson', 'externo', 'total'],
+                'items' => [
+                    'asignada' => ['icon' => 'fa-check', 'color' => '#63E6BE', 'label' => 'Asignadas'],
+                    'disponible' => ['icon' => 'fa-arrow-up', 'color' => '#397ef3', 'label' => 'Disponibles'],
+                    'bloqueada' => ['icon' => 'fa-ban', 'color' => '#fc883b', 'label' => 'Bloqueadas'],
+                    'porverificar' => ['icon' => 'fa-exclamation', 'color' => '#FFD43B', 'label' => 'Por Verificar'],
+                    'poreliminar' => ['icon' => 'fa-xmark', 'color' => '#f53246', 'label' => 'Por Eliminar'],
+                    'total' => ['icon' => 'fa-hashtag', 'color' => '#d158e9', 'label' => 'Total']
+                ]
+            ],
+            [
+                'id' => 'acordeonDeposito',
+                'title' => 'Resumen de Equipos en Depósito',
+                'icon' => 'fa-warehouse',
+                'data' => $this->getDepositosData(),
+                'sections' => ['cortijos', 'nea'],
+                'items' => [
+                    'deposito' => ['icon' => 'fa-archive', 'color' => '#63E6BE', 'label' => 'En Depósito'],
+                    'instalado' => ['icon' => 'fa-check-circle', 'color' => '#397ef3', 'label' => 'Instalados'],
+                    'porreparar' => ['icon' => 'fa-tools', 'color' => '#fc883b', 'label' => 'Por Reparar'],
+                    'pordesincorporar' => ['icon' => 'fa-trash-alt', 'color' => '#FFD43B', 'label' => 'Por Desincorporar'],
+                    'desincorporado' => ['icon' => 'fa-times-circle', 'color' => '#f53246', 'label' => 'Desincorporados'],
+                    'total' => ['icon' => 'fa-hashtag', 'color' => '#d158e9', 'label' => 'Total']
+                ]
+            ],
+            [
+                'id' => 'acordeonRedes',
+                'title' => 'Resumen Redes Corporativas',
+                'icon' => 'fa-network-wired',
+                'data' => [],
+                'sections' => [],
+                'items' => []
+            ]
         ];
 
-        return view('home', $data);
+        return view('home', compact('accordions'));
     }
 
     private function getLineasData()
