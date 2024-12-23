@@ -45,6 +45,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/callcenters', CallcenterController::class);    
     Route::resource('/localidades', LocalidadController::class);
     Route::resource('/pisos', pisoController::class);
+    Route::get('/usuarios/{id}/historial', [UsuarioController::class, 'historial'])->name('usuarios.historial');
     Route::resource('/usuarios', UsuarioController::class);
     Route::resource('/campos', CampoController::class);
     Route::resource('/roles', RoleController::class);

@@ -57,6 +57,9 @@
                 @endif
             </td>
             <td>
+                <button class="btn btn-outline-light btn-sm historial-btn" data-id="{{ $usuario->id }}">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </button>
                 <a href="{{ route('usuarios.edit', $usuario->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-person-circle-exclamation"></i>
                 </a>
@@ -72,6 +75,23 @@
         @endforeach
     </tbody>
 </table>
+
+<!-- Modal para el historial -->
+<div class="modal fade" id="historialModal" tabindex="-1" aria-labelledby="historialModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header admin-navbar text-white">
+                <h5 class="modal-title" id="historialModalLabel">
+                    <i class="fa-solid fa-clock-rotate-left me-2"></i>Historial de Usuario
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="historialContent"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection
 
@@ -99,6 +119,38 @@
                 }
             });
         });
+        // Manejo del botón de historial
+        $('.historial-btn').on('click', function() {
+    var userId = $(this).data('id');
+    $.ajax({
+        url: "{{ route('usuarios.historial', ':id') }}".replace(':id', userId),
+        type: 'GET',
+        success: function(response) {
+            var content = '<h4>' + response.usuario + '</h4>';
+            content += '<ul class="list-group">';
+            response.activities.forEach(function(activity) {
+                content += '<li class="list-group-item">';
+                content += '<strong>' + activity.description + '</strong> - ' + 
+                        new Date(activity.created_at).toLocaleString() + '<br>';
+                content += 'Modelo: ' + activity.subject_type + ' (ID: ' + activity.subject_id + ')<br>';
+                if (activity.properties && activity.properties.attributes) {
+                    content += 'Cambios: <br>';
+                    for (var key in activity.properties.attributes) {
+                        content += key + ': ' + activity.properties.attributes[key] + '<br>';
+                    }
+                }
+                content += '</li>';
+            });
+            content += '</ul>';
+            $('#historialContent').html(content);
+            $('#historialModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.error("Error al cargar el historial:", error);
+            alert('Error al cargar el historial: ' + error);
+        }
+    });
+});
     });
 </script>
 @endpush

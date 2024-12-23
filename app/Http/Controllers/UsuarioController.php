@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Spatie\Activitylog\Models\Activity;
 use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
@@ -71,6 +72,17 @@ class UsuarioController extends Controller
         $usuario->delete();
 
         return redirect()->route('usuarios.index')->with('mensaje', 'Usuario eliminado con éxito.');
+    }
+
+    public function historial($id)
+    {
+        $usuario = User::findOrFail($id);
+        $activities = Activity::causedBy($usuario)->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'usuario' => $usuario->name,
+            'activities' => $activities
+        ]);
     }
 
     protected function validateUsuario(Request $request, $id = null)
