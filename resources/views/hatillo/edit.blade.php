@@ -112,7 +112,7 @@
         </div>
     </div>
 
-    <div class="mt-3 d-flex justify-content-between col-5">
+    <div class="mt-3 d-flex justify-content-between col-sm-7">
         <a href="{{ url('hatillo') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
