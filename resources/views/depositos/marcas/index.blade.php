@@ -18,12 +18,9 @@
 </div>
 
 <!-- Botones Agregar -->
-<div class="d-flex mb-2">
-    
-</div>
-
 
 <div class="d-flex justify-content-between mb-2">
+    @can('Agregar Marca-Modelo')
     <div>
         <a href="{{ route('marcas.create') }}" class="btn btn-outline-success btn-sm me-2">
             <i class="fa-solid fa-plus m-2"></i>Agregar Marca
@@ -32,6 +29,7 @@
             <i class="fa-solid fa-plus m-2"></i>Agregar Modelo
         </a>
     </div>
+    @endcan
     <div>
         <a href="{{ url('depositos/modelos/') }}" class="btn btn-outline-primary btn-sm">
             <i class="fa-solid fa-gears m-2"></i>
@@ -39,6 +37,7 @@
         </a>
     </div>
 </div>
+
 
 <!-- Resumen de Marcas -->
 <div class="d-flex mb-2">
@@ -70,9 +69,12 @@
                 <a href="{{ route('marcas.show', $marca->id) }}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-gears"></i>
                 </a>
+                @can('Editar Marca-Modelo')
                 <a href="{{ route('marcas.edit', $marca->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
+                @endcan
+                @can('Eliminar Marca-Modelo')
                 <form action="{{ route('marcas.destroy', $marca->id) }}" id="form-eliminar-{{ $marca->id }}" class="d-inline" method="POST">
                     @csrf
                     @method('DELETE')
@@ -80,6 +82,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </form>
+                @endcan
             </td>
         </tr>
         @endforeach

@@ -20,11 +20,13 @@
 </div>
 
 <!-- Botón Agregar -->
+ @can('Agregar Marca-Modelo')
 <a href="{{ url('depositos/modelos/create') }}" class="btn btn-outline-success btn-sm me-2">
     <span>
         <i class="fa-solid fa-plus m-2"></i>Agregar Modelo
     </span>
 </a>
+@endcan
 
 <!--Contenido de la Sección -->
 <table class="table table-striped">
@@ -40,10 +42,13 @@
             <td>{{ $modelo->nombre }}</td>
             <td>
                 <!--Boton Editar-->
+                @can('Editar Marca-Modelo')
                 <a href="{{ url('depositos/modelos/'.$modelo->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
+                @endcan
                 <!--Boton Eliminar-->
+                @can('Eliminar Marca-Modelo')
                 <form action="{{ url('depositos/modelos/'.$modelo->id)}}" id="form-eliminar-{{ $modelo->id }}" action="{{ route('modelos.destroy', $modelo->id) }}" class="d-inline" method="post">
                     @method("DELETE")
                     @csrf
@@ -51,6 +56,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </form>
+                @endcan
             </td>
         </tr>
         @endforeach

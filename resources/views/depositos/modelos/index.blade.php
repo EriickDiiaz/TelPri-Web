@@ -18,12 +18,15 @@
 </div>
 
 <!-- Botones Agregar -->
+
 <div class="d-flex justify-content-between mb-2">
+    @can('Agregar Marca-Modelo')
     <div>
         <a href="{{ route('modelos.create') }}" class="btn btn-outline-success btn-sm me-2">
             <i class="fa-solid fa-plus m-2"></i>Agregar Modelo
         </a>
     </div>
+    @endcan
     <div>
         <a href="{{ url('depositos/marcas/') }}" class="btn btn-outline-primary btn-sm">
             <i class="fa-solid fa-delete-left m-2"></i>
@@ -59,9 +62,12 @@
             <td>{{ $modelo->marca->nombre }}</td>
             <td>{{ $modelo->depositos_count }}</td>
             <td>
+                @can('Editar Marca-Modelo')
                 <a href="{{ route('modelos.edit', $modelo->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
+                @endcan
+                @can('Eliminar Marca-Modelo')
                 <form action="{{ route('modelos.destroy', $modelo->id) }}" id="form-eliminar-{{ $modelo->id }}" class="d-inline" method="POST">
                     @csrf
                     @method('DELETE')
@@ -69,6 +75,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </form>
+                @endcan
             </td>
         </tr>
         @endforeach
