@@ -18,7 +18,7 @@
 </div>
 
 <!-- Botones Agregar -->
-@can('Agregar Deposito')
+@can('Agregar Equipo Deposito')
 <div class="d-flex justify-content-between mb-2">
     <div>
         <a href="{{ route('depositos.create') }}" class="btn btn-outline-success btn-sm">
@@ -80,12 +80,12 @@
                 <a href="{{ route('depositos.show', $deposito->id) }}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
-                @can('Editar Deposito')
+                @can('Editar Equipo Deposito')
                 <a href="{{ route('depositos.edit', $deposito->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
                 @endcan
-                @can('Eliminar Deposito')
+                @can('Eliminar Equipo Deposito')
                 <form action="{{ route('depositos.destroy', $deposito->id) }}" id="form-eliminar-{{ $deposito->id }}" class="d-inline" method="POST">
                     @csrf
                     @method('DELETE')

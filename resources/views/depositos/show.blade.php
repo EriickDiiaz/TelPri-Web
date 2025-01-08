@@ -94,7 +94,7 @@ use Carbon\Carbon;
 </a>
 
 <!--Boton Editar-->
-@can('Editar Deposito')
+@can('Editar Equipo Deposito')
 <a href="{{ url('depositos/'.$deposito->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
     <i class="fa-solid fa-pen-to-square m-2"></i>Modificar Equipo
 </a>
@@ -107,7 +107,7 @@ use Carbon\Carbon;
 </a>
 
 <!--Boton Eliminar-->
-@can('Eliminar Deposito')
+@can('Eliminar Equipo Deposito')
 <form action="{{ url('depositos/'.$deposito->id)}}" id="form-eliminar-{{ $deposito->id }}" action="{{ route('depositos.destroy', $deposito->id) }}" class="d-inline" method="post">
     @method("DELETE")
     @csrf
