@@ -1,9 +1,5 @@
 @extends('layout/template')
 
-@php
-use Carbon\Carbon;
-@endphp
-
 @section('title','Depositos | Equipo en Depósito')
 @section('contenido')
 
@@ -83,7 +79,7 @@ use Carbon\Carbon;
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $deposito->modificado }} {{ Carbon::parse($deposito->updated_at)->format('d/m/Y H:i:s') }}</p>
+        <p>{{ $deposito->modificado }} {{ $deposito->updated_at->format('d/m/Y H:i:s') }}</p>
     </div>
 </div>
 

@@ -109,7 +109,7 @@
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $hatillo->modificado }} {{ $hatillo->updated_at }}</p>
+        <p>{{ $hatillo->modificado }} {{ $hatillo->updated_at->format('d/m/Y H:i') }} </p>
     </div>
 </div>
 

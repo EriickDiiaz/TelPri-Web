@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Hatillo;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
+
 
 class HatilloController extends Controller
 {
@@ -82,7 +84,7 @@ class HatilloController extends Controller
     {
         $rules = [
             'linea' => ['required', 'max:10', Rule::unique('hatillo')->ignore($id)],
-            'estado' => 'nullable|max:20',
+            'estado' => 'required|max:20',
             'titular' => 'nullable|max:100',
             'inventario' => 'nullable|max:50',
             'serial' => 'nullable|max:50',
@@ -98,6 +100,7 @@ class HatilloController extends Controller
             'linea.required' => 'El campo línea es obligatorio.',
             'linea.unique' => 'La línea ya está en uso.',
             'linea.max' => 'La línea no puede tener más de 10 caracteres.',
+            'estado.required' => 'El estado es obligatorio.',
             'estado.max' => 'El estado no puede tener más de 20 caracteres.',
             'titular.max' => 'El titular no puede tener más de 100 caracteres.',
             'inventario.max' => 'El inventario no puede tener más de 50 caracteres.',

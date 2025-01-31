@@ -1,9 +1,5 @@
 @extends('layout/template')
 
-@php
-use Carbon\Carbon;
-@endphp
-
 @section('title','Lineas | Detalles de Linea')
 
 @section('contenido')
@@ -158,7 +154,7 @@ use Carbon\Carbon;
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $linea->modificado }} {{ Carbon::parse($linea->updated_at)->format('d/m/Y H:i:s') }}</p>
+        <p>{{ $linea->modificado }} {{ $linea->updated_at->format('d/m/Y H:i:s') }}</p>
     </div>
 </div>
 
@@ -226,7 +222,7 @@ use Carbon\Carbon;
                                         @endswitch
                                     </span>
                                     <small class="text-muted">
-                                        <i class="fa-regular fa-clock me-1"></i>{{ Carbon::parse($activity->created_at)->format('d/m/Y H:i:s') }}
+                                        <i class="fa-regular fa-clock me-1"></i>{{ $activity->created_at->format('d/m/Y H:i:s') }}
                                     </small>
                                 </div>
                             </div>
