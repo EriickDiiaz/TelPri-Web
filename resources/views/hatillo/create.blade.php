@@ -92,7 +92,7 @@
             </div>
             <div class="col-sm-5">
                 <label for="dn" class="col-form-label">DN:</label>
-                <input type="number" min="0" max="99" class="form-control" name="dn" id="dn" value="{{ old('dn') }}">
+                <input type="number" min="0" max="999" class="form-control" name="dn" id="dn" value="{{ old('dn') }}">
             </div>
         </div>
     </div>

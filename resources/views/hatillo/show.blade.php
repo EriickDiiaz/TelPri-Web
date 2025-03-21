@@ -129,13 +129,37 @@
 
 <!--Boton Eliminar-->
 @can('Eliminar Hatillo')
-<form action="{{ url('hatillo/'.$hatillo->id)}}" id="form-eliminar-{{ $hatillo->id }}" action="{{ route('hatillo.destroy', $hatillo->id) }}" class="d-inline" method="post">
+<form action="{{ url('hatillo/'.$hatillo->id)}}" id="form-eliminar-{{ $hatillo->id }}" class="d-inline" method="post">
     @method("DELETE")
     @csrf
-    <button type="submit" class="btn btn-outline-danger btn-sm">
-        <i class="fa-solid fa-xmark m-2"></i>
+    <button type="submit" class="btn btn-outline-danger">
+        <i class="fa-solid fa-user-minus"></i>
     </button>
 </form>
 @endcan
 
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        // SweetAlert2 for delete confirmation
+        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit();
+                }
+            });
+        });
+    });
+</script>
+@endpush
