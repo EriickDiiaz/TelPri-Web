@@ -12,10 +12,10 @@ class AdminUserSeeder extends Seeder
     {
         $admin = User::create([
             'name' => 'Admin User',
-            'email' => 'admi',
+            'email' => 'admin',
             'password' => Hash::make('password123'),
         ]);
 
-        $admin->assignRole('admin');
+        $admin->assignRole('Administrador');
     }
 }
