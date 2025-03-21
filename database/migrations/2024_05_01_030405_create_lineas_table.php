@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('estado', 20);
             $table->string('titular', 100)->nullable();
             $table->foreignId('localidad_id')->nullable()->constrained('localidades')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('piso', 15)->nullable();
+            $table->string('piso_id', 15)->nullable();
             $table->string('mac', 50)->nullable();
             $table->foreignId('campo_id')->nullable()->constrained('campos')->onDelete('cascade')->onUpdate('cascade');
             $table->string('par', 6)->nullable();
