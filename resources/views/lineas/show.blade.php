@@ -151,12 +151,15 @@
 </div>
 @endif
 
-<div>
-    <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
-    <div class="col-sm-7 px-4">
-        <p>{{ $linea->modificado }} {{ $linea->updated_at->format('d/m/Y H:i:s') }}</p>
+@if (!empty($linea->modificado))
+    <div>
+        <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
+        <div class="col-sm-7 px-4">
+            <p>{{ $linea->modificado }} {{ $linea->updated_at->format('d/m/Y H:i:s') }}</p>
+        </div>
     </div>
-</div>
+@endif
+
 
 <a href="{{ url('lineas') }}" class="btn btn-outline-danger btn-sm">
     <span>
