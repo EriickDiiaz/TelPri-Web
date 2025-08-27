@@ -1,6 +1,6 @@
 @extends('layout/template') 
 
-@section('title','Campos | Modificar Campo')
+@section('title','Ubicaciones | Modificar Ubicación')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -19,37 +19,37 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">    
-    <h2><i class="fa-solid fa-pen-to-square m-2"></i>Modificar Campo.</h2>
+    <h2><i class="fa-solid fa-pen-to-square m-2"></i>Modificar Ubicación.</h2>
 </div>
 
 <!--Contenido de la Sección -->
-<form action="{{ url('campos/' .$campo->id) }}" method="post">
+<form action="{{ url('ubicaciones/' .$ubicacion->id) }}" method="post">
     @method("PUT")
     @csrf
 
     <div class="mb-2">
-        <label for="nombre" class="col-sm-2 col-form-label">Nombre del campo:</label>
+        <label for="nombre" class="col-sm-4 col-form-label">Nombre de la ubicación:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ $campo->nombre }}" required>
+            <input type="text" class="form-control" name="nombre" id="nombre" value="{{ $ubicacion->nombre }}" required>
         </div>
     </div>
 
     <div class="mb-2">
-        <label for="descripcion" class="col-sm-2 col-form-label">Descripcion del campo:</label>
+        <label for="descripcion" class="col-sm-2 col-form-label">Descripcion de la ubicación:</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ $campo->descripcion }}" required>
+            <input type="text" class="form-control" name="descripcion" id="descripcion" value="{{ $ubicacion->descripcion }}" required>
         </div>
     </div>
 
     <div class="mt-3 d-flex justify-content-between col-5">
-        <a href="{{ url('campos') }}" class="btn btn-outline-danger btn-sm">
+        <a href="{{ url('ubicaciones') }}" class="btn btn-outline-danger btn-sm">
             <span>
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
         <button type="submit" class="btn btn-outline-primary btn-sm">
             <span>
-                <i class="fa-solid fa-check m-2"></i>Actualizar Campo
+                <i class="fa-solid fa-check m-2"></i>Actualizar Ubicación
             </span>
         </button>
     </div>               

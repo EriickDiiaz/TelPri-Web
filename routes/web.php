@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\CallcenterController;
-use App\Http\Controllers\CampoController;
+use App\Http\Controllers\UbicacionController;
 use App\Http\Controllers\DepositoController;
 use App\Http\Controllers\HatilloController;
 use App\Http\Controllers\LineaController;
@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/localidades', LocalidadController::class);
     Route::resource('/pisos', pisoController::class);
     Route::resource('/usuarios', UsuarioController::class);
-    Route::resource('/campos', CampoController::class);
+    Route::resource('/ubicaciones', UbicacionController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permisos', PermisoController::class);
     Route::resource('/depositos/marcas', MarcaController::class);

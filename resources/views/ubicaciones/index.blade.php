@@ -1,6 +1,6 @@
 @extends('layout/template')
 
-@section('title','TelPri-Web | Campos')
+@section('title','TelPri-Web | Ubicaciones')
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -14,13 +14,13 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">
-    <h2><i class="fa-solid fa-ethernet m-2"></i>Administrador de Campos.</h2>
+    <h2><i class="fa-solid fa-ethernet m-2"></i>Administrador de Pares.</h2>
 </div>
 
 <!-- Botón Agregar -->
 <div class="d-flex mb-2"> 
-    <a href="{{ route('campos.create') }}" class="btn btn-outline-success btn-sm me-2">
-        <i class="fa-solid fa-plus m-2"></i>Agregar Campo
+    <a href="{{ route('ubicaciones.create') }}" class="btn btn-outline-success btn-sm me-2">
+        <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
     </a>
 </div>
 
@@ -29,32 +29,32 @@
     <div class="align-items-center me-2">
         <button class="btn-gradient-outline" disabled>
             Total:
-            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalCampo }}</span>
+            <span class="badge text-bg-primary rounded-pill mx-2">{{ $totalUbicacion }}</span>
         </button>
     </div>
 </div>
 
 <!-- Contenido de Sección -->
-<table class="table table-striped" id="datatableCampos">
+<table class="table table-striped" id="datatableUbicaciones">
     <thead>
         <tr>
-            <th>Campo</th>
+            <th>Nombre</th>
             <th>Descripción</th>
             <th>Número de Líneas</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        @foreach ($campos as $campo)
+        @foreach ($ubicaciones as $ubicacion)
         <tr>
-            <td>{{ $campo->nombre }}</td>
-            <td>{{ $campo->descripcion }}</td>
-            <td>{{ $campo->lineas_count }}</td>
+            <td>{{ $ubicacion->nombre }}</td>
+            <td>{{ $ubicacion->descripcion }}</td>
+            <td>{{ $ubicacion->lineas_count }}</td>
             <td>
-                <a href="{{ route('campos.edit', $campo->id) }}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('ubicaciones.edit', $ubicacion->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <form action="{{ route('campos.destroy', $campo->id) }}" id="form-eliminar-{{ $campo->id }}" class="d-inline" method="POST">
+                <form action="{{ route('ubicaciones.destroy', $ubicacion->id) }}" id="form-eliminar-{{ $ubicacion->id }}" class="d-inline" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm">
@@ -72,7 +72,7 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        initializeDataTable('#datatableCampos', {
+        initializeDataTable('#datatableUbicaciones', {
             // Add any specific options for this table
         });
 

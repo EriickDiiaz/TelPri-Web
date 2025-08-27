@@ -4,7 +4,7 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 
 use App\Models\Callcenter;
-use App\Models\Campo;
+use App\Models\Ubicacion;
 use App\Models\Deposito;
 use App\Models\Hatillo;
 use App\Models\Linea;
@@ -43,20 +43,20 @@ Breadcrumbs::for('callcenters.edit', function (BreadcrumbTrail $trail, $id) {
 
 //BreadCrumbs Campos
 // Home > Campos
-Breadcrumbs::for('campos.index', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('ubicaciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
-    $trail->push('Campos', route('campos.index'));
+    $trail->push('Ubicaciones', route('ubicaciones.index'));
 });
 // Home > Campos > Crear
-Breadcrumbs::for('campos.create', function (BreadcrumbTrail $trail) {
-    $trail->parent('campos.index');
-    $trail->push('Agregar Campo', route('campos.create'));
+Breadcrumbs::for('ubicaciones.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('ubicaciones.index');
+    $trail->push('Agregar Ubicacion', route('ubicaciones.create'));
 });
 // Home > Campos > Editar
-Breadcrumbs::for('campos.edit', function (BreadcrumbTrail $trail, $id) {
-    $campo = Campo::findOrFail($id);
-    $trail->parent('campos.index', $id);
-    $trail->push('Modificar Campo', route('campos.edit', $id));
+Breadcrumbs::for('ubicaciones.edit', function (BreadcrumbTrail $trail, $id) {
+    $ubicacion = Ubicacion::findOrFail($id);
+    $trail->parent('ubicaciones.index', $id);
+    $trail->push('Modificar Ubicacion', route('ubicaciones.edit', $id));
 });
 
 

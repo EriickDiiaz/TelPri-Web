@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('campos', function (Blueprint $table) {
+        Schema::create('ubicaciones', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',10);
             $table->string('descripcion',50);
@@ -24,9 +24,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('campos', function (Blueprint $table) {
-            $table->dropForeign(['campo_id']);
+        Schema::table('ubicaciones', function (Blueprint $table) {
+            $table->dropForeign(['ubicacion_id']);
         });
-        Schema::dropIfExists('campos');
+        Schema::dropIfExists('ubicaciones');
     }
 };
