@@ -257,8 +257,8 @@
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/localidades') }}">
                         <i class="fa-solid fa-location-dot m-2"></i>Adm. de Localidades
                     </a>
-                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/campos') }}">
-                        <i class="fa-solid fa-ethernet m-2"></i>Adm. de Campos
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/ubicaciones') }}">
+                        <i class="fa-solid fa-ethernet m-2"></i>Adm. de Pares
                     </a>
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/usuarios') }}">
                         <i class="fa-solid fa-person m-2"></i>Adm. de Usuarios
