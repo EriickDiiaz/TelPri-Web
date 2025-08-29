@@ -8,6 +8,7 @@ use App\Http\Controllers\LineaController;
 use App\Http\Controllers\LocalidadController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ModeloController;
+use App\Http\Controllers\ParController;
 use App\Http\Controllers\PermisoController;
 use App\Http\Controllers\PisoController;
 use App\Http\Controllers\RoleController;
@@ -47,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pisos', pisoController::class);
     Route::resource('/usuarios', UsuarioController::class);
     Route::resource('/ubicaciones', UbicacionController::class);
+    Route::resource('/pares', ParController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permisos', PermisoController::class);
     Route::resource('/depositos/marcas', MarcaController::class);

@@ -76,12 +76,14 @@
 </div>
 @endif
 
+@if(!empty($deposito->usuario))
 <div>
     <label for="modificado" class="col-sm-2 col-form-label fw-bold">Ultima modificación:</label>
     <div class="col-sm-7 px-4">
         <p>{{ $deposito->modificado }} {{ $deposito->updated_at->format('d/m/Y H:i:s') }}</p>
     </div>
 </div>
+@endif
 
 <a href="{{ url('depositos') }}" class="btn btn-outline-danger btn-sm">
     <span>

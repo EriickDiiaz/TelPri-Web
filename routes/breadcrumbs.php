@@ -11,6 +11,7 @@ use App\Models\Linea;
 use App\Models\Localidad;
 use App\Models\Marca;
 use App\Models\Modelo;
+use App\Models\Par;
 use App\Models\Piso;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -41,22 +42,40 @@ Breadcrumbs::for('callcenters.edit', function (BreadcrumbTrail $trail, $id) {
 });
 
 
-//BreadCrumbs Campos
-// Home > Campos
+//BreadCrumbs Ubicaciones
+// Home > Ubicaciones
 Breadcrumbs::for('ubicaciones.index', function (BreadcrumbTrail $trail) {
     $trail->parent('home');
     $trail->push('Ubicaciones', route('ubicaciones.index'));
 });
-// Home > Campos > Crear
+// Home > Ubicaciones > Crear
 Breadcrumbs::for('ubicaciones.create', function (BreadcrumbTrail $trail) {
     $trail->parent('ubicaciones.index');
     $trail->push('Agregar Ubicacion', route('ubicaciones.create'));
 });
-// Home > Campos > Editar
+// Home > Ubicaciones > Editar
 Breadcrumbs::for('ubicaciones.edit', function (BreadcrumbTrail $trail, $id) {
     $ubicacion = Ubicacion::findOrFail($id);
     $trail->parent('ubicaciones.index', $id);
     $trail->push('Modificar Ubicacion', route('ubicaciones.edit', $id));
+});
+
+//BreadCrumbs Pares
+// Home > Pares
+Breadcrumbs::for('pares.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('home');
+    $trail->push('Pares', route('pares.index'));
+});
+// Home > Pares > Crear
+Breadcrumbs::for('pares.create', function (BreadcrumbTrail $trail) {
+    $trail->parent('pares.index');
+    $trail->push('Agregar Par', route('pares.create'));
+});
+// Home > Pares > Editar
+Breadcrumbs::for('pares.edit', function (BreadcrumbTrail $trail, $id) {
+    $par = Par::findOrFail($id);
+    $trail->parent('pares.index', $id);
+    $trail->push('Modificar Par', route('pares.edit', $id));
 });
 
 
