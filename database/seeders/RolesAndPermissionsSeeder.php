@@ -34,6 +34,14 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'Agregar Marca-Modelo']);
         Permission::create(['name' => 'Editar Marca-Modelo']);
         Permission::create(['name' => 'Eliminar Marca-Modelo']);
+        Permission::create(['name' => 'Menu Ubicaciones']);
+        Permission::create(['name' => 'Crear Ubicaciones']);
+        Permission::create(['name' => 'Editar Ubicaciones']);
+        Permission::create(['name' => 'Eliminar Ubicaciones']);
+        Permission::create(['name' => 'Menu Pares']);
+        Permission::create(['name' => 'Crear Pares']);
+        Permission::create(['name' => 'Editar Pares']);
+        Permission::create(['name' => 'Eliminar Pares']);
         Permission::create(['name' => 'Menu Localidades']);
         Permission::create(['name' => 'Crear Localidades']);
         Permission::create(['name' => 'Editar Localidades']);
@@ -41,9 +49,6 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'Crear Pisos']);
         Permission::create(['name' => 'Editar Pisos']);
         Permission::create(['name' => 'Eliminar Pisos']);
-        Permission::create(['name' => 'Crear Campos']);
-        Permission::create(['name' => 'Editar Campos']);
-        Permission::create(['name' => 'Eliminar Campos']);
         Permission::create(['name' => 'Menu Usuarios']);
         Permission::create(['name' => 'Crear Usuarios']);
         Permission::create(['name' => 'Editar Usuarios']);
@@ -70,7 +75,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'Menu Lineas', 'Crear Lineas', 'Editar Lineas', 'Eliminar Lineas', 'Ver Lineas', 
             'Menu CallCenters', 'Crear Usuario CallCenter', 'Editar Usuario CallCenter', 'Eliminar Usuario CallCenter',
             'Menu Hatillo', 'Crear Hatillo', 'Editar Hatillo', 'Eliminar Hatillo', 
-            'Menu Deposito', 'Agregar Equipo Deposito', 'Editar Equipo Deposito', 'Eliminar Equipo Deposito', 
+            'Menu Deposito', 'Agregar Equipo Deposito', 'Editar Equipo Deposito', 'Eliminar Equipo Deposito',
+            'Menu Ubicaciones', 'Crear Ubicaciones', 'Editar Ubicaciones', 'Eliminar Ubicaciones', 
+            'Menu Pares', 'Crear Pares', 'Editar Pares', 'Eliminar Pares',
             'Agregar Marca-Modelo', 'Editar Marca-Modelo', 'Eliminar Marca-Modelo', 
             'Menu Localidades', 'Crear Localidades', 'Editar Localidades', 'Eliminar Localidades', 
             'Crear Pisos', 'Editar Pisos', 'Eliminar Pisos', 

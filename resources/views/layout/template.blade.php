@@ -236,19 +236,32 @@
                     <a class="navbar-brand" href="{{ url('/home') }}">
                         <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 90%;" class="m-2 pt-2">
                     </a>
+                    @can('Menu Lineas')
                     <div class="border-top my-2 nav-item"></div>
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/lineas') }}">
                         <i class="fa-solid fa-phone m-2"></i>Líneas
                     </a>
+                    @endcan
+                    @can('Menu CallCenters')
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/callcenters') }}">
                         <i class="fa-solid fa-headset m-2"></i>CallCenters
                     </a>
+                    @endcan
+                    @can('Menu Hatillo')
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/hatillo') }}">
                         <i class="fa-solid fa-database m-2"></i>DC El Hatillo
                     </a>
+                    @endcan
+                    @can('Menu Deposito')
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/depositos') }}">
                         <i class="fa-solid fa-warehouse m-2"></i>Depósitos
                     </a>
+                    @endcan
+                    @can('Menu Pares')
+                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/pares') }}">
+                        <i class="fa-solid fa-ethernet m-2"></i>Adm. de Pares
+                    </a>
+                    @endcan
                     <a class="btn btn-gradient-outline btn-sm text-start" href="#">
                         <i class="fa-solid fa-network-wired m-2"></i>Redes Corp.
                     </a>
@@ -256,10 +269,7 @@
                     <div class="border-top my-2 nav-item"></div>                    
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/localidades') }}">
                         <i class="fa-solid fa-location-dot m-2"></i>Adm. de Localidades
-                    </a>
-                    <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/pares') }}">
-                        <i class="fa-solid fa-ethernet m-2"></i>Adm. de Pares
-                    </a>
+                    </a>                    
                     <a class="btn btn-gradient-outline btn-sm text-start" href="{{ url('/usuarios') }}">
                         <i class="fa-solid fa-person m-2"></i>Adm. de Usuarios
                     </a>
