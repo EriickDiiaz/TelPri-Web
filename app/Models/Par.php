@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Par extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'pares';
 
@@ -19,11 +21,16 @@ class Par extends Model
         'observaciones',
     ];
 
-    /**
-     * Relación: Un par pertenece a una ubicación.
-     */
     public function ubicacion()
     {
         return $this->belongsTo(Ubicacion::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['numero ', 'estado', 'plataforma', 'ubicacion_id ', 'observaciones'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 }

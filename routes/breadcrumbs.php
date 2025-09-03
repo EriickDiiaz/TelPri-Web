@@ -71,6 +71,12 @@ Breadcrumbs::for('pares.create', function (BreadcrumbTrail $trail) {
     $trail->parent('pares.index');
     $trail->push('Agregar Par', route('pares.create'));
 });
+// Home > Pares > Ver
+Breadcrumbs::for('pares.show', function (BreadcrumbTrail $trail, $id) {
+    $par = Par::findOrFail($id);
+    $trail->parent('pares.index');
+    $trail->push($par->numero, route('pares.show', $id));
+});
 // Home > Pares > Editar
 Breadcrumbs::for('pares.edit', function (BreadcrumbTrail $trail, $id) {
     $par = Par::findOrFail($id);

@@ -14,14 +14,22 @@
 
 <!-- Titulo de la Sección -->
 <div class="d-flex">
-    <h2><i class="fa-solid fa-ethernet m-2"></i>Administrador de Pares.</h2>
+    <h2><i class="fa-solid fa-diagram-project m-2"></i>Administrador de Ubicaciones.</h2>
 </div>
 
 <!-- Botón Agregar -->
-<div class="d-flex mb-2"> 
-    <a href="{{ route('ubicaciones.create') }}" class="btn btn-outline-success btn-sm me-2">
-        <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
-    </a>
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <a href="{{ route('ubicaciones.create') }}" class="btn btn-outline-success btn-sm">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
+        </a>
+    </div>
+    <div>
+        <a href="{{ url('pares/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-delete-left m-2"></i>
+            <span>Volver a Pares</span>
+        </a>
+    </div>
 </div>
 
 <!-- Resumen de Campos -->

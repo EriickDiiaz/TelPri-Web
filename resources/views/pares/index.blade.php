@@ -18,10 +18,21 @@
 </div>
 
 <!-- Botón Agregar -->
-<div class="d-flex mb-2"> 
-    <a href="{{ route('pares.create') }}" class="btn btn-outline-success btn-sm me-2">
-        <i class="fa-solid fa-plus m-2"></i>Agregar Par
-    </a>
+<div class="d-flex justify-content-between mb-2">
+    <div>
+        <a href="{{ route('pares.create') }}" class="btn btn-outline-success btn-sm me-2">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Par
+        </a>
+        <a href="{{ route('ubicaciones.create') }}" class="btn btn-outline-success btn-sm me-2">
+            <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
+        </a>
+    </div>
+    <div>
+        <a href="{{ url('ubicaciones/') }}" class="btn btn-outline-primary btn-sm">
+            <i class="fa-solid fa-diagram-project m-2"></i>
+            <span>Ver Ubicaciones</span>
+        </a>
+    </div>
 </div>
 
 <!-- Resumen de Campos -->
@@ -53,6 +64,9 @@
             <td>{{ $par->plataforma }}</td>
             <td>{{ $par->estado }}</td>
             <td>
+                <a href="{{ route('pares.show', $par->id) }}" class="btn btn-outline-light btn-sm">
+                    <i class="fa-solid fa-list-ul"></i>
+                </a>
                 <a href="{{ route('pares.edit', $par->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
