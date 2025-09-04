@@ -70,32 +70,34 @@ class RolesAndPermissionsSeeder extends Seeder
         $role = Role::create(['name' => 'Administrador'])
             ->givePermissionTo(Permission::all());
 
-        $role = Role::create(['name' => 'Lider'])
-        ->givePermissionTo([
-            'Menu Lineas', 'Crear Lineas', 'Editar Lineas', 'Eliminar Lineas', 'Ver Lineas', 
-            'Menu CallCenters', 'Crear Usuario CallCenter', 'Editar Usuario CallCenter', 'Eliminar Usuario CallCenter',
-            'Menu Hatillo', 'Crear Hatillo', 'Editar Hatillo', 'Eliminar Hatillo', 
-            'Menu Deposito', 'Agregar Equipo Deposito', 'Editar Equipo Deposito', 'Eliminar Equipo Deposito',
-            'Menu Ubicaciones', 'Crear Ubicaciones', 'Editar Ubicaciones', 'Eliminar Ubicaciones', 
-            'Menu Pares', 'Crear Pares', 'Editar Pares', 'Eliminar Pares',
-            'Agregar Marca-Modelo', 'Editar Marca-Modelo', 'Eliminar Marca-Modelo', 
-            'Menu Localidades', 'Crear Localidades', 'Editar Localidades', 'Eliminar Localidades', 
-            'Crear Pisos', 'Editar Pisos', 'Eliminar Pisos', 
-            'Crear Campos', 'Editar Campos', 'Eliminar Campos', 
-            'Menu Usuarios', 'Crear Usuarios', 'Editar Usuarios', 'Eliminar Usuarios'
-        ]);
+        $role = Role::create(['name' => 'Supervisor'])
+            ->givePermissionTo([
+                'Menu Lineas', 'Crear Lineas', 'Editar Lineas', 'Eliminar Lineas', 'Ver Lineas', 
+                'Menu CallCenters', 'Crear Usuario CallCenter', 'Editar Usuario CallCenter', 'Eliminar Usuario CallCenter',
+                'Menu Hatillo', 'Crear Hatillo', 'Editar Hatillo', 'Eliminar Hatillo', 
+                'Menu Deposito', 'Agregar Equipo Deposito', 'Editar Equipo Deposito', 'Eliminar Equipo Deposito',
+                'Menu Ubicaciones', 'Crear Ubicaciones', 'Editar Ubicaciones', 'Eliminar Ubicaciones', 
+                'Menu Pares', 'Crear Pares', 'Editar Pares', 'Eliminar Pares',
+                'Agregar Marca-Modelo', 'Editar Marca-Modelo', 'Eliminar Marca-Modelo', 
+                'Menu Localidades', 'Crear Localidades', 'Editar Localidades', 'Eliminar Localidades', 
+                'Crear Pisos', 'Editar Pisos', 'Eliminar Pisos', 
+                'Crear Campos', 'Editar Campos', 'Eliminar Campos', 
+                'Menu Usuarios', 'Crear Usuarios', 'Editar Usuarios', 'Eliminar Usuarios'
+            ]);
 
-        $role = Role::create(['name' => 'Consultor'])
+        $role = Role::create(['name' => 'Tecnico'])
             ->givePermissionTo([
                 'Menu Lineas', 'Crear Lineas', 'Editar Lineas', 'Ver Lineas', 
                 'Menu CallCenters', 'Crear Usuario CallCenter', 'Editar Usuario CallCenter',
                 'Menu Hatillo', 'Crear Hatillo', 'Editar Hatillo',
                 'Menu Deposito', 'Editar Equipo Deposito',
+                'Menu Ubicaciones', 'Editar Ubicaciones',  
+                'Menu Pares', 'Editar Pares',
                 'Editar Usuarios'
             ]);
 
         $role = Role::create(['name' => 'Invitado'])
-            ->givePermissionTo(['Menu Lineas', 'Crear Lineas']);
+            ->givePermissionTo(['Menu Lineas']);
         
     }
 }

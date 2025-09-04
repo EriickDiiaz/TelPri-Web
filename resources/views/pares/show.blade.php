@@ -28,11 +28,30 @@
     </div>
 </div>
 
+<div>
+    <label for="numero" class="col-sm-2 col-form-label fw-bold">Ubicación:</label>
+    <div class="col-sm-7 px-4">
+        <p>{{ $par->ubicacion->nombre }}</p>
+    </div>
+</div>
+
 @if(!empty($par->estado))
 <div>
     <label for="estado" class="col-sm-2 col-form-label fw-bold">Estado:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $par->estado }}</p>
+        @if ($par->estado == 'Certificado')
+            <p>{{ $par->estado }}<i class="fa-solid fa-certificate text-warning ms-2"></i></p>
+        @elseif ($par->estado == 'Disponible')
+            <p>{{ $par->estado }}<i class="fa-solid fa-check text-success ms-2"></i></p>
+        @elseif ($par->estado == 'Asignado')
+            <p>{{ $par->estado }}<i class="fa-solid fa-link text-primary ms-2"></i></p>
+        @elseif ($par->estado == 'Por Verificar')
+            <p>{{ $par->estado }}<i class="fa-solid fa-clock text-info ms-2"></i></p>
+        @elseif ($par->estado == 'Dañado')
+            <p>{{ $par->estado }}<i class="fa-solid fa-triangle-exclamation text-danger ms-2"></i></p>
+        @else
+            <p>{{ $par->estado }}</p>
+        @endif
     </div>
 </div>
 @endif
@@ -46,22 +65,11 @@
 </div>
 @endif
 
-@if(!empty($linea->ubicacion_id))
-<div>
-    <label for="ubicacion_id" class="col-sm-2 col-form-label fw-bold">Ubicación:</label>
-    <div class="col-sm-7 px-4">
-        <p>
-            {{ $par->ubicacion->nombre ?? 'N/A'}}
-        </p>
-    </div>
-</div>
-@endif
-
-@if(!empty($linea->observaciones))
+@if(!empty($par->observaciones))
 <div>
     <label for="observaciones" class="col-sm-2 col-form-label fw-bold">Observaciones:</label>
     <div class="col-sm-7 px-4">
-        <p>{{ $linea->observaciones }}</p>
+        <p>{{ $par->observaciones }}</p>
     </div>
 </div>
 @endif
@@ -80,13 +88,13 @@
         <i class="fa-solid fa-delete-left m-2"></i>Regresar
     </span>
 </a>
-
+@can('Editar Pares')
 <a href="{{ url('pares/'.$par->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
     <span>
         <i class="fa-solid fa-ethernet m-2"></i>Modificar Par
     </span>
 </a>
-
+@endcan
 <!--Boton Historial-->
 <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#historialModal">
     <i class="fa-solid fa-clock-rotate-left"></i>

@@ -48,17 +48,6 @@
     </div>
 
     <div class="mb-2">
-        <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
-        <div class="col-sm-5">
-            <select class="form-select" name="plataforma" id="plataforma" required>
-                <option value="" selected disabled>-- Seleccione una plataforma --</option>
-                <option value="Analógica" {{ old('plataforma') == 'Analógica' ? 'selected' : '' }}>Analógica</option>
-                <option value="Digital" {{ old('plataforma') == 'Digital' ? 'selected' : '' }}>Digital</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="mb-2">
         <label for="estado" class="col-sm-4 col-form-label">Estado:</label>
         <div class="col-sm-5">
             <select class="form-select" name="estado" id="estado" required>
@@ -68,6 +57,17 @@
                 <option value="Certificado" {{ old('estado') == 'Certificado' ? 'selected' : '' }}>Certificado</option>
                 <option value="Por Verificar" {{ old('estado') == 'Por Verificar' ? 'selected' : '' }}>Por Verificar</option>
                 <option value="Dañado" {{ old('estado') == 'Dañado' ? 'selected' : '' }}>Dañado</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="mb-2">
+        <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
+        <div class="col-sm-5">
+            <select class="form-select" name="plataforma" id="plataforma" required>
+                <option value="" selected disabled>-- Seleccione una plataforma --</option>
+                <option value="Analógica" {{ old('plataforma') == 'Analógica' ? 'selected' : '' }}>Analógica</option>
+                <option value="Digital" {{ old('plataforma') == 'Digital' ? 'selected' : '' }}>Digital</option>
             </select>
         </div>
     </div>
@@ -85,11 +85,13 @@
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
+        @can('Crear Pares')
         <button type="submit" class="btn btn-outline-success btn-sm">
             <span>
-                <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
+                <i class="fa-solid fa-plus m-2"></i>Agregar Par
             </span>
         </button>
+        @endcan
     </div>       
 </form>
 

@@ -12,7 +12,7 @@ class ParController extends Controller
 
     public function index()
     {
-        $pares = Par::with('ubicacion')->paginate(20);
+        $pares = Par::all();
         return view('pares.index', compact('pares'));
     }
 

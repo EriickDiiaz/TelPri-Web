@@ -38,23 +38,12 @@
         <label for="ubicacion" class="col-sm-4 col-form-label">Ubicación del Par:</label>
         <div class="col-sm-5">
             <select class="form-select" name="ubicacion_id" id="ubicacion_id" required>
-                <option value="{{ $par->ubicacion_id }}" selected>{{ $par->ubicacion_id }}</option>
+                <option value="{{ $par->ubicacion_id }}" selected>{{ $par->ubicacion->nombre }}</option>
                 @foreach ($ubicaciones as $ubicacion)
                     <option value="{{ $ubicacion->id }}" {{ old('ubicacion') == $ubicacion->nombre ? 'selected' : '' }}>
                         {{ $ubicacion->nombre }}
                     </option>                   
                 @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="mb-2">
-        <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
-        <div class="col-sm-5">
-            <select class="form-select" name="plataforma" id="plataforma" required>
-                <option value="{{ $par->plataforma }}" selected>{{ $par->plataforma }}</option>
-                <option value="Analógica" {{ old('plataforma') == 'Analógica' ? 'selected' : '' }}>Analógica</option>
-                <option value="Digital" {{ old('plataforma') == 'Digital' ? 'selected' : '' }}>Digital</option>
             </select>
         </div>
     </div>
@@ -72,6 +61,17 @@
             </select>
         </div>
     </div>
+    
+    <div class="mb-2">
+        <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
+        <div class="col-sm-5">
+            <select class="form-select" name="plataforma" id="plataforma" required>
+                <option value="{{ $par->plataforma }}" selected>{{ $par->plataforma }}</option>
+                <option value="Analógica" {{ old('plataforma') == 'Analógica' ? 'selected' : '' }}>Analógica</option>
+                <option value="Digital" {{ old('plataforma') == 'Digital' ? 'selected' : '' }}>Digital</option>
+            </select>
+        </div>
+    </div>
 
     <div class="mb-2">
         <label for="observaciones" class="col-sm-4 col-form-label">Observaciones:</label>
@@ -86,11 +86,13 @@
                 <i class="fa-solid fa-delete-left m-2"></i>Regresar
             </span>
         </a>
+        @can('Editar Pares')
         <button type="submit" class="btn btn-outline-primary btn-sm">
             <span>
                 <i class="fa-solid fa-check m-2"></i>Actualizar Par
             </span>
         </button>
+        @endcan
     </div>               
 </form>
 

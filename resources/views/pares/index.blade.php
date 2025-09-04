@@ -20,12 +20,16 @@
 <!-- Botón Agregar -->
 <div class="d-flex justify-content-between mb-2">
     <div>
+        @can('Crear Pares')
         <a href="{{ route('pares.create') }}" class="btn btn-outline-success btn-sm me-2">
             <i class="fa-solid fa-plus m-2"></i>Agregar Par
         </a>
+        @endcan
+        @can('Crear Ubicaciones')
         <a href="{{ route('ubicaciones.create') }}" class="btn btn-outline-success btn-sm me-2">
             <i class="fa-solid fa-plus m-2"></i>Agregar Ubicación
         </a>
+        @endcan
     </div>
     <div>
         <a href="{{ url('ubicaciones/') }}" class="btn btn-outline-primary btn-sm">
@@ -62,14 +66,31 @@
             <td>{{ $par->numero }}</td>
             <td>{{ $par->ubicacion->nombre }}</td>
             <td>{{ $par->plataforma }}</td>
-            <td>{{ $par->estado }}</td>
+            <td>
+                @if ($par->estado == 'Certificado')
+                    <p>{{ $par->estado }}<i class="fa-solid fa-certificate text-warning ms-2"></i></p>
+                @elseif ($par->estado == 'Disponible')
+                    <p>{{ $par->estado }}<i class="fa-solid fa-check text-success ms-2"></i></p>
+                @elseif ($par->estado == 'Asignado')
+                    <p>{{ $par->estado }}<i class="fa-solid fa-link text-primary ms-2"></i></p>
+                @elseif ($par->estado == 'Por Verificar')
+                    <p>{{ $par->estado }}<i class="fa-solid fa-clock text-info ms-2"></i></p>
+                @elseif ($par->estado == 'Dañado')
+                    <p>{{ $par->estado }}<i class="fa-solid fa-triangle-exclamation text-danger ms-2"></i></p>
+                @else
+                    <p>{{ $par->estado }}</p>
+                @endif
+            </td>
             <td>
                 <a href="{{ route('pares.show', $par->id) }}" class="btn btn-outline-light btn-sm">
                     <i class="fa-solid fa-list-ul"></i>
                 </a>
+                @can('Editar Pares')
                 <a href="{{ route('pares.edit', $par->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>
                 </a>
+                @endcan
+                @can('Eliminar Pares')
                 <form action="{{ route('pares.destroy', $par->id) }}" id="form-eliminar-{{ $par->id }}" class="d-inline" method="POST">
                     @csrf
                     @method('DELETE')
@@ -77,6 +98,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </button>
                 </form>
+                @endcan
             </td>
         </tr>
         @endforeach
