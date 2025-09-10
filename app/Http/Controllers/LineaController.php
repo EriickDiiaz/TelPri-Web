@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Linea;
 use App\Models\Localidad;
-use App\Models\Campo;
+use App\Models\Ubicacion;
+use App\Models\Par;
 use App\Models\Piso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -52,8 +53,9 @@ class LineaController extends Controller
     public function create()
     {
         $localidades = Localidad::orderBy('nombre')->get();
-        $campos = Campo::orderBy('nombre')->get();
-        return view('lineas.create', compact('localidades', 'campos'));
+        $ubicaciones = Ubicacion::orderBy('nombre')->get();
+
+        return view('lineas.create', compact('localidades', 'ubicaciones'));
     }
 
     public function store(Request $request)
@@ -66,7 +68,7 @@ class LineaController extends Controller
 
     public function show($id)
     {
-        $linea = Linea::with(['localidad', 'piso', 'campo'])->findOrFail($id);
+        $linea = Linea::with(['localidad', 'piso', 'ubicacion'])->findOrFail($id);
         $activities = $linea->activities()->with('causer')->latest()->get();
 
         return view('lineas.show', compact('linea', 'activities'));
@@ -74,12 +76,13 @@ class LineaController extends Controller
 
     public function edit($id)
     {
-        $localidades = Localidad::orderBy('nombre')->get();
-        $campos = Campo::orderBy('nombre')->get();
         $linea = Linea::findOrFail($id);
+        $localidades = Localidad::orderBy('nombre')->get();
         $pisos = Piso::where('localidad_id', $linea->localidad_id)->orderBy('nombre')->get();
+        $ubicaciones = Ubicacion::orderBy('nombre')->get();
+        $pares = Par::where('ubicacion_id', $linea->ubicacion_id)->orderBy('numero')->get();       
 
-        return view('lineas.edit', compact('linea', 'localidades', 'campos', 'pisos'));
+        return view('lineas.edit', compact('linea', 'localidades', 'pisos', 'ubicaciones', 'pares'));
     }
 
     public function update(Request $request, $id)
@@ -114,8 +117,8 @@ class LineaController extends Controller
             'localidad_id' => 'nullable|exists:localidades,id',
             'piso_id' => 'nullable|exists:pisos,id',
             'mac' => 'nullable|max:50',
-            'campo_id' => 'nullable|exists:campos,id',
-            'par' => 'nullable|max:6',
+            'ubicacion_id' => 'nullable|exists:ubicaciones,id',
+            'par_id' => 'required_with:ubicacion_id|nullable|exists:pares,id',
             'directo' => 'nullable|max:50',
             'observacion' => 'nullable|max:255',
             'modificado' => 'nullable|max:50',
@@ -129,6 +132,8 @@ class LineaController extends Controller
             'titular.max' => 'El nombre del titular no puede tener más de 100 caracteres.',
             'mac.max' => 'El MAC/EQ/LI3 no puede tener más de 50 caracteres.',
             'serial.max' => 'El número de serie no puede tener más de 50 caracteres.',
+            'par_id.required_with' => 'Debes seleccionar un Par si seleccionaste una Ubicación.',
+            'par_id.exists' => 'El Par seleccionado no es válido.',
         ];
 
         // Aplicar transformaciones antes de la validación
@@ -217,7 +222,7 @@ class LineaController extends Controller
         }
 
         $localidades = Localidad::orderBy('nombre')->get();
-        $campos = Campo::orderBy('nombre')->get();
+        $ubicaciones = Ubicacion::orderBy('nombre')->get();
 
         return view('lineas.avanzada', compact('localidades', 'campos'));
     }
@@ -227,5 +232,11 @@ class LineaController extends Controller
         $localidad_id = $request->input('localidad_id');
         $pisos = Piso::where('localidad_id', $localidad_id)->orderBy('nombre')->get();
         return response()->json($pisos);
+    }
+    public function getPares(Request $request)
+    {
+        $ubicacion_id = $request->input('ubicacion_id');
+        $pares = Par::where('ubicacion_id', $ubicacion_id)->orderBy('numero')->get();
+        return response()->json($pares);
     }
 }

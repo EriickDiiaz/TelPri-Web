@@ -68,32 +68,31 @@
         </div>
     </div>
 
-    <div>
-        <div class="d-flex justify-content-between col-7">
-            <div class="col-sm-5">
-                <label for="localidad_id" class="col-sm-2 col-form-label">Localidad:</label>
-                <select name="localidad_id" id="localidad_id" class="form-select">
-                    <option value="">Seleccione una localidad</option>
-                    @foreach($localidades as $localidad)
-                    <option value="{{ $localidad->id }}" {{ $linea->localidad_id == $localidad->id ? 'selected' : '' }}>
-                        {{ $localidad->nombre }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-sm-5">
-                <label for="piso_id" class="col-sm-2 col-form-label">Piso:</label>
-                <select name="piso_id" id="piso_id" class="form-select">
-                    <option value="">Seleccione un piso</option>
-                    @foreach($pisos as $piso)
-                    <option value="{{ $piso->id }}" {{ $linea->piso_id == $piso->id ? 'selected' : '' }}>
-                        {{ $piso->nombre }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+    <div class="d-flex justify-content-between col-7">
+        <div class="col-sm-5">
+            <label for="localidad_id" class="col-sm-2 col-form-label">Localidad:</label>
+            <select name="localidad_id" id="localidad_id" class="form-select">
+                <option value="">Seleccione una localidad</option>
+                @foreach($localidades as $localidad)
+                <option value="{{ $localidad->id }}" {{ $linea->localidad_id == $localidad->id ? 'selected' : '' }}>
+                    {{ $localidad->nombre }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-sm-5">
+            <label for="piso_id" class="col-sm-2 col-form-label">Piso:</label>
+            <select name="piso_id" id="piso_id" class="form-select">
+                <option value="">Seleccione un piso</option>
+                @foreach($pisos as $piso)
+                <option value="{{ $piso->id }}" {{ $linea->piso_id == $piso->id ? 'selected' : '' }}>
+                    {{ $piso->nombre }}
+                </option>
+                @endforeach
+            </select>
         </div>
     </div>
+    
 
     <div>
         <label for="inventario" class="col-sm-2 col-form-label">Cod. Inventario:</label>
@@ -123,26 +122,28 @@
         </div>
     </div>
 
-    <div>
-        <label for="campo_id" class="col-sm-2 col-form-label">Ubic/Par/Campo:</label>
-        <div class="d-flex justify-content-between col-7">
-            <div class="col-sm-5">
-                <select name="campo_id" id="campo_id" class="form-select">
-                    @if(!empty($linea->campo))
-                    <option value="{{ $linea->campo_id }}">{{ $linea->campo->nombre }}</option>
-                    @endif
-                    <option value="">Seleccione</option>
-                    @foreach($campos as $campo)
-                    <option value="{{ $campo->id }}" {{ $linea->campo_id == $campo->id ? 'selected' : '' }}>{{ $campo->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="align-items-center">
-                /P/
-            </div>
-            <div class="align-items-center">
-                <input type="text" class="form-control" name="par" id="par" value="{{ $linea->par }}">
-            </div>    
+    <div class="d-flex justify-content-between col-7">
+        <div class="col-sm-5">
+            <label for="ubicacion_id" class="col-sm-2 col-form-label">Ubicación:</label>
+            <select name="ubicacion_id" id="ubicacion_id" class="form-select">
+                <option value="">Seleccione una ubicación</option>
+                @foreach($ubicaciones as $ubicacion)
+                <option value="{{ $ubicacion->id }}" {{ $linea->ubicacion_id == $ubicacion->id ? 'selected' : '' }}>
+                    {{ $ubicacion->nombre }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div class="col-sm-5">
+            <label for="par_id" class="col-sm-2 col-form-label">Par:</label>
+            <select name="par_id" id="par_id" class="form-select">
+                <option value="">Seleccione un par</option>
+                @foreach($pares as $par)
+                <option value="{{ $par->id }}" {{ $linea->par_id == $par->id ? 'selected' : '' }}>
+                    {{ $par->nombre }}
+                </option>
+                @endforeach
+            </select>
         </div>
     </div>
 
@@ -211,9 +212,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Script para cargar los pisos segun la localidad seleccionada-->
+
 <script type="text/javascript">
 $(document).ready(function() {
+    
+    // Script para cargar los pisos segun la localidad seleccionada
     $('#localidad_id').change(function() {
         var localidadID = $(this).val();
         if(localidadID) {
@@ -238,6 +241,33 @@ $(document).ready(function() {
             $('#piso_id').append('<option value="">Seleccione un piso</option>');
         }
     });
+    
+    // Script para cargar los pares segun la ubicación seleccionada
+    $('#ubicacion_id').change(function() {
+        var ubicacionID = $(this).val();
+        if(ubicacionID) {
+            $.ajax({
+                url: '{{ route("getPares") }}',
+                type: 'GET',
+                data: { ubicacion_id: ubicacionID },
+                dataType: 'json',
+                success: function(data) {
+                    $('#par_id').empty();
+                    $('#par_id').append('<option value="">Seleccione un par</option>');
+                    $.each(data, function(key, value) {
+                        $('#par_id').append('<option value="'+ value.id +'">'+ value.numero +'</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error en la petición AJAX:', error);
+                }
+            });
+        } else {
+            $('#par_id').empty();
+            $('#par_id').append('<option value="">Seleccione un par</option>');
+        }
+    });
+
 });
 </script>
 

@@ -13,7 +13,7 @@ class Linea extends Model
 
     protected $fillable = [
         'linea', 'vip', 'inventario', 'serial', 'plataforma', 'estado', 'titular',
-        'acceso', 'localidad_id', 'piso_id', 'mac', 'campo_id', 'par', 'directo',
+        'acceso', 'localidad_id', 'piso_id', 'mac', 'ubicacion_id', 'par_id', 'directo',
         'observacion', 'modificado'
     ];
 
@@ -40,8 +40,13 @@ class Linea extends Model
         return $this->belongsTo(Piso::class, 'piso_id');
     }
 
-    public function campo()
+    public function ubicacion()
     {
-        return $this->belongsTo(Campo::class);
+        return $this->belongsTo(Ubicacion::class);
+    }
+
+    public function par()
+    {
+        return $this->belongsTo(Par::class);
     }
 }
