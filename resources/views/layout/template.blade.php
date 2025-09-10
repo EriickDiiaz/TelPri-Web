@@ -233,8 +233,11 @@
         <nav class="sidebar col-md-3 col-lg-2 my-2">
             <div class="d-flex flex-column h-100">
                 <div class="d-grid gap-2 col-12 mx-auto">
-                    <a class="navbar-brand" href="{{ url('/home') }}">
-                        <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 90%;" class="m-2 pt-2">
+                    <a class="navbar-brand d-flex flex-column align-items-start" href="{{ url('/home') }}" style="height: 70px;">
+                        <div class="d-flex align-items-end h-100">
+                            <img src="{{ asset('imagenes/Logo_TelPriWeb_Wh.png') }}" alt="Logo TelPri" style="width: 100%; max-height: 60px;" class="m-2 pt-2">
+                            <small class="text-white ms-2 align-self-end">V1.8</small>
+                        </div>
                     </a>
                     @can('Menu Lineas')
                     <div class="border-top my-2 nav-item"></div>

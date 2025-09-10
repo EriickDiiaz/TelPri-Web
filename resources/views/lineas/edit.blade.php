@@ -140,7 +140,7 @@
                 <option value="">Seleccione un par</option>
                 @foreach($pares as $par)
                 <option value="{{ $par->id }}" {{ $linea->par_id == $par->id ? 'selected' : '' }}>
-                    {{ $par->nombre }}
+                    {{ $par->numero }}
                 </option>
                 @endforeach
             </select>
