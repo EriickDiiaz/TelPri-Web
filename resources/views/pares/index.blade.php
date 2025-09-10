@@ -50,7 +50,7 @@
 </div>
 
 <!-- Contenido de Sección -->
-<table class="table table-striped" id="datatableUbicaciones">
+<table class="table table-sm table-striped" id="datatableUbicaciones"> 
     <thead>
         <tr>
             <th>Número</th>

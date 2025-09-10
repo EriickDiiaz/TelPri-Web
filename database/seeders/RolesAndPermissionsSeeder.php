@@ -61,9 +61,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'Editar Permisos']);
         Permission::create(['name' => 'Eliminar Permisos']);
         Permission::create(['name' => 'Asignar Roles']);
-        Permission::create(['name' => 'Agregar Equipos']);
-        Permission::create(['name' => 'Editar Equipos']);
-        Permission::create(['name' => 'Eliminar Equipos']);
+
         // Añade aquí más permisos según sea necesario
 
         // Create roles and assign created permissions
@@ -81,7 +79,6 @@ class RolesAndPermissionsSeeder extends Seeder
                 'Agregar Marca-Modelo', 'Editar Marca-Modelo', 'Eliminar Marca-Modelo', 
                 'Menu Localidades', 'Crear Localidades', 'Editar Localidades', 'Eliminar Localidades', 
                 'Crear Pisos', 'Editar Pisos', 'Eliminar Pisos', 
-                'Crear Campos', 'Editar Campos', 'Eliminar Campos', 
                 'Menu Usuarios', 'Crear Usuarios', 'Editar Usuarios', 'Eliminar Usuarios'
             ]);
 

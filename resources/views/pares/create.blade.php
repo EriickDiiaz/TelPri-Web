@@ -34,6 +34,23 @@
     </div>
 
     <div class="mb-2">
+        <label for="variable" class="col-sm-4 col-form-label">Número Variable:</label>
+        <div class="col-sm-5">
+            <select class="form-select" name="variable" id="variable">
+                <option value="" selected>-- Seleccione número variable --</option>
+                <option value="500" {{ old('plataforma') == '500' ? 'selected' : '' }}>500</option>
+                <option value="504" {{ old('plataforma') == '504' ? 'selected' : '' }}>504</option>
+                <option value="531" {{ old('plataforma') == '531' ? 'selected' : '' }}>531</option>
+                <option value="572" {{ old('plataforma') == '572' ? 'selected' : '' }}>572</option>
+                <option value="573" {{ old('plataforma') == '573' ? 'selected' : '' }}>573</option>
+                <option value="575" {{ old('plataforma') == '575' ? 'selected' : '' }}>575</option>
+                
+            </select>
+        </div>
+    </div>
+
+
+    <div class="mb-2">
         <label for="ubicacion" class="col-sm-4 col-form-label">Ubicación del Par:</label>
         <div class="col-sm-5">
             <select class="form-select" name="ubicacion_id" id="ubicacion_id" required>

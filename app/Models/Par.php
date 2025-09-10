@@ -15,6 +15,7 @@ class Par extends Model
 
     protected $fillable = [
         'numero',
+        'variable',
         'estado',
         'plataforma',
         'ubicacion_id',

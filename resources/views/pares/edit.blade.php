@@ -35,6 +35,22 @@
     </div>
 
     <div class="mb-2">
+        <label for="variable" class="col-sm-4 col-form-label">Número Variable:</label>
+        <div class="col-sm-5">
+            <select class="form-select" name="variable" id="variable">
+                <option value="{{ $par->variable }}" selected>{{ $par->variable }}</option>
+                <option value="">-- Seleccione número variable --</option>
+                <option value="500" {{ old('500') == '500' ? 'selected' : '' }}>500</option>
+                <option value="500" {{ old('504') == '504' ? 'selected' : '' }}>504</option>
+                <option value="500" {{ old('531') == '531' ? 'selected' : '' }}>531</option>
+                <option value="500" {{ old('572') == '572' ? 'selected' : '' }}>572</option>
+                <option value="500" {{ old('573') == '573' ? 'selected' : '' }}>573</option>
+                <option value="500" {{ old('575') == '575' ? 'selected' : '' }}>575</option>                
+            </select>
+        </div>
+    </div>
+
+    <div class="mb-2">
         <label for="ubicacion" class="col-sm-4 col-form-label">Ubicación del Par:</label>
         <div class="col-sm-5">
             <select class="form-select" name="ubicacion_id" id="ubicacion_id" required>

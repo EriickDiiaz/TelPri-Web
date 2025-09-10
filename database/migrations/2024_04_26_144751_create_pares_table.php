@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('pares', function (Blueprint $table) {
             $table->id();
             $table->string('numero', 4);
+            $table->string('variable', 5)->nullable();
             $table->string('estado', 20);
-            $table->string('plataforma', 20)->nullable();
+            $table->string('plataforma', 20)->nullable();            
             $table->foreignId('ubicacion_id')->constrained('ubicaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->string('observaciones', 255)->nullable();
             $table->unique(['ubicacion_id', 'numero']);
