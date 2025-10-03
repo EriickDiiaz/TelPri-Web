@@ -81,7 +81,7 @@
     <div class="mb-2">
         <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
         <div class="col-sm-5">
-            <select class="form-select" name="plataforma" id="plataforma" required>
+            <select class="form-select" name="plataforma" id="plataforma">
                 <option value="" selected disabled>-- Seleccione una plataforma --</option>
                 <option value="Analógica" {{ old('plataforma') == 'Analógica' ? 'selected' : '' }}>Analógica</option>
                 <option value="Digital" {{ old('plataforma') == 'Digital' ? 'selected' : '' }}>Digital</option>

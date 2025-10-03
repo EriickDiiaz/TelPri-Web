@@ -159,10 +159,10 @@ class LineaController extends Controller
     public function avanzada(Request $request)
     {
         if ($request->ajax()) {
-            $query = Linea::with(['localidad', 'piso', 'campo']);
+            $query = Linea::with(['localidad', 'piso', 'ubicacion', 'par']);
 
             // Apply filters
-            $filters = ['linea', 'inventario', 'serial', 'plataforma', 'estado', 'titular', 'mac', 'par'];
+            $filters = ['linea', 'inventario', 'serial', 'plataforma', 'estado', 'titular', 'mac'];
             foreach ($filters as $filter) {
                 if ($request->filled($filter)) {
                     $query->where($filter, 'like', '%' . $request->input($filter) . '%');
@@ -175,8 +175,11 @@ class LineaController extends Controller
             if ($request->filled('piso_id')) {
                 $query->where('piso_id', $request->piso_id);
             }
-            if ($request->filled('campo_id')) {
-                $query->where('campo_id', $request->campo_id);
+            if ($request->filled('ubicacion_id')) {
+                $query->where('ubicacion_id', $request->ubicacion_id);
+            }
+            if ($request->filled('par_id')) {
+                $query->where('par_id', $request->par_id);
             }
             if ($request->filled('vip')) {
                 $query->where('vip', $request->vip);
@@ -211,11 +214,11 @@ class LineaController extends Controller
                 ->editColumn('mac', function ($linea) {
                     return $linea->mac ?: 'N/A';
                 })
-                ->editColumn('campo.nombre', function ($linea) {
-                    return $linea->campo ? $linea->campo->nombre : 'N/A';
+                ->editColumn('ubicacion.nombre', function ($linea) {
+                    return $linea->ubicacion ? $linea->ubicacion->nombre : 'N/A';
                 })
-                ->editColumn('par', function ($linea) {
-                    return $linea->par ?: 'N/A';
+                ->editColumn('par.numero', function ($linea) {
+                    return $linea->par ? $linea->par->numero : 'N/A';
                 })
                 ->rawColumns(['linea_with_vip'])
                 ->make(true);
@@ -224,7 +227,7 @@ class LineaController extends Controller
         $localidades = Localidad::orderBy('nombre')->get();
         $ubicaciones = Ubicacion::orderBy('nombre')->get();
 
-        return view('lineas.avanzada', compact('localidades', 'campos'));
+        return view('lineas.avanzada', compact('localidades', 'ubicaciones'));
     }
 
     public function getPisos(Request $request)

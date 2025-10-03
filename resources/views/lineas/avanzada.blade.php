@@ -79,17 +79,19 @@
             <input type="text" class="form-control" id="mac" name="mac">
         </div>
         <div class="col-md-3">
-            <label for="campo_id" class="form-label">Campo</label>
-            <select class="form-select" id="campo_id" name="campo_id">
+            <label for="ubicacion_id" class="form-label">Ubicacón</label>
+            <select class="form-select" id="ubicacion_id" name="ubicacion_id">
                 <option value="">Seleccione</option>
-                @foreach($campos as $campo)
-                    <option value="{{ $campo->id }}">{{ $campo->nombre }}</option>
+                @foreach($ubicaciones as $ubicacion)
+                    <option value="{{ $ubicacion->id }}">{{ $ubicacion->nombre }}</option>
                 @endforeach
             </select>
         </div>
         <div class="col-md-3">
-            <label for="par" class="form-label">Par</label>
-            <input type="text" class="form-control" id="par" name="par">
+            <label for="par_id" class="form-label">Par</label>
+            <select class="form-select" id="par_id" name="par_id">
+                <option value="">Seleccione</option>
+            </select>
         </div>
     </div>
     <div class="mt-3">
@@ -111,7 +113,7 @@
             <th>Localidad</th>
             <th>Piso</th>
             <th>Mac</th>
-            <th>Campo</th>
+            <th>Ubicación</th>
             <th>Par</th>
         </tr>
     </thead>
@@ -139,8 +141,8 @@ $(document).ready(function() {
                 d.localidad_id = $('#localidad_id').val();
                 d.piso_id = $('#piso_id').val();
                 d.mac = $('#mac').val();
-                d.campo_id = $('#campo_id').val();
-                d.par = $('#par').val();
+                d.ubicacion_id = $('#ubicacion_id').val();
+                d.par_id = $('#par_id').val();
             }
         },
         columns: [
@@ -153,8 +155,8 @@ $(document).ready(function() {
             {data: 'localidad.nombre', name: 'localidad.nombre'},
             {data: 'piso.nombre', name: 'piso.nombre'},
             {data: 'mac', name: 'mac'},
-            {data: 'campo.nombre', name: 'campo.nombre'},
-            {data: 'par', name: 'par'}
+            {data: 'ubicacion.nombre', name: 'ubicacion.nombre'},
+            {data: 'par.numero', name: 'par.numero'}
         ],
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
@@ -190,6 +192,27 @@ $(document).ready(function() {
         } else {
             $('#piso_id').empty();
             $('#piso_id').append('<option value="">Seleccione</option>');
+        }
+    });
+
+    $('#ubicacion_id').change(function() {
+        var ubicacionId = $(this).val();
+        if (ubicacionId) {
+            $.ajax({
+                url: '{{ route("getPares") }}',
+                type: 'GET',
+                data: { ubicacion_id: ubicacionId },
+                success: function(data) {
+                    $('#par_id').empty();
+                    $('#par_id').append('<option value="">Seleccione</option>');
+                    $.each(data, function(key, value) {
+                        $('#par_id').append('<option value="' + value.id + '">' + value.numero + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#par_id').empty();
+            $('#par_id').append('<option value="">Seleccione</option>');
         }
     });
 });
