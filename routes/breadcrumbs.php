@@ -83,6 +83,11 @@ Breadcrumbs::for('pares.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('pares.index', $id);
     $trail->push('Modificar Par', route('pares.edit', $id));
 });
+// Home > Pares > Búsqueda Avanzada
+Breadcrumbs::for('pares.avanzada', function (BreadcrumbTrail $trail) {
+    $trail->parent('pares.index');
+    $trail->push('Búsqueda Avanzada', route('pares.avanzada'));
+});
 
 
 //BreadCrumbs Depósitos

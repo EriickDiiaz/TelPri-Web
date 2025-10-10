@@ -41,7 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
   
     Route::get('lineas/avanzada', [LineaController::class, 'avanzada'])->name('lineas.avanzada');
-    Route::get('lineas/historial', [LineaController::class, 'historial'])->name('lineas/historial');
+    //Route::get('lineas/historial', [LineaController::class, 'historial'])->name('lineas/historial');
     Route::resource('/lineas', LineaController::class);
 
     Route::resource('/callcenters', CallcenterController::class);    
@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/pisos', pisoController::class);
     Route::resource('/usuarios', UsuarioController::class);
     Route::resource('/ubicaciones', UbicacionController::class);
+    Route::get('/pares/avanzada', [ParController::class, 'avanzada'])->name('pares.avanzada');
     Route::resource('/pares', ParController::class);
     Route::resource('/roles', RoleController::class);
     Route::resource('/permisos', PermisoController::class);

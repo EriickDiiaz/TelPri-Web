@@ -31,7 +31,10 @@
         </a>
         @endcan
     </div>
-    <div>
+    <div class="d-flex justify-content-between mb-2">
+        <a href="{{ route('pares.avanzada') }}" class="btn btn-outline-light btn-sm me-2">
+            <i class="fa-solid fa-binoculars m-2"></i>Busqueda Avanzada
+        </a>
         <a href="{{ url('ubicaciones/') }}" class="btn btn-outline-primary btn-sm">
             <i class="fa-solid fa-diagram-project m-2"></i>
             <span>Ver Ubicaciones</span>

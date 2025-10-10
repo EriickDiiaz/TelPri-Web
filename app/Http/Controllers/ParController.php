@@ -6,6 +6,7 @@ use App\Models\Par;
 use App\Models\Ubicacion;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Yajra\DataTables\Facades\DataTables;
 
 class ParController extends Controller
 {
@@ -95,5 +96,43 @@ class ParController extends Controller
         ];
 
         return $request->validate($rules, $messages);
+    }
+
+    public function avanzada(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Par::with(['ubicacion']);
+
+            // Apply filters
+            $filters = ['numero', 'estado', 'plataforma'];
+            foreach ($filters as $filter) {
+                if ($request->filled($filter)) {
+                    $query->where($filter, 'like', '%' . $request->input($filter) . '%');
+                }
+            }
+            if ($request->filled('ubicacion_id')) {
+                $query->where('ubicacion_id', $request->ubicacion_id);
+            }
+
+            return DataTables::of($query)
+                ->addColumn('numero', function ($par) {
+                    return '<a href="' . route('pares.show', $par->id) . '">' . $par->numero . '</a>';
+                })
+                ->editColumn('ubicacion.nombre', function ($par) {
+                    return $par->ubicacion ? $par->ubicacion->nombre : 'N/A';
+                })
+                ->editColumn('estado', function ($par) {
+                    return $par->estado ?: 'N/A';
+                })
+                ->editColumn('plataforma', function ($par) {
+                    return $par->plataforma ?: 'N/A';
+                })
+                ->rawColumns(['numero'])
+                ->make(true);
+        }
+
+        $ubicaciones = Ubicacion::orderBy('nombre')->get();
+
+        return view('pares.avanzada', compact('ubicaciones'));
     }
 }
