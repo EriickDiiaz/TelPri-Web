@@ -1,4 +1,4 @@
-@extends('layout/template') 
+@extends('layout.template') 
 
 @section('title','Pares | Modificar Par')
 @section('contenido')
@@ -33,23 +33,6 @@
             <input type="text" class="form-control" name="numero" id="numero" value="{{ $par->numero }}" required>
         </div>
     </div>
-
-    <div class="mb-2">
-        <label for="variable" class="col-sm-4 col-form-label">Número Variable:</label>
-        <div class="col-sm-5">
-            <select class="form-select" name="variable" id="variable">
-                <option value="{{ $par->variable }}" selected>{{ $par->variable }}</option>
-                <option value="">-- Seleccione número variable --</option>
-                <option value="500" {{ old('500') == '500' ? 'selected' : '' }}>500</option>
-                <option value="500" {{ old('504') == '504' ? 'selected' : '' }}>504</option>
-                <option value="500" {{ old('531') == '531' ? 'selected' : '' }}>531</option>
-                <option value="500" {{ old('572') == '572' ? 'selected' : '' }}>572</option>
-                <option value="500" {{ old('573') == '573' ? 'selected' : '' }}>573</option>
-                <option value="500" {{ old('575') == '575' ? 'selected' : '' }}>575</option>                
-            </select>
-        </div>
-    </div>
-
     <div class="mb-2">
         <label for="ubicacion" class="col-sm-4 col-form-label">Ubicación del Par:</label>
         <div class="col-sm-5">
@@ -63,7 +46,6 @@
             </select>
         </div>
     </div>
-
     <div class="mb-2">
         <label for="estado" class="col-sm-4 col-form-label">Estado:</label>
         <div class="col-sm-5">
@@ -76,8 +58,7 @@
                 <option value="Dañado" {{ old('estado') == 'Dañado' ? 'selected' : '' }}>Dañado</option>
             </select>
         </div>
-    </div>
-    
+    </div>    
     <div class="mb-2">
         <label for="plataforma" class="col-sm-4 col-form-label">Plataforma:</label>
         <div class="col-sm-5">
@@ -88,14 +69,12 @@
             </select>
         </div>
     </div>
-
     <div class="mb-2">
         <label for="observaciones" class="col-sm-4 col-form-label">Observaciones:</label>
         <div class="col-sm-5">
             <textarea class="form-control" name="observaciones" id="observaciones" rows="3">{{ $par->observaciones }}</textarea>
         </div>
     </div>
-
     <div class="mt-3 d-flex justify-content-between col-5">
         <a href="{{ url('pares') }}" class="btn btn-outline-danger btn-sm">
             <span>

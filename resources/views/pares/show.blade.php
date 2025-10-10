@@ -1,7 +1,5 @@
-@extends('layout/template')
-
+@extends('layout.template')
 @section('title','Pares | Detalles del Par')
-
 @section('contenido')
 
 <!-- Mensajes y Notificaciones -->
@@ -27,16 +25,6 @@
         <p>{{ $par->numero }}</p>
     </div>
 </div>
-
-@if ($par->variable)
-<div>
-    <label for="variable" class="col-sm-2 col-form-label fw-bold">Número Variable:</label>
-    <div class="col-sm-7 px-4">
-        <p>{{ $par->variable }}</p>
-    </div>
-</div>
-@endif
-
 
 <div>
     <label for="numero" class="col-sm-2 col-form-label fw-bold">Ubicación:</label>

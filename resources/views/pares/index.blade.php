@@ -1,4 +1,4 @@
-@extends('layout/template')
+@extends('layout.template')
 
 @section('title','TelPri-Web | Pares')
 @section('contenido')
