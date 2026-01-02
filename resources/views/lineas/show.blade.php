@@ -164,19 +164,20 @@
         <i class="fa-solid fa-delete-left m-2"></i>Regresar
     </span>
 </a>
-
+@can('Editar Lineas')
 <a href="{{ url('lineas/'.$linea->id.'/edit')}}" class="btn btn-outline-primary btn-sm">
     <span>
         <i class="fa-solid fa-phone-volume m-2"></i>Modificar Línea
     </span>
 </a>
 
+
 <!--Boton Historial-->
 <a href="#" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#historialModal">
     <i class="fa-solid fa-clock-rotate-left"></i>
     <span>Historial</span>
 </a>
-
+@endcan
 @can('Eliminar Lineas')
 <form action="{{ url('lineas/'.$linea->id)}}" id="form-eliminar-{{ $linea->id }}" action="{{ route('lineas.destroy', $linea->id) }}" class="d-inline" method="post">
     @method("DELETE")

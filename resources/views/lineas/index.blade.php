@@ -1,4 +1,4 @@
-@extends('layout/template')
+@extends('layout.template')
 
 @section('title','TelPri-Web | Lineas')
 @section('contenido')
@@ -25,9 +25,11 @@
             <i class="fa-solid fa-phone-volume m-2"></i>Agregar Línea
         </a>
         @endcan
+        @can('Editar Lineas')
         <a href="{{ route('lineas.avanzada') }}" class="btn btn-outline-light btn-sm me-2">
             <i class="fa-solid fa-binoculars m-2"></i>Busqueda Avanzada
         </a>
+        @endcan
     </div>
 </div>
 
