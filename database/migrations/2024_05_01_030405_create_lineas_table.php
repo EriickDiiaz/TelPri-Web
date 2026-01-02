@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('mac', 50)->nullable();
             $table->foreignId('ubicacion_id')->nullable()->constrained('ubicaciones')->onDelete('cascade')->onUpdate('cascade');
             $table->string('par_id', 6)->nullable();
-            $table->string('directo',50)->nullable();
+             $table->json('acceso')->nullable();
             $table->string('observacion', 255)->nullable();
             $table->string('modificado', 50)->nullable();
             $table->timestamps();

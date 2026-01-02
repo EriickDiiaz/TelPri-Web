@@ -107,12 +107,12 @@
 </div>
 @endif
 
-@if(!empty($linea->ucicacion_id) || !empty($linea->par_id))
+@if(!empty($linea->ubicacion_id) || !empty($linea->par_id))
 <div>
     <label for="campo" class="col-sm-2 col-form-label fw-bold">Ubicación/Par:</label>
     <div class="col-sm-7 px-4">
         <p>
-            {{ $linea->ubicacion->nombre ?? 'N/A' }} / {{ $linea->par->numero }}            
+            {{ $linea->ubicacion->nombre ?? 'N/A' }} / {{ $linea->par->numero ?? ''}}            
         </p>
     </div>
 </div>
