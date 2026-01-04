@@ -98,15 +98,6 @@
 </div>
 @endif
 
-@if(!empty($linea->directo))
-<div>
-    <label for="directo" class="col-sm-2 col-form-label fw-bold">Directo:</label>
-    <div class="col-sm-7 px-4">
-        <p>{{ $linea->directo }}</p>
-    </div>
-</div>
-@endif
-
 @if(!empty($linea->ubicacion_id) || !empty($linea->par_id))
 <div>
     <label for="campo" class="col-sm-2 col-form-label fw-bold">Ubicación/Par:</label>

@@ -108,13 +108,6 @@
         </div>
     </div>
 
-    <div>
-        <label for="directo" class="col-sm-2 col-form-label">Directo:</label>
-        <div class="col-sm-7">
-            <input type="text" class="form-control" name="directo" id="directo" value="{{ old('directo') }}">
-        </div>
-    </div>
-
     <div class="d-flex justify-content-between col-7">
         <div class="col-sm-5">
             <label for="ubicacion_id" class="col-sm-2 col-form-label">Ubicación:</label>
