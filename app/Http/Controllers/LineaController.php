@@ -119,6 +119,7 @@ class LineaController extends Controller
             'mac' => 'nullable|max:50',
             'ubicacion_id' => 'nullable|exists:ubicaciones,id',
             'par_id' => 'required_with:ubicacion_id|nullable|exists:pares,id',
+            'directo' => 'nullable|max:50',
             'observacion' => 'nullable|max:255',
             'modificado' => 'nullable|max:50',
         ];

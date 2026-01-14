@@ -13,7 +13,7 @@ class Linea extends Model
 
     protected $fillable = [
         'linea', 'vip', 'inventario', 'serial', 'plataforma', 'estado', 'titular',
-        'acceso', 'localidad_id', 'piso_id', 'mac', 'ubicacion_id', 'par_id',
+        'acceso', 'localidad_id', 'piso_id', 'mac', 'ubicacion_id', 'par_id','directo',
         'observacion', 'modificado'
     ];
 
