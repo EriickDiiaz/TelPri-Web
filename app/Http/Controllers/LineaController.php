@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Linea;
 use App\Models\Localidad;
 use App\Models\Ubicacion;
-use App\Models\Par;
 use App\Models\Piso;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,9 +79,8 @@ class LineaController extends Controller
         $localidades = Localidad::orderBy('nombre')->get();
         $pisos = Piso::where('localidad_id', $linea->localidad_id)->orderBy('nombre')->get();
         $ubicaciones = Ubicacion::orderBy('nombre')->get();
-        $pares = Par::where('ubicacion_id', $linea->ubicacion_id)->orderBy('numero')->get();       
 
-        return view('lineas.edit', compact('linea', 'localidades', 'pisos', 'ubicaciones', 'pares'));
+        return view('lineas.edit', compact('linea', 'localidades', 'pisos', 'ubicaciones'));
     }
 
     public function update(Request $request, $id)
@@ -118,7 +116,7 @@ class LineaController extends Controller
             'piso_id' => 'nullable|exists:pisos,id',
             'mac' => 'nullable|max:50',
             'ubicacion_id' => 'nullable|exists:ubicaciones,id',
-            'par_id' => 'required_with:ubicacion_id|nullable|exists:pares,id',
+            'par_id' => 'required_with:ubicacion_id|nullable',
             'directo' => 'nullable|max:50',
             'observacion' => 'nullable|max:255',
             'modificado' => 'nullable|max:50',
@@ -133,7 +131,6 @@ class LineaController extends Controller
             'mac.max' => 'El MAC/EQ/LI3 no puede tener más de 50 caracteres.',
             'serial.max' => 'El número de serie no puede tener más de 50 caracteres.',
             'par_id.required_with' => 'Debes seleccionar un Par si seleccionaste una Ubicación.',
-            'par_id.exists' => 'El Par seleccionado no es válido.',
         ];
 
         // Aplicar transformaciones antes de la validación

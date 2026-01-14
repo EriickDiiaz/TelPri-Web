@@ -121,16 +121,6 @@
 @if(!empty($linea->acceso))
 <div>
     <label for="acceso" class="col-sm-2 col-form-label fw-bold">Acceso:</label>
-                <li>{{ $acceso }}</li>
-            @endforeach
-        </ul>
-    </div>
-</div>
-@endif
-
-@if(!empty($linea->acceso))
-<div>
-    <label for="acceso" class="col-sm-2 col-form-label fw-bold">Acceso:</label>
     <div class="col-sm-7 px-4">
         <ul>
             @foreach ($linea->acceso as $acceso)
