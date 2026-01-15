@@ -102,26 +102,7 @@ $(document).ready(function() {
 
     // Dependent select for localidad and piso
 
-    $('#ubicacion_id').change(function() {
-        var ubicacionId = $(this).val();
-        if (ubicacionId) {
-            $.ajax({
-                url: '{{ route("getPares") }}',
-                type: 'GET',
-                data: { ubicacion_id: ubicacionId },
-                success: function(data) {
-                    $('#par_id').empty();
-                    $('#par_id').append('<option value="">Seleccione</option>');
-                    $.each(data, function(key, value) {
-                        $('#par_id').append('<option value="' + value.id + '">' + value.numero + '</option>');
-                    });
-                }
-            });
-        } else {
-            $('#par_id').empty();
-            $('#par_id').append('<option value="">Seleccione</option>');
-        }
-    });
+    
 });
 </script>
 @endpush
