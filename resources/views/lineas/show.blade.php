@@ -103,7 +103,7 @@
     <label for="campo" class="col-sm-2 col-form-label fw-bold">Ubicación/Par:</label>
     <div class="col-sm-7 px-4">
         <p>
-            {{ $linea->ubicacion->nombre ?? 'N/A' }} / {{ $linea->par->numero ?? ''}}            
+            {{ $linea->ubicacion->nombre ?? 'N/A' }} / {{ $linea->par_id ?? ''}}            
         </p>
     </div>
 </div>

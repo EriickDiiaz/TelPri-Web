@@ -89,9 +89,7 @@
         </div>
         <div class="col-md-3">
             <label for="par_id" class="form-label">Par</label>
-            <select class="form-select" id="par_id" name="par_id">
-                <option value="">Seleccione</option>
-            </select>
+            <input type="text" class="form-control" id="par_id" name="par_id">
         </div>
     </div>
     <div class="mt-3">
@@ -156,7 +154,7 @@ $(document).ready(function() {
             {data: 'piso.nombre', name: 'piso.nombre'},
             {data: 'mac', name: 'mac'},
             {data: 'ubicacion.nombre', name: 'ubicacion.nombre'},
-            {data: 'par.numero', name: 'par.numero'}
+            {data: 'par_id', name: 'par_id'}
         ],
         language: {
             url: "https://cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
@@ -195,26 +193,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#ubicacion_id').change(function() {
-        var ubicacionId = $(this).val();
-        if (ubicacionId) {
-            $.ajax({
-                url: '{{ route("getPares") }}',
-                type: 'GET',
-                data: { ubicacion_id: ubicacionId },
-                success: function(data) {
-                    $('#par_id').empty();
-                    $('#par_id').append('<option value="">Seleccione</option>');
-                    $.each(data, function(key, value) {
-                        $('#par_id').append('<option value="' + value.id + '">' + value.numero + '</option>');
-                    });
-                }
-            });
-        } else {
-            $('#par_id').empty();
-            $('#par_id').append('<option value="">Seleccione</option>');
-        }
-    });
+   
 });
 </script>
 @endpush
