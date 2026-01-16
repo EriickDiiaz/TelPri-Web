@@ -1,4 +1,4 @@
-@extends('layout/template')
+@extends('layout.template')
 
 @section('title','TelPri-Web | Ubicaciones')
 @section('contenido')
@@ -61,6 +61,9 @@
             <td>{{ $ubicacion->descripcion }}</td>
             <td>{{ $ubicacion->lineas_count }}</td>
             <td>
+                <a href="{{ route('ubicaciones.show', $ubicacion->id) }}" class="btn btn-outline-light btn-sm">
+                    <i class="fa-solid fa-list"></i>
+                </a>
                 @can('Editar Ubicaciones')
                 <a href="{{ route('ubicaciones.edit', $ubicacion->id) }}" class="btn btn-outline-primary btn-sm">
                     <i class="fa-solid fa-pen-to-square"></i>

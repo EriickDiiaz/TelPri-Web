@@ -29,6 +29,12 @@ class UbicacionController extends Controller
         return redirect()->route('ubicaciones.index')->with('mensaje', 'Ubicacion guardada con éxito.');
     }
 
+    public function show($id)
+    {
+        $ubicacion = Ubicacion::with(['lineas' => function($q){ $q->orderBy('linea'); }])->withCount('lineas')->findOrFail($id);
+        return view('ubicaciones.show', compact('ubicacion'));
+    }
+
     public function edit($id) 
     {
         $ubicacion = Ubicacion::findOrFail($id);

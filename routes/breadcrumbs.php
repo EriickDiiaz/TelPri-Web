@@ -59,6 +59,12 @@ Breadcrumbs::for('ubicaciones.edit', function (BreadcrumbTrail $trail, $id) {
     $trail->parent('ubicaciones.index', $id);
     $trail->push('Modificar Ubicacion', route('ubicaciones.edit', $id));
 });
+// Home > Ubicaciones > Ver
+Breadcrumbs::for('ubicaciones.show', function (BreadcrumbTrail $trail, $id) {
+    $ubicacion = Par::findOrFail($id);
+    $trail->parent('ubicaciones.index');
+    $trail->push($ubicacion->id, route('ubicaciones.show', $id));
+});
 
 //BreadCrumbs Pares
 // Home > Pares

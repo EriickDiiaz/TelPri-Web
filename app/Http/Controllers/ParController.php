@@ -32,10 +32,10 @@ class ParController extends Controller
                     $actions = '';
                     $actions .= '<a href="' . route('pares.show', $par->id) . '" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-list-ul"></i></a>';
                     if (auth()->user()->can('Editar Pares')) {
-                        $actions .= ' <a href="' . route('pares.edit', $par->id) . '" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-phone-volume"></i></a>';
+                        $actions .= ' <a href="' . route('pares.edit', $par->id) . '" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i></a>';
                     }
                     if (auth()->user()->can('Eliminar Pares')) {
-                        $actions .= ' <button class="btn btn-outline-danger btn-sm delete-par" data-id="' . $par->id . '"><i class="fa-solid fa-phone-slash"></i></button>';
+                        $actions .= ' <button class="btn btn-outline-danger btn-sm delete-par" data-id="' . $par->id . '"><i class="fa-solid fa-xmark"></i></button>';
                     }
                     return $actions;
                 })
