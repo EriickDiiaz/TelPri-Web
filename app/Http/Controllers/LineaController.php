@@ -233,10 +233,4 @@ class LineaController extends Controller
         $pisos = Piso::where('localidad_id', $localidad_id)->orderBy('nombre')->get();
         return response()->json($pisos);
     }
-    public function getPares(Request $request)
-    {
-        $ubicacion_id = $request->input('ubicacion_id');
-        $pares = Par::where('ubicacion_id', $ubicacion_id)->orderBy('numero')->get();
-        return response()->json($pares);
-    }
 }

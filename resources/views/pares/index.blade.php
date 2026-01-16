@@ -1,4 +1,4 @@
-@extends('layout.template')
+@extends('layout.template') 
 
 @section('title','TelPri-Web | Pares')
 @section('contenido')
@@ -53,7 +53,7 @@
 </div>
 
 <!-- Contenido de Sección -->
-<table class="table table-sm table-striped" id="datatableUbicaciones"> 
+<table class="table table-sm table-striped" id="datatablePares"> 
     <thead>
         <tr>
             <th>Número</th>
@@ -63,49 +63,6 @@
             <th>Acciones</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach ($pares as $par)
-        <tr>
-            <td>{{ $par->numero }}</td>
-            <td>{{ $par->ubicacion->nombre }}</td>
-            <td>{{ $par->plataforma }}</td>
-            <td>
-                @if ($par->estado == 'Certificado')
-                    <p>{{ $par->estado }}<i class="fa-solid fa-certificate text-warning ms-2"></i></p>
-                @elseif ($par->estado == 'Disponible')
-                    <p>{{ $par->estado }}<i class="fa-solid fa-check text-success ms-2"></i></p>
-                @elseif ($par->estado == 'Asignado')
-                    <p>{{ $par->estado }}<i class="fa-solid fa-link text-primary ms-2"></i></p>
-                @elseif ($par->estado == 'Por Verificar')
-                    <p>{{ $par->estado }}<i class="fa-solid fa-clock text-info ms-2"></i></p>
-                @elseif ($par->estado == 'Dañado')
-                    <p>{{ $par->estado }}<i class="fa-solid fa-triangle-exclamation text-danger ms-2"></i></p>
-                @else
-                    <p>{{ $par->estado }}</p>
-                @endif
-            </td>
-            <td>
-                <a href="{{ route('pares.show', $par->id) }}" class="btn btn-outline-light btn-sm">
-                    <i class="fa-solid fa-list-ul"></i>
-                </a>
-                @can('Editar Pares')
-                <a href="{{ route('pares.edit', $par->id) }}" class="btn btn-outline-primary btn-sm">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </a>
-                @endcan
-                @can('Eliminar Pares')
-                <form action="{{ route('pares.destroy', $par->id) }}" id="form-eliminar-{{ $par->id }}" class="d-inline" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </form>
-                @endcan
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
 </table>
 
 @endsection
@@ -113,13 +70,22 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
-        initializeDataTable('#datatableUbicaciones', {
-            // Add any specific options for this table
+        initializeDataTable('#datatablePares', {
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('pares.index') }}",
+            columns: [
+                {data: 'numero', name: 'numero'},
+                {data: 'ubicacion', name: 'ubicaciones.nombre'},
+                {data: 'plataforma', name: 'plataforma'},
+                {data: 'estado', name: 'estado'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+            ]
         });
 
         // SweetAlert2 for delete confirmation
-        $(document).on('submit', 'form[id^="form-eliminar-"]', function(event) {
-            event.preventDefault();
+        $('#datatablePares').on('click', '.delete-par', function() {
+            var parId = $(this).data('id');
             Swal.fire({
                 title: '¿Estás seguro?',
                 text: "¡No podrás revertir esto!",
@@ -130,7 +96,22 @@
                 confirmButtonText: 'Sí, eliminarlo!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    event.target.submit();
+                    $.ajax({
+                        url: "{{ url('pares') }}/" + parId,
+                        type: 'DELETE',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            Swal.fire(
+                                
+                                'Eliminado!',
+                                response.mensaje,
+                                'success'
+                            );
+                            table.ajax.reload();
+                        }
+                    });
                 }
             });
         });

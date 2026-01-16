@@ -11,9 +11,38 @@ use Yajra\DataTables\Facades\DataTables;
 class ParController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $pares = Par::all();
+
+        if ($request->ajax()) {
+            // Join with ubicaciones so we can sort/search by ubicaciones.nombre
+            $query = Par::select('pares.*', 'ubicaciones.nombre as ubicacion_nombre')
+                ->leftJoin('ubicaciones', 'pares.ubicacion_id', '=', 'ubicaciones.id');
+
+            return DataTables::of($query)
+                ->addColumn('ubicacion', function ($par) {
+                    return $par->ubicacion_nombre ?? ($par->ubicacion?->nombre ?? '');
+                })
+                ->filterColumn('ubicacion', function ($query, $keyword) {
+                    $query->where('ubicaciones.nombre', 'like', "%{$keyword}%");
+                })
+                ->orderColumn('ubicacion', 'ubicaciones.nombre $1')
+                ->addColumn('action', function ($par) {
+                    $actions = '';
+                    $actions .= '<a href="' . route('pares.show', $par->id) . '" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-list-ul"></i></a>';
+                    if (auth()->user()->can('Editar Pares')) {
+                        $actions .= ' <a href="' . route('pares.edit', $par->id) . '" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-phone-volume"></i></a>';
+                    }
+                    if (auth()->user()->can('Eliminar Pares')) {
+                        $actions .= ' <button class="btn btn-outline-danger btn-sm delete-par" data-id="' . $par->id . '"><i class="fa-solid fa-phone-slash"></i></button>';
+                    }
+                    return $actions;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('pares.index', compact('pares'));
     }
 
